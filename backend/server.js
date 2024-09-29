@@ -31,6 +31,7 @@ const server = express();
 const app = http.createServer(server);
 server.use(cookieParser());
 server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 
 const io = socketIo(app);
 
@@ -254,6 +255,8 @@ async function validatecert(username, filename) {
 }
 
 async function checkToken(req, res, next) {
+    const body = req.body;
+    console.log(body)
     const Token = req.body.Token;  // Use req.body to access the fields
     const interfaceType = req.body.interface;
 
@@ -721,7 +724,7 @@ server.post("/changeprofile",profile_pic_upload.single('file'), checkToken, asyn
 });
 
 
-server.post('/upload', checkToken,upload.single('file'), async (req, res) => {
+server.post('/upload',upload.single('file'), async (req, res) => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         const userIP = response.data.ip;
@@ -1106,7 +1109,7 @@ server.post('/delete-batch',checkToken, async (req, res) => {
 });
 
 
-server.post("/extract-hashtags",checkToken, extract_hashtag_folder.single('file'), async (req, res) => {
+server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     if (Array.isArray(userIP)) {
