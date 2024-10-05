@@ -166,47 +166,51 @@ async function fetchAndSaveBadges(userUsername) {
         if (!mycredly_data) {
             throw new Error('User not found');
         }
+        if(mycredly_data.link){
+            const credlylink = mycredly_data.link;
+            const response = await axios.get('http://localhost:5000/fetch-badges', {
+                params: { url: credlylink }
+            });
 
-        const credlylink = mycredly_data.link;
-        const response = await axios.get('http://localhost:5000/fetch-badges', {
-            params: { url: credlylink }
-        });
+            const badgeDataArray = response.data;
 
-        const badgeDataArray = response.data;
+            // Fetch existing badges for this user from the database
+            const existingBadges = await Credly.find({ username: userUsername });
 
-        // Fetch existing badges for this user from the database
-        const existingBadges = await Credly.find({ username: userUsername });
+            // Create a set of existing badge identifiers (e.g., certificate name and issue date)
+            const existingBadgeIdentifiers = new Set(
+                existingBadges.map(badge => `${badge.cert_name}-${badge.issue_date}`)
+            );
 
-        // Create a set of existing badge identifiers (e.g., certificate name and issue date)
-        const existingBadgeIdentifiers = new Set(
-            existingBadges.map(badge => `${badge.cert_name}-${badge.issue_date}`)
-        );
+            // Prepare an array to hold new badges
+            const newBadges = [];
 
-        // Prepare an array to hold new badges
-        const newBadges = [];
+            // Identify new badges
+            for (const badge of badgeDataArray) {
+                const badgeIdentifier = `${badge.certificate_name}-${badge.issued_date}`;
+                if (!existingBadgeIdentifiers.has(badgeIdentifier)) {
+                    newBadges.push({
+                        firstname: firstname,
+                        lastname: lastname,
+                        username: userUsername,
+                        link: credlylink,
+                        issuer_name: badge.issuer_name,
+                        cert_name: badge.certificate_name,
+                        issue_date: badge.issued_date
+                    });
+                }
+            }
 
-        // Identify new badges
-        for (const badge of badgeDataArray) {
-            const badgeIdentifier = `${badge.certificate_name}-${badge.issued_date}`;
-            if (!existingBadgeIdentifiers.has(badgeIdentifier)) {
-                newBadges.push({
-                    firstname: firstname,
-                    lastname: lastname,
-                    username: userUsername,
-                    link: credlylink,
-                    issuer_name: badge.issuer_name,
-                    cert_name: badge.certificate_name,
-                    issue_date: badge.issued_date
-                });
+            // Insert only new badges into the database
+            if (newBadges.length > 0) {
+                await Credly.insertMany(newBadges);
+
+            } else {
+                console.log('No new badges to insert.');
             }
         }
-
-        // Insert only new badges into the database
-        if (newBadges.length > 0) {
-            await Credly.insertMany(newBadges);
-            
-        } else {
-            console.log('No new badges to insert.');
+        else{
+            next();
         }
     } catch (error) {
         console.error("Error fetching and saving badges:", error);
@@ -252,66 +256,136 @@ async function validatecert(username, filename) {
         console.error('Error:', error);
         return [null, null]; // Return nulls or handle the error as needed
     }
-}
+};
 
 async function checkToken(req, res, next) {
-    const body = req.body;
-    console.log(body)
-    const Token = req.body.Token;  // Use req.body to access the fields
-    const interfaceType = req.body.interface;
+    let token;
+    let interfaceType;
 
-    console.log("check token : ", Token, "   ", interfaceType);
-
-    // Check if Token or interface are missing
-    if (!Token || !interfaceType) {
-        return res.status(400).json({ message: "Token or interface missing" });
+    // Determine the source of the token and interface (body for Mobileapp, cookies for Webapp)
+    if (req.body.Token && req.body.interface) {
+        // Mobileapp request (fetching from body)
+        token = req.body.Token;
+        interfaceType = req.body.interface;
+    } else if (req.cookies && req.cookies.Token) {
+        // Webapp request (fetching from cookies)
+        token = req.cookies.Token;
+        interfaceType = "Webapp"; // Default to Webapp if using cookies
+    } else {
+        // Token or interface missing in both Webapp and Mobileapp
+        return res.redirect("/loginpage")
     }
 
-    const token_data = await CSRFToken.findOne({ token: Token });
-    if (!token_data) {
-        return res.status(400).json({ message: "Invalid token" });
-    }
+    console.log("check token : ", token, "   ", interfaceType);
 
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-
-    // Check token age and validity based on interface (Mobile or Webapp)
-    const tokenAgeDays = (Date.now() - token_data.createdAt) / (1000 * 60 * 60 * 24); // token age in days
-    const tokenAgeMinutes = (Date.now() - token_data.createdAt) / (1000 * 60); // token age in minutes
-
-    if (interfaceType === "Mobileapp") {
-        if (tokenAgeDays > 30) {
-            logMessage(`[=] Mobileapp ${userIP} : Token for user ${token_data.username} has expired`);
-            await CSRFToken.deleteOne({ token: token_data.token });
-            return res.status(400).json({ message: "token expired" });
+    try {
+        // For Webapp, we need to decode the token (JWT), for Mobileapp, we use the raw token
+        let decodedToken;
+        if (interfaceType === "Webapp") {
+            decodedToken = jwt.verify(token, serverSK); // Decode JWT for Webapp
+            token = decodedToken.userId; // Use the userId as the token to query the database
         }
-    } else if (interfaceType === "Webapp") {
-        if (tokenAgeMinutes > 15) {
-            logMessage(`[=] Webapp ${userIP} : Token for user ${token_data.username} has expired`);
-            await CSRFToken.deleteOne({ token: token_data.token });
-            return res.status(400).json({ message: "token expired" });
-        }
-    }
 
-    console.log("Token is correct");
-    next();
+        // Fetch the token data from the database
+        const token_data = await CSRFToken.findOne({ token });
+        if (!token_data) {
+            return res.status(400).json({ message: "Invalid token" });
+        }
+
+        // Log user's IP
+        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (Array.isArray(userIP)) {
+            userIP = userIP[0];
+        } else if (userIP.includes(',')) {
+            userIP = userIP.split(',')[0].trim();
+        }
+
+        // Check token age and validity based on interface
+        const tokenAgeDays = (Date.now() - token_data.createdAt) / (1000 * 60 * 60 * 24); // age in days
+        const tokenAgeMinutes = (Date.now() - token_data.createdAt) / (1000 * 60); // age in minutes
+
+        if (interfaceType === "Mobileapp") {
+            if (tokenAgeDays > 30) {
+                logMessage(`[=] Mobileapp ${userIP} : Token for user ${token_data.username} has expired`);
+                await CSRFToken.deleteOne({ token: token_data.token });
+                return res.status(400).json({ message: "token expired" });
+            }
+        } else if (interfaceType === "Webapp") {
+            if (tokenAgeMinutes > 15) {
+                logMessage(`[=] Webapp ${userIP} : Token for user ${token_data.username} has expired`);
+                await CSRFToken.deleteOne({ token: token_data.token });
+                return res.status(400).json({ message: "token expired" });
+            }
+        }
+
+        console.log("Token is valid");
+        next();
+    } catch (error) {
+        console.log("Error processing token:", error.message);
+        return res.status(400).json({ message: "Invalid token or error during token verification" });
+    }
 }
 
-server.set("view engine", "hbs");
-server.set("views", __dirname + "/views");
-server.use('/public', express.static(path.join(__dirname, 'public')));
-const directoryPath = path.join(__dirname, "uploads");
-server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const fetchUser = async (req, res) => {
+    try {
+        // Retrieve the token from the cookie
+        const token = req.cookies.Token;
+        console.log("GOT TOKEN 1");
+
+        // If token exists
+        if (token) {
+            // Decode the token using your secret key
+            const decoded = jwt.verify(token, serverSK);
+            console.log("decoded TOKEN 2", decoded);
+
+            // Check if the decoded token has the required userId (note: case-sensitive)
+            if (decoded && decoded.userId) {
+                // Look for the token in the CSRFToken collection by the token (uniqueId)
+                const tokenData = await CSRFToken.findOne({ token: decoded.userId });
+                console.log("Looking in database");
+
+                if (tokenData) {
+                    // Now, check if the username in the tokenData matches the one in the decoded token
+                    if (tokenData.username === decoded.username) {
+                        // Return the username if it matches
+                        console.log("Username found to be: ", tokenData.username);
+                        return tokenData.username;
+                    } else {
+                        // If the username does not match, redirect to login
+                        console.log("Username mismatch. Redirecting to login.");
+                        return res.redirect('/loginpage');
+                    }
+                } else {
+                    // If no matching token is found in the database, redirect to login
+                    console.log("Token not found in database. Redirecting to login.");
+                    return res.redirect('/loginpage');
+                }
+            } else {
+                // If the decoded token does not have a valid userId, redirect to login
+                console.log("Invalid userId in token. Redirecting to login.");
+                return res.redirect('/loginpage');
+            }
+        } else {
+            // If no token is present, redirect to login page
+            console.log("No token found. Redirecting to login.");
+            return res.redirect('/loginpage');
+        }
+    } catch (error) {
+        console.error("Error validating token:", error.message);
+        return res.redirect('/loginpage');
+    }
+};
+
+
+
+server.set("view engine", "ejs");
+server.set("views", path.join(__dirname, "views"));
+server.use(express.static(path.join(__dirname, "public")));
+const directoryPath = path.join(__dirname, "uploads");
+server.use('/uploads', express.static(directoryPath));
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
-server.use(express.static(path.join(__dirname, "public")));
-server.use(express.static("public"));
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -359,7 +433,92 @@ const user_profilepic = multer.diskStorage({
 
 const profile_pic_upload = multer({storage: user_profilepic});
 
+// ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** START
+server.get("/loginpage", (req,res) =>{
+    res.status(200).render("login")
+});
+
+server.get("/dashboard",checkToken , async(req,res)=>{
+    const username = await fetchUser(req,res);
+    console.log("username is ", username);
+    res.status(200).render('dashboard', {username : username})
+});
+
+server.get("/profile-web-page", checkToken, async (req, res) => {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    // Normalize userIP
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+
+    try {
+        // Fetch the username from the token
+        const username = await fetchUser(req, res);
+
+        // Fetch user data
+        const userProfile = await User.findOne({ username: username });
+        if (!userProfile) {
+            return res.redirect('/loginpage'); // Redirect if user not found
+        }
+
+        // Fetch bio data and profile
+        const user_bio_data = await User.findOne({ username: username }); // Assuming this is the correct call
+        const user_profile = await Profiles.find({ username: username });
+
+        // Check for missing mandatory fields
+        const mandatoryFields = [
+            'firstname',
+            'lastname',
+            'phone_number',
+            'dob',
+            'bio',
+            'college',
+            'academic_year',
+            'semester',
+            'cgpa',
+            'hobby',
+        ];
+
+        const missingFields = mandatoryFields.filter(field => !userProfile[field]);
+        const Credly_there = await Credly.findOne({username : username})
+        let link
+        if(Credly_there){
+            link = Credly_there.link;
+        }
+
+        // Render the profile page with user data and missing fields
+        return res.render('profile', {
+            userProfile,
+            user_bio_data,
+            user_profile,
+            missingFields,
+            link
+        });
+
+
+    } catch (error) {
+        logMessage("[*] Webapp ",userIP," : Error fetching profile =", error.message);
+        return res.redirect('/loginpage'); // Redirect on error
+    }
+});
+
+
+// ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
+
 server.get("/ping", (req, res) => {
+    const userAgent = req.headers['user-agent'];
+
+    console.log("User-Agent:", userAgent);
+
+    // Set default based on the user-agent
+    let detectedInterface = "Webapp";
+
+    if (userAgent.includes("Mobile")) {
+        detectedInterface = "Mobileapp";
+    }
     res.status(200).json({ message: "Server is up and running" });
 });
 
@@ -415,52 +574,95 @@ server.post("/login", async (req, res) => {
     } else if (userIP.includes(',')) {
         userIP = userIP.split(',')[0].trim();
     }
-    console.log("Request body:", req.body);
     
-    const { userUsername, userPwd, interface, mobiletoken } = req.body;
-    console.log("API Interface:", interface, "Mobile token:", mobiletoken);
-    
+    console.log("STEP 1")
+    const { userUsername, userPwd, mobiletoken, interface } = req.body; 
+    console.log(req.body);
+    // Set the interface to "Webapp" if it is not provided
+    const interfaceType = interface || "Webapp"; 
+    console.log(interfaceType);
     if (userUsername) {    
         logMessage(`[=] User ${userUsername} attempting to log in`);
     }
 
     try {
-        if (interface === "Webapp") {
+        // Use interfaceType instead of interface in your existing conditions
+        if (interfaceType === "Webapp") {
             console.log("Webapp login block");
 
             const user = await User.findOne({ username: userUsername });
 
             if (!user || user.password !== userPwd) {
-                logMessage(`[-] ${interface} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);
+                logMessage(`[-] ${interfaceType} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);
                 return res.status(401).json({ message: "Invalid username or password" });
             }
-    
-            logMessage(`[=] ${interface} ${userIP} : User ${userUsername} successfully logged in`);
-    
+
+            logMessage(`[=] ${interfaceType} ${userIP} : User ${userUsername} successfully logged in`);
+
             const uniqueId = uuidv4();
-            const payload = jwt.sign({ userId: uniqueId }, serverSK, { expiresIn: "15m" });
-    
+
+            // Include userId, username, and interface in the payload
+            const payload = jwt.sign({
+                userId: uniqueId,       // Unique ID for the token
+                username: userUsername, // Username of the user
+                interface: "Webapp"     // Interface type (Webapp or Mobileapp)
+            }, serverSK, { expiresIn: "15m" });
+            
             const check_token_DB = await CSRFToken.findOne({ username: userUsername });
             if (check_token_DB) {
                 await CSRFToken.deleteOne({ username: userUsername });
             }
-            logMessage(`[=] ${interface} ${userIP} : Token provided for user ${userUsername}`);
             
+            logMessage(`[=] ${interfaceType} ${userIP} : Token provided for user ${userUsername}`);
+            console.log("JWT Payload: ", payload);
+            
+            // Save the token data in the CSRFToken collection
             const token_Data = new CSRFToken({
-                token: uniqueId,
-                username: userUsername,
-                interface: "Webapp"
+                token: uniqueId,         // Use uniqueId as the token in the database
+                username: userUsername,  // Save the username
+                interface: "Webapp"      // Save the interface type
             });
             await token_Data.save();
+            
+            // Send the JWT as a cookie
             res.cookie("Token", payload, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production', // Set to true if serving over HTTPS
                 maxAge: 15 * 60 * 1000 // 15 minutes
             });
-            fetchAndSaveBadges(userUsername);
-            return res.status(200).json({ message: "Login successful" });
+            if(await Credly.findOne({username : userUsername}))
+            {
+                fetchAndSaveBadges(userUsername);
+            }
+            const userProfile = await User.findOne({ username: userUsername });
+            const mandatoryFields = [
+                'firstname',
+                'lastname',
+                'phone_number',
+                'dob',
+                'bio',
+                'college',
+                'academic_year',
+                'semester',
+                'cgpa',
+                'hobby',
+            ];
+
+            // Check for missing mandatory fields
+            const missingFields = mandatoryFields.filter(field => !userProfile[field]);
+
+            if (missingFields.length > 0) {
+                console.log("Going to profile page")
+                // If there are missing mandatory fields, render the profile page
+                return res.redirect('/profile-web-page');
+            } else {
+                console.log("Going to dash page")
+                // If all required fields are present, you can redirect to another page or send a success message
+                return res.redirect('/dashboard');
+            }
+
         } 
-        else if (interface === "Mobileapp" && typeof mobiletoken === 'string') {
+        else if (interfaceType === "Mobileapp" && typeof mobiletoken === 'string') {
             console.log("Mobile app auto-login block");
 
             const mobile_token_check = await CSRFToken.findOne({ token: mobiletoken });
@@ -486,17 +688,17 @@ server.post("/login", async (req, res) => {
 
             return res.status(200).json({ message: "valid", user_type: user.user_type });
         } 
-        else if (interface === "Mobileapp" && !mobiletoken) {
+        else if (interfaceType === "Mobileapp" && !mobiletoken) {
             console.log("Mobile app login with username and password");
 
             const user = await User.findOne({ username: userUsername });
 
             if (!user || user.password !== userPwd) {
-                logMessage(`[-] ${interface} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);
+                logMessage(`[-] ${interfaceType} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);
                 return res.status(401).json({ message: "Invalid username or password" });
             }
 
-            logMessage(`[=] ${interface} ${userIP} : User ${userUsername} successfully logged in`);
+            logMessage(`[=] ${interfaceType} ${userIP} : User ${userUsername} successfully logged in`);
 
             const uniqueId = uuidv4();
             const payload = jwt.sign({ userId: uniqueId }, serverSK, { expiresIn: "15m" });
@@ -506,7 +708,7 @@ server.post("/login", async (req, res) => {
                 await CSRFToken.deleteOne({ username: userUsername });
             }
 
-            logMessage(`[=] ${interface} ${userIP} : Token provided for user ${userUsername}`);
+            logMessage(`[=] ${interfaceType} ${userIP} : Token provided for user ${userUsername}`);
             const LLT = uuidv4();
             const token_Data = new CSRFToken({
                 token: LLT,
@@ -527,6 +729,7 @@ server.post("/login", async (req, res) => {
     }
 });
 
+
 server.post("/logout", async(req,res)=>{
     const {Token} = req.body;
     console.log("token logged out :" , Token)
@@ -544,8 +747,14 @@ server.post("/register", async (req, res) => {
     const credlylink_template = "https://www.credly.com/users/"
     
     const { firstname , lastname, email , ph_no , reguserUsername, reguserPwd, confuserPwd,credlylink, interface } = req.body;
+
     const specialCharRegex = /[!@#\$%\^&\*\(\)_\-=+]/;
     const passwordMinLength = 8;
+
+    const existingUser = await User.findOne({ username: reguserUsername });
+    if (existingUser) {
+        return res.status(400).json({message : "Username already exists "})
+    }
 
     if (reguserPwd.length < passwordMinLength) {
         return res.status(400).json({message :"Password should be at least 8 characters long."});
@@ -553,73 +762,76 @@ server.post("/register", async (req, res) => {
     if (reguserPwd !== confuserPwd) {
         return res.status(400).json({message : "Passwords do not match."});
     }
-        
-    try {
-        if (credlylink.toLowerCase().includes(firstname.toLowerCase()) && 
-            credlylink.toLowerCase().includes(lastname.toLowerCase()) &&
-            credlylink.toLowerCase().includes(credlylink_template)) {
 
-            const response = await axios.get('http://localhost:5000/fetch-badges', {
-                params: { url: credlylink }
-            });
-
-            // Handle the response data
-            console.log('Badges data:', response.data);
-
-            const badgeDataArray = response.data;
-
-            // Insert each badge data into the database-+
-            for (const badge of badgeDataArray) {
-                try {
-                    const newBadge = new Credly({
-                        firstname: firstname,
-                        lastname: lastname,
-                        username : reguserUsername,
-                        link: credlylink,
-                        issuer_name: badge.issuer_name,
-                        cert_name: badge.certificate_name,
-                        issue_date: badge.issued_date
-                    });
-
-                    await newBadge.save();
-                } catch (error) {
-                    console.error("badges error : "+error)
-                }
-            }          
-        } else {
-            res.status(400).json({ message: 'Invalid credlylink' });
-        }
-    } catch (error) {
-        logMessage(`[*] ${interface} ${userIP} : Error fetching badges `);
-        res.status(500).json({ message: 'Failed to fetch and save badges data' });
+    if(interface == "Webapp"){
+        const newUser = new User({
+            username: reguserUsername,
+            password: reguserPwd,
+            email : email,
+            user_type: "Student",
+        });
+        await newUser.save();
+        logMessage(`[=] ${interface} ${userIP} : New student registered: ${reguserUsername}`);
+        return res.status(200).redirect("/loginpage");
     }
-    
-
-    const existingUser = await User.findOne({ username: reguserUsername });
-    if (!existingUser) {
+    if(interface == "Mobileapp")
         try {
+            if (credlylink.toLowerCase().includes(firstname.toLowerCase()) && 
+                credlylink.toLowerCase().includes(lastname.toLowerCase()) &&
+                credlylink.toLowerCase().includes(credlylink_template)) {
+
+                const response = await axios.get('http://localhost:5000/fetch-badges', {
+                    params: { url: credlylink }
+                });
+
+                // Handle the response data
+                console.log('Badges data:', response.data);
+
+                const badgeDataArray = response.data;
+
+                // Insert each badge data into the database-+
+                for (const badge of badgeDataArray) {
+                    try {
+                        const newBadge = new Credly({
+                            firstname: firstname,
+                            lastname: lastname,
+                            username : reguserUsername,
+                            link: credlylink,
+                            issuer_name: badge.issuer_name,
+                            cert_name: badge.certificate_name,
+                            issue_date: badge.issued_date
+                        });
+
+                        await newBadge.save();
+                    } catch (error) {
+                        console.error("badges error : "+error)
+                    }
+                } 
+                
+            } else {
+                res.status(400).json({ message: 'Invalid credlylink' });
+            }
             const newUser = new User({
-                firstname : firstname,
-                lastname : lastname,
-                username : reguserUsername,
-                password: reguserPwd,
-                user_type: "Student",
-                email : email,
-                phone_number: ph_no
-            });
-            await newUser.save();
-            logMessage(`[=] ${interface} ${userIP} : New student registered: ${reguserUsername}`);
-            return res.status(201).json({ message: "User registered successfully" });
+                    username: reguserUsername,
+                    password: reguserPwd,
+                    email : email,
+                    user_type: "Student",
+                    firstname: firstname,
+                    lastname: lastname,
+                    phone_number: ph_no,
+                });        
+                await newUser.save(); 
+
         } catch (error) {
-            logMessage(`[*] ${interface} ${userIP} : New student registration failed: ${error.message} `);
-            return res.status(500).json({message: "User registration failed"});
+            logMessage(`[*] ${interface} ${userIP} : Error fetching badges `);
+            res.status(500).json({ message: 'Failed to fetch and save badges data' });
         }
-    } else {
-        return res.status(400).json({message : "Username already exists "});
-    }
+
+    logMessage(`[=] ${interface} ${userIP} : New student registered: ${reguserUsername}`);
+    return res.status(201).json({ message: "User registered successfully" });
 });
 
-server.post("/changeprofile",profile_pic_upload.single('file'), checkToken, async (req, res) => {
+server.post("/changeprofile",checkToken,profile_pic_upload.single('file'),  async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     if (Array.isArray(userIP)) {
@@ -629,8 +841,10 @@ server.post("/changeprofile",profile_pic_upload.single('file'), checkToken, asyn
     }
 
     // Destructure the request body to get all fields
-    const { 
-        Token, 
+    let { 
+        Token,
+        firstName,
+        lastName, 
         changeemail, 
         changepwd, 
         changephoneno, 
@@ -644,10 +858,31 @@ server.post("/changeprofile",profile_pic_upload.single('file'), checkToken, asyn
         cgpa, 
         hobby, 
         photo, 
+        credly,
         interface 
     } = req.body;
+
     
     console.log("Token:", Token, "Email:", changeemail, "Password:", changepwd, "PhoneNo:", changephoneno);
+
+    if (!Token) {
+        const raw_token = req.cookies.Token;
+
+        if (!raw_token) {
+            return res.status(400).json({ message: "Token is required." });
+        }
+
+        try {
+            // Verify and decode the token using serverSK
+            const decodedToken = jwt.verify(raw_token, serverSK);
+
+            // Extract userId from the decoded token
+            Token = decodedToken.userId;
+        } catch (error) {
+            console.log("Error decoding token:", error.message);
+            return res.status(400).json({ message: "Invalid or expired token." });
+        }
+    }
 
     // Check if the token is provided
     if (Token) {
@@ -706,11 +941,14 @@ server.post("/changeprofile",profile_pic_upload.single('file'), checkToken, asyn
                     semester: semester,
                     cgpa: cgpa,
                     hobby: hobby,
-                    photo: photo // Assuming the photo is in base64 or a file URL
                 }
             },
             { upsert: true }
         );
+
+        if(credly){
+            fetchAndSaveBadges
+        }
 
         // Delete the used token
         await CSRFToken.deleteOne({ token: Token });
@@ -926,6 +1164,36 @@ server.post("/getUserProfile", checkToken, async (req, res) => {
     }
 });
 
+server.get("/myprofile",checkToken, async(req,res)=> {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+    const token_cookie = req.cookies.Token;
+    const decode = jwt.verify(token_cookie , serverSK);
+    const token_username =''
+    if(decode && decode.token){
+    
+        token_username = await CSRFToken.findOne({ username : decode.username});
+        if(!token_username){
+            res.redirect('/loginpage');
+        }
+    }
+
+    try{
+        const user_profile_data = await Profiles.find({username : token_username});
+        const user_Data = await User.findOne({username : token_username});
+        res.render("profile",{certificateData : user_profile_data, userBio: user_Data, profilePic: "/uploads/${tokencheck.username}/profile.jpg" });
+    }
+    catch (error){
+        logMessage(`[*] Internal server error : ${error}`);
+        res.status(500);
+    }
+});
 
 server.post("/myprofile",checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -938,6 +1206,7 @@ server.post("/myprofile",checkToken, async (req, res) => {
     }
 
     const { Token, interface } = req.body;
+    const interfaceType = interface || "Webapp";
     const tokencheck = await CSRFToken.findOne({ token: Token });
 
     if (tokencheck) {
@@ -964,10 +1233,16 @@ server.post("/myprofile",checkToken, async (req, res) => {
             console.log(user_profile_data); 
             console.log(profilePosts); 
 
-            logMessage(`[=] ${interface} ${userIP} : ${tokencheck.username} pulled their own profile`);
-            res.status(200).json({ userbio : user_bio_data,data: profilePosts, credly: user_credly_data });
+            logMessage(`[=] ${interfaceType} ${userIP} : ${tokencheck.username} pulled their own profile`);
+            if(interfaceType === "Mobileapp"){
+                res.status(200).json({ userbio : user_bio_data,data: profilePosts, credly: user_credly_data });
+            }
+            else
+            {
+                res.render("profile",{certificateData : profilePosts, userBio:user_bio_data, profilePic: "/uploads/${tokencheck.username}/profile.jpg" });
+            }
         } catch (error) {
-            logMessage(`[*] ${interface} ${userIP} : Internal server error ${error}`);
+            logMessage(`[*] ${interfaceType} ${userIP} : Internal server error ${error}`);
             res.status(500).json({ message: "Internal server error" });
         }
     } else {

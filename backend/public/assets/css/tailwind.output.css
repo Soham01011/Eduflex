@@ -76,3 +76,9 @@
 *::after {
   box-sizing: border-box;
 }
+
+.modal-content {
+  max-height: 80vh; /* Ensures the modal height doesn't exceed 80% of the viewport */
+  overflow-y: auto; /* Adds vertical scrolling when content overflows */
+}
+
