@@ -434,42 +434,35 @@ const upload = multer({ storage: storage });
 
 const hashtag_storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        let username;
+        const hashtag_file = 'hashtag_extractions/';
+        fs.mkdirSync(hashtag_file, { recursive: true });
+        callback(null, hashtag_file); // Ensure the directory exists or create it
+    },
+    filename: (req, file, callback) => {
+        let username = req.body.up_username; // First, try to get the username from request body
 
-        // Check if the request is from the Mobile App (req.body.up_username)
-        if (req.body && req.body.up_username) {
-            username = req.body.up_username; // Use username from the request body (Mobile App)
-        }
-
-        // Otherwise, check if the request is from the Webapp (req.cookies.Token)
-        else if (req.cookies && req.cookies.Token) {
+        // If username is not in the request body, assume Webapp and get it from the Token cookie
+        if (!username && req.cookies && req.cookies.Token) {
             try {
-                // Decode the token from the cookie
-                const decodedToken = jwt.verify(req.cookies.Token, serverSK);
-                username = decodedToken.username; // Extract username from decoded token (Webapp)
-            } catch (error) {
-                console.error("Error decoding token from cookie:", error.message);
-                return callback(new Error("Invalid token in cookie"), null);
+                const tokenPayload = jwt.verify(req.cookies.Token, serverSK); // Decode the token
+                username = tokenPayload.username; // Extract username from token
+            } catch (err) {
+                console.error("Error decoding token: ", err);
+                return callback(new Error('Invalid token'), null); // Handle invalid token scenario
             }
         }
 
-        // Ensure username is available for file storage
-        if (username) {
-            const hashtag_file = `hashtag_extractions/${username}/`; // Store in the directory for the user
-            fs.mkdirSync(hashtag_file, { recursive: true }); // Create directory recursively
-            callback(null, hashtag_file); // Set upload destination
-        } else {
-            callback(new Error("Username not found in body or cookie"), null); // Handle missing username
+        // If username is still undefined, throw an error
+        if (!username) {
+            return callback(new Error('Username not found'), null);
         }
-    },
-    filename: (req, file, callback) => {
-        // Use either body 'up_username' or cookie-decoded username in the filename
-        const username = req.body.up_username || req.cookies.username;
-        const newFilename = `${username}-${file.originalname}`; // Filename format: <username>-<original filename>
-        callback(null, newFilename); // Set new filename
+
+        // Define the filename with the extracted or provided username
+        callback(null, username + "-" + file.originalname);
     }
 });
 
+// Multer setup for hashtag extraction folder
 const extract_hashtag_folder = multer({ storage: hashtag_storage });
 
 
@@ -602,10 +595,12 @@ function formatCertificateData(data) {
             pdfLink: cert.file, // Assuming the PDF file path is stored in 'file'
             postDesc: cert.post_desc, // Assuming the post description is stored in 'post_desc'
             hashtags: cert.hashtags || [], // Ensure hashtags is an array
-            status: cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Pending' // Derive status based on conditions
+            status: cert.mentor_approved === null ? 'Pending' : // If mentor approval is still pending
+                    (cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Rejected') // Logic for approved status
         };
     });
 }
+
 
 server.get("/upload-certificate",checkToken,async(req,res)=>{
     username = await fetchUser(req,res);
@@ -979,6 +974,7 @@ server.post("/changeprofile",checkToken,profile_pic_upload.single('file'),  asyn
         interface 
     } = req.body;
 
+    let user_data;
     
     console.log("Token:", Token, "Email:", changeemail, "Password:", changepwd, "PhoneNo:", changephoneno);
 
@@ -1113,12 +1109,13 @@ server.post("/changeprofile",checkToken,profile_pic_upload.single('file'),  asyn
 });
 
 
-server.post('/upload',upload.single('file'), async (req, res) => {
+server.post("/upload", upload.single('file'), async (req, res) => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         const userIP = response.data.ip;
-        const { Token, up_username, post_type, post_desc, filename, interface } = req.body;
+        let { Token, up_username, post_type, post_desc, interface } = req.body;
         let { hashtags } = req.body;
+        console.log(hashtags, post_type, post_desc, interface);
 
         // Handle `hashtags` whether it is a string or an array
         if (typeof hashtags === 'string') {
@@ -1130,21 +1127,49 @@ server.post('/upload',upload.single('file'), async (req, res) => {
             return res.status(400).json({ message: "Invalid hashtags format" });
         }
 
-        const tokencheck = await CSRFToken.findOne({ token: Token });
-        if (!tokencheck || up_username !== tokencheck.username) {
-            return res.status(400).json({ message: "Invalid Token or Username" });
+        if (!Token && !up_username && post_type === 'post' && interface === 'Webapp') {
+            const tokenFromCookie = req.cookies.Token;
+            if (!tokenFromCookie) {
+                return res.status(400).json({ message: "Token is missing from cookies" });
+            }
+
+            try {
+                const decodedToken = jwt.verify(tokenFromCookie, serverSK);
+                Token = decodedToken.userId;
+                up_username = decodedToken.username;
+            } catch (error) {
+                return res.status(400).json({ message: "Invalid token" });
+            }
         }
 
-        const user_data = await User.findOne({ username: up_username });
-        if (!user_data) {
-            return res.status(404).json({ message: "User not found" });
+        let user_data = null; // Initialize user_data
+
+        if (!Token && interface === "Mobileapp") {
+            const tokencheck = await CSRFToken.findOne({ token: Token });
+            if (!tokencheck || up_username !== tokencheck.username) {
+                return res.status(400).json({ message: "Invalid Token or Username" });
+            }
+            user_data = await User.findOne({ username: up_username });
+            if (!user_data) {
+                return res.status(404).json({ message: "User not found" });
+            }
+        }
+
+        // Check if `req.file` exists and extract the filename safely
+        let filename = req.file ? req.file.originalname : undefined;
+
+        // Sanitize the filename if it exists
+        if (!filename) {
+            return res.status(400).json({ message: "Filename is missing" });
         }
 
         const sanitizedFilename = filename.replace(/\s+/g, '_');
         const filePath = `uploads/${up_username}/${up_username}-${sanitizedFilename}`;
-
+        console.log("-----------", Token, interface, up_username, sanitizedFilename, filePath);
+        
         if (post_type === "post") {
             // Convert PDF to images
+            console.log("POST OF STUDENT");
             const opts = {
                 format: 'jpeg',
                 out_dir: path.dirname(filePath),
@@ -1153,7 +1178,7 @@ server.post('/upload',upload.single('file'), async (req, res) => {
             };
 
             pdf.convert(filePath, opts)
-                .then(async() => {
+                .then(async () => {
                     // Rename the files with sequential numbers
                     const renameFiles = (directory, baseName) => {
                         fs.readdir(directory, (err, files) => {
@@ -1171,8 +1196,6 @@ server.post('/upload',upload.single('file'), async (req, res) => {
                                 fs.rename(oldPath, newPath, err => {
                                     if (err) {
                                         console.error('Error renaming file:', err);
-                                    } else {
-                                        // File renamed successfully
                                     }
                                 });
                             });
@@ -1183,7 +1206,6 @@ server.post('/upload',upload.single('file'), async (req, res) => {
 
                     // Collect paths of image files
                     const uploadDir = path.join(__dirname, `uploads/${up_username}/`);
-
                     const imagePaths = fs.readdirSync(uploadDir)
                         .filter(file => file.startsWith(opts.out_prefix) && file.endsWith('.jpg'))
                         .map(file => path.join(`uploads/${up_username}/`, file));
@@ -1193,80 +1215,53 @@ server.post('/upload',upload.single('file'), async (req, res) => {
                         .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
                         .trim()  // Remove leading and trailing spaces
                     );
-                    console.log("Cleaned:", cleanedHashtags);
+
                     const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
-                    console.log("Broken:", brokenTags);
 
                     const [model_result, producer] = await validatecert(up_username, sanitizedFilename);
 
-                    if (model_result == 'Real') {
-                        const newpost = new Profiles({
-                            firstname: user_data.firstname,
-                            lastname: user_data.lastname,
-                            username: up_username,
-                            postID: `${up_username}-${uuidv4()}`,
-                            file: filePath, // Store the PDF file path
-                            imagePaths: imagePaths, // Store the array of image paths
-                            post_type: post_type,
-                            post_desc: post_desc,
-                            post_likes: 0,
-                            hashtags: cleanedHashtags,
-                            broken_tags: brokenTags,
-                            approved: false,
-                            interface: interface,
-                            embedding : null,
-                            model_approved: true,
-                            real: true,
-                            edited_by: producer
-                        });
-                        await newpost.save();
-                        logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
-                        return res.status(200).json({ message: "Uploaded Successfully" });
+                    const newpost = new Profiles({
+                        firstname: user_data ? user_data.firstname : null, // Check if user_data exists
+                        lastname: user_data ? user_data.lastname : null,
+                        username: up_username,
+                        postID: `${up_username}-${uuidv4()}`, // Unique post ID
+                        file: filePath,
+                        imagePaths: imagePaths,
+                        post_type: post_type,
+                        post_desc: post_desc,
+                        post_likes: 0,
+                        hashtags: cleanedHashtags,
+                        broken_tags: brokenTags,
+                        approved: false,  // Initially set to false as the mentor has not reviewed yet
+                        mentor_approved: null, // Set to null as default, waiting for mentor approval
+                        interface: interface,
+                        model_approved: true, // Assuming model approval is granted based on your logic
+                        real: model_result === 'Real', // Set real based on validation
+                        edited_by: producer // Keep track of who edited the post
+                    });
 
-                    } else if (model_result == 'Fake') {
-                        const newpost = new Profiles({
-                            firstname: user_data.firstname,
-                            lastname: user_data.lastname,
-                            username: up_username,
-                            postID: `${up_username}-${uuidv4()}`,
-                            file: filePath, // Store the PDF file path
-                            imagePaths: imagePaths, // Store the array of image paths
-                            post_type: post_type,
-                            post_desc: post_desc,
-                            post_likes: 0,
-                            hashtags: cleanedHashtags,
-                            broken_tags: brokenTags,
-                            approved: false,
-                            interface: interface,
-                            model_approved: true,
-                            real: false,
-                            edited_by: producer,
-                        });
+                    // Save the new post to the database
+                    await newpost.save();
 
-                        await newpost.save();
-                        logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
-                        return res.status(200).json({ message: "Uploaded Successfully" });
 
-                    } else {
-                        return res.status(500).json({ error: 'Unknown validation result' });
-                    }
-
+                    logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
+                    return res.status(200).json({ message: "Uploaded Successfully" });
                 })
                 .catch(error => {
                     console.error('Error converting PDF to images:', error);
                     return res.status(500).json({ message: "Error converting PDF to images" });
                 });
-
         } else if (post_type === "mentor_file_upload") {
             // Handle other file upload types
             addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
         }
-
     } catch (error) {
         console.error(`[*] Internal server error: ${error}`);
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+
 
 server.post("/getUserProfile", checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -1682,38 +1677,55 @@ server.post("/status-post", checkToken,async(req,res)=> {
         const check_token = await CSRFToken.findOne({ token : Token});
         if (check_token.username == up_username)
         {
-            if(status == "approved")
-            {
+            if (status == "approved") {
                 try {
-
                     const result = await Profiles.findOneAndUpdate(
-                      { postID: postId }, 
-                      { $set: { approved: true } }, 
-                      { new: true } 
+                        { postID: postId },
+                        { 
+                            $set: { 
+                                approved: true, 
+                                mentor_approved: "approved" 
+                            } 
+                        },
+                        { new: true }
                     );
                 
                     if (!result) {
-                      return res.status(404).json({ message: 'Post not found' });
+                        return res.status(404).json({ message: 'Post not found' });
                     }
-                    logMessage(`[=] ${interface} ${userIP} : ${up_username} approved post ${postId}`)
-                    return res.status(200).json({ message: 'Post approved successfully'});
-                  } catch (error) {
-                    logMessage(`[*] Internal Server error : failed to approved post :${error}`)
-                    return res.status(500).json({ message: 'Internal Server error' });
-                  }
-            }
-            else if (status == 'rejected')
-            {
-                try {
-                    console.log("REJECTED : ",postId);
-                    await Profiles.deleteOne({postID : postId});
-                    logMessage(`[=] ${interface} ${userIP} : ${up_username} rejected post ${postId}`);
-                    return res.status(200).json({ message: 'Post rejected successfully'});
+                    logMessage(`[=] ${interface} ${userIP} : ${up_username} approved post ${postId}`);
+                    return res.status(200).json({ message: 'Post approved successfully' });
                 } catch (error) {
-                    logMessage(`[*] Internal Server error : rejected post ${postId} ,error ${error}`);
-                    return res.status(200).json({ message: 'Internal Server error'});
+                    logMessage(`[*] Internal Server error : failed to approve post : ${error}`);
+                    return res.status(500).json({ message: 'Internal Server error' });
+                }
+            } else if (status == 'rejected') {
+                try {
+                    console.log("REJECTED : ", postId);
+                    const result = await Profiles.findOneAndUpdate(
+                        { postID: postId },
+                        { 
+                            $set: { 
+                                approved: true, 
+                                mentor_approved: "rejected" 
+                            } 
+                        },
+                        { new: true }
+                    );
+                
+                    if (!result) {
+                        return res.status(404).json({ message: 'Post not found' });
+                    }
+                
+                    logMessage(`[=] ${interface} ${userIP} : ${up_username} rejected post ${postId}`);
+                    return res.status(200).json({ message: 'Post rejected successfully' });
+                } catch (error) {
+                    logMessage(`[*] Internal Server error : rejected post ${postId}, error ${error}`);
+                    return res.status(500).json({ message: 'Internal Server error' });
                 }
             }
+
+            
         }
         else{
             logMessage(`[-] ${interface} ${userIP} : Invalid request : ${up_username} ${postId}`);
