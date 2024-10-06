@@ -20,7 +20,7 @@ document.getElementById('formAccountSettings').addEventListener('submit', async 
         if (response.ok) {
             // Handle successful profile update
             alert('Profile updated successfully.');
-            console.log(result);
+            window.location.href = '/loginpage';
         } else {
             // Handle errors (e.g., invalid token, validation errors)
             alert(`Error: ${result.message}`);

@@ -28,12 +28,10 @@ const serverSK = process.env.SERVER_SEC_KEY;
 
 const server = express();
 
-const app = http.createServer(server);
 server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
-const io = socketIo(app);
 
 // Use CORS middleware
 server.use(cors({
@@ -276,7 +274,6 @@ async function checkToken(req, res, next) {
         return res.redirect("/loginpage")
     }
 
-    console.log("check token : ", token, "   ", interfaceType);
 
     try {
         // For Webapp, we need to decode the token (JWT), for Mobileapp, we use the raw token
@@ -318,7 +315,6 @@ async function checkToken(req, res, next) {
             }
         }
 
-        console.log("Token is valid");
         next();
     } catch (error) {
         console.log("Error processing token:", error.message);
@@ -326,58 +322,47 @@ async function checkToken(req, res, next) {
     }
 }
 
-
 const fetchUser = async (req, res) => {
     try {
         // Retrieve the token from the cookie
         const token = req.cookies.Token;
-        console.log("GOT TOKEN 1");
 
         // If token exists
         if (token) {
             // Decode the token using your secret key
             const decoded = jwt.verify(token, serverSK);
-            console.log("decoded TOKEN 2", decoded);
 
             // Check if the decoded token has the required userId (note: case-sensitive)
             if (decoded && decoded.userId) {
                 // Look for the token in the CSRFToken collection by the token (uniqueId)
                 const tokenData = await CSRFToken.findOne({ token: decoded.userId });
-                console.log("Looking in database");
 
                 if (tokenData) {
                     // Now, check if the username in the tokenData matches the one in the decoded token
                     if (tokenData.username === decoded.username) {
                         // Return the username if it matches
-                        console.log("Username found to be: ", tokenData.username);
                         return tokenData.username;
                     } else {
                         // If the username does not match, redirect to login
-                        console.log("Username mismatch. Redirecting to login.");
                         return res.redirect('/loginpage');
                     }
                 } else {
                     // If no matching token is found in the database, redirect to login
-                    console.log("Token not found in database. Redirecting to login.");
                     return res.redirect('/loginpage');
                 }
             } else {
                 // If the decoded token does not have a valid userId, redirect to login
-                console.log("Invalid userId in token. Redirecting to login.");
                 return res.redirect('/loginpage');
             }
         } else {
             // If no token is present, redirect to login page
-            console.log("No token found. Redirecting to login.");
             return res.redirect('/loginpage');
         }
     } catch (error) {
-        console.error("Error validating token:", error.message);
+        logMessage(`[*] Internal server error : ${error} `);
         return res.redirect('/loginpage');
     }
 };
-
-
 
 server.set("view engine", "ejs");
 server.set("views", path.join(__dirname, "views"));
@@ -418,20 +403,45 @@ const hashtag_storage = multer.diskStorage({
 const extract_hashtag_folder = multer({storage : hashtag_storage});
 
 const user_profilepic = multer.diskStorage({
-    destination: (req,file,callback)=>
-    {
-        const profilepic = `uploads/${req.body.username}/profile`;
-        fs.mkdirSync(profilepic, { recursive: true });
-        callback(null, profilepic);
+    destination: (req, file, callback) => {
+        let username;
+
+        // Check if the request is from the Mobile App (req.body.username)
+        if (req.body && req.body.username) {
+            username = req.body.username; // Use username from the request body (Mobile App)
+        }
+
+        // Otherwise, check if the request is from the Webapp (req.cookies.Token)
+        else if (req.cookies && req.cookies.Token) {
+            try {
+                // Decode the token from the cookie
+                const decodedToken = jwt.verify(req.cookies.Token, serverSK);
+                username = decodedToken.username; // Extract username from decoded token (Webapp)
+            } catch (error) {
+                console.error("Error decoding token from cookie:", error.message);
+                return callback(new Error("Invalid token in cookie"), null);
+            }
+        }
+
+        // Ensure username is available for file storage
+        if (username) {
+            const profilepic = `uploads/${username}/profile`;
+            fs.mkdirSync(profilepic, { recursive: true }); // Create directory recursively
+            callback(null, profilepic); // Set upload destination
+        } else {
+            callback(new Error("Username not found in body or cookie"), null); // Handle missing username
+        }
     },
     filename: (req, file, callback) => {
         const fileExtension = file.originalname.split('.').pop();
-        const newFilename = `profile.${fileExtension}`;
-        callback(null, newFilename); // Set the new filename
+        const newFilename = `profile.${fileExtension}`; // Filename format: profile.<extension>
+        callback(null, newFilename); // Set new filename
     }
 });
 
-const profile_pic_upload = multer({storage: user_profilepic});
+// Initialize multer with the modified storage configuration
+const profile_pic_upload = multer({ storage: user_profilepic });
+
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** START
 server.get("/loginpage", (req,res) =>{
@@ -441,10 +451,11 @@ server.get("/loginpage", (req,res) =>{
 server.get("/dashboard",checkToken , async(req,res)=>{
     const username = await fetchUser(req,res);
     console.log("username is ", username);
-    res.status(200).render('dashboard', {username : username})
+    res.status(200).render('index', {username : username})
 });
 
 server.get("/profile-web-page", checkToken, async (req, res) => {
+    console.log("HERE");
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     // Normalize userIP
@@ -461,12 +472,19 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
         // Fetch user data
         const userProfile = await User.findOne({ username: username });
         if (!userProfile) {
+            console.log("no user profile for ", username);
             return res.redirect('/loginpage'); // Redirect if user not found
         }
 
         // Fetch bio data and profile
-        const user_bio_data = await User.findOne({ username: username }); // Assuming this is the correct call
-        const user_profile = await Profiles.find({ username: username });
+        const user_bio_data = await User.findOne({ username: username });
+        const user_profile = await Profiles.findOne({ username: username });
+
+        // Fetch certificate data
+        const certificateData = await Profiles.find({ username: username }); // Adjust this query as per your database structure
+
+        // Format certificate data for display
+        const formattedCertificateData = formatCertificateData(certificateData);
 
         // Check for missing mandatory fields
         const mandatoryFields = [
@@ -483,27 +501,42 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
         ];
 
         const missingFields = mandatoryFields.filter(field => !userProfile[field]);
-        const Credly_there = await Credly.findOne({username : username})
-        let link
-        if(Credly_there){
+        const Credly_there = await Credly.findOne({ username: username });
+        let link;
+        if (Credly_there) {
             link = Credly_there.link;
         }
 
-        // Render the profile page with user data and missing fields
+        // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
             userProfile,
             user_bio_data,
             user_profile,
             missingFields,
-            link
+            link,
+            certificateData: formattedCertificateData // Send formatted certificate data
         });
-
-
+        
     } catch (error) {
-        logMessage("[*] Webapp ",userIP," : Error fetching profile =", error.message);
+        logMessage("[*] Webapp ", userIP, " : Error fetching profile =", error.message);
         return res.redirect('/loginpage'); // Redirect on error
     }
 });
+
+// Function to format the certificate data
+function formatCertificateData(data) {
+    if (!data || !Array.isArray(data)) return []; // Return empty array if no data is found
+
+    return data.map(cert => {
+        return {
+            pdfLink: cert.file, // Assuming the PDF file path is stored in 'file'
+            postDesc: cert.post_desc, // Assuming the post description is stored in 'post_desc'
+            hashtags: cert.hashtags || [], // Ensure hashtags is an array
+            status: cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Pending' // Derive status based on conditions
+        };
+    });
+}
+
 
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
@@ -575,12 +608,11 @@ server.post("/login", async (req, res) => {
         userIP = userIP.split(',')[0].trim();
     }
     
-    console.log("STEP 1")
     const { userUsername, userPwd, mobiletoken, interface } = req.body; 
-    console.log(req.body);
+
     // Set the interface to "Webapp" if it is not provided
     const interfaceType = interface || "Webapp"; 
-    console.log(interfaceType);
+
     if (userUsername) {    
         logMessage(`[=] User ${userUsername} attempting to log in`);
     }
@@ -588,7 +620,6 @@ server.post("/login", async (req, res) => {
     try {
         // Use interfaceType instead of interface in your existing conditions
         if (interfaceType === "Webapp") {
-            console.log("Webapp login block");
 
             const user = await User.findOne({ username: userUsername });
 
@@ -614,7 +645,6 @@ server.post("/login", async (req, res) => {
             }
             
             logMessage(`[=] ${interfaceType} ${userIP} : Token provided for user ${userUsername}`);
-            console.log("JWT Payload: ", payload);
             
             // Save the token data in the CSRFToken collection
             const token_Data = new CSRFToken({
@@ -653,11 +683,9 @@ server.post("/login", async (req, res) => {
 
             if (missingFields.length > 0) {
                 console.log("Going to profile page")
-                // If there are missing mandatory fields, render the profile page
                 return res.redirect('/profile-web-page');
             } else {
                 console.log("Going to dash page")
-                // If all required fields are present, you can redirect to another page or send a success message
                 return res.redirect('/dashboard');
             }
 
@@ -730,12 +758,27 @@ server.post("/login", async (req, res) => {
 });
 
 
-server.post("/logout", async(req,res)=>{
-    const {Token} = req.body;
-    console.log("token logged out :" , Token)
-    await CSRFToken.deleteOne({ token : Token});
-    return res.status(200).json({ message : "Logged out "});
+server.post("/logout", checkToken, async (req, res) => {
+    // Extract Token from the request body
+    const { Token } = req.body;
+
+    // Check if the Token exists in the request body
+    if (Token) {
+        console.log("Token logged out:", Token);
+        // Delete the CSRF token associated with this token
+        await CSRFToken.deleteOne({ token: Token });
+        return res.status(200).json({ message: "Logged out" });
+    } 
+    // If no Token in the body, check cookies
+    else if (req.cookies.token) {
+        const username = await fetchUser(req, res);
+        await CSRFToken.deleteOne({ username: username, interface: "Webapp" });
+        return res.status(200).json({ message: "Logged out" });
+    } else {
+        return res.status(400).json({ message: "Token or cookie required for logout." });
+    }
 });
+
 
 server.post("/register", async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -946,8 +989,42 @@ server.post("/changeprofile",checkToken,profile_pic_upload.single('file'),  asyn
             { upsert: true }
         );
 
-        if(credly){
-            fetchAndSaveBadges
+        if (credly) {
+            const credlylink_template = "https://www.credly.com/users/";
+            
+            // Validate that the credly link is valid
+            if (credly.toLowerCase().includes(firstName.toLowerCase()) && 
+                credly.toLowerCase().includes(lastName.toLowerCase()) &&
+                credly.toLowerCase().includes(credlylink_template)) {
+
+                const response = await axios.get('http://localhost:5000/fetch-badges', {
+                    params: { url: credly }
+                });
+
+                const badgeDataArray = response.data;
+
+                // Insert each badge into the database
+                for (const badge of badgeDataArray) {
+                    try {
+                        const newBadge = new Credly({
+                            firstname: firstName,
+                            lastname: lastName,
+                            username: tokencheck.username,
+                            link: credly,
+                            issuer_name: badge.issuer_name,
+                            cert_name: badge.certificate_name,
+                            issue_date: badge.issued_date
+                        });
+
+                        await newBadge.save();
+                        logMessage(`[=] ${interface} ${userIP} : ${tokencheck.username} fetched and saved credyl badges `)
+                    } catch (error) {
+                        console.error("Badge saving error:", error);
+                    }
+                }
+            } else {
+                return res.status(400).json({ message: 'Invalid Credly link.' });
+            }
         }
 
         // Delete the used token
