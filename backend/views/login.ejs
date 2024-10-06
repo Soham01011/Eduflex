@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign in & Sign up Form</title>
     <link rel="stylesheet" href="/style/style.css" />
-    <script>
-      var script = document.createElement('script');
-      script.src = 'https://nice-genuinely-pug.ngrok-free.app/scripts/uploadprifledata.js';
-      document.head.appendChild(script);
-    </script>
+ 
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -20,17 +16,18 @@
       <div class="box">
         <div class="inner-box">
           <div class="forms-wrap">
-            <form action="/login" method="post">
+            <!-- Login Form -->
+            <form action="/login" method="post" class="sign-in-form">
               <div class="logo">
                 <h4>EduFlex</h4>
               </div>
 
-
               <div class="heading">
                 <h2>Welcome Back</h2>
-                <h6>Not registred yet?</h6>
+                <h6>Not registered yet?</h6>
                 <a href="#" class="toggle">Sign up</a>
               </div>
+
               <div class="actual-form">
                 <div class="input-wrap">
                   <input
@@ -59,14 +56,15 @@
                 </div>
 
                 <input type="submit" value="Sign In" class="sign-btn" />
-                </form>
-                <p class="text">
-                  Forgotten your password or you login datails?
-                  <a href="#">Get help</a> signing in
-                </p>
               </div>
+              <p class="text">
+                Forgotten your password or your login details?
+                <a href="#">Get help</a> signing in
+              </p>
+            </form>
 
-            <form action="land.html" autocomplete="off" class="sign-up-form">
+            <!-- Sign Up Form -->
+            <form action="/register" method="post" autocomplete="off" class="sign-up-form">
               <div class="logo">
                 <h4>EduFlex</h4>
               </div>
@@ -81,6 +79,7 @@
                 <div class="input-wrap">
                   <input
                     id="userUsername"
+                    name="reguserUsername"
                     type="text"
                     minlength="7"
                     class="input-field"
@@ -93,6 +92,7 @@
                 <div class="input-wrap">
                   <input
                     id="emailInput"
+                    name="email"
                     type="email"
                     class="input-field"
                     autocomplete="off"
@@ -104,6 +104,7 @@
                 <div class="input-wrap">
                   <input
                     id="passwordInput"
+                    name="reguserPwd"
                     type="password"
                     minlength="8"
                     class="input-field"
@@ -115,7 +116,8 @@
 
                 <div class="input-wrap">
                   <input
-                    id="passwordInput"
+                    id="confirmPasswordInput"
+                    name="confuserPwd"
                     type="password"
                     minlength="8"
                     class="input-field"
@@ -124,6 +126,7 @@
                   />
                   <label>Confirm Password</label>
                 </div>
+                <input type="hidden" name="interface" value="Webapp" />
 
                 <input type="submit" value="Sign Up" class="sign-btn" />
 
@@ -136,11 +139,11 @@
             </form>
           </div>
 
+          <!-- Carousel Section -->
           <div class="carousel">
             <div class="images-wrapper">
-              <img src="./img/image1.png" class="image img-1 show" alt="" />
-              <img src="./img/image2.png" class="image img-2" alt="" />
-              <img src="./img/image3.png" class="image img-3" alt="" />
+              <img src="./img/image1.svg" class="image img-1 show" alt="" />
+              <img src="./img/image2.svg" class="image img-2" alt="" />
             </div>
 
             <div class="text-slider">
@@ -155,7 +158,6 @@
               <div class="bullets">
                 <span class="active" data-value="1"></span>
                 <span data-value="2"></span>
-                <span data-value="3"></span>
               </div>
             </div>
           </div>
@@ -164,49 +166,53 @@
     </main>
 
     <!-- Javascript file -->
-
     <script>
       const inputs = document.querySelectorAll(".input-field");
-const toggle_btn = document.querySelectorAll(".toggle");
-const main = document.querySelector("main");
-const bullets = document.querySelectorAll(".bullets span");
-const images = document.querySelectorAll(".image");
-console.log("Script is loaded from here")
-inputs.forEach((inp) => {
-  inp.addEventListener("focus", () => {
-    inp.classList.add("active");
-  });
-  inp.addEventListener("blur", () => {
-    if (inp.value != "") return;
-    inp.classList.remove("active");
-  });
-});
+      const toggle_btns = document.querySelectorAll(".toggle");
+      const main = document.querySelector("main");
+      const bullets = document.querySelectorAll(".bullets span");
+      const images = document.querySelectorAll(".image");
+      const textSlider = document.querySelector(".text-group");
 
-toggle_btn.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    main.classList.toggle("sign-up-mode");
-  });
-});
+      // Handle input focus and blur
+      inputs.forEach((inp) => {
+        inp.addEventListener("focus", () => {
+          inp.classList.add("active");
+        });
+        inp.addEventListener("blur", () => {
+          if (inp.value != "") return;
+          inp.classList.remove("active");
+        });
+      });
 
-function moveSlider() {
-  let index = this.dataset.value;
+      // Toggle between Sign In and Sign Up
+      toggle_btns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          main.classList.toggle("sign-up-mode");
+        });
+      });
 
-  let currentImage = document.querySelector(`.img-${index}`);
-  images.forEach((img) => img.classList.remove("show"));
-  currentImage.classList.add("show");
+      // Handle carousel image and text slide transitions
+      function moveSlider() {
+        let index = this.dataset.value;
 
-  const textSlider = document.querySelector(".text-group");
-  textSlider.style.transform = `translateY(${-(index - 1) * 2.2}rem)`;
+        // Image transition
+        let currentImage = document.querySelector(`.img-${index}`);
+        images.forEach((img) => img.classList.remove("show"));
+        currentImage.classList.add("show");
 
-  bullets.forEach((bull) => bull.classList.remove("active"));
-  this.classList.add("active");
-}
+        // Text transition
+        textSlider.style.transform = `translateY(${-(index - 1) * 2.2}rem)`;
 
-bullets.forEach((bullet) => {
-  bullet.addEventListener("click", moveSlider);
-});
+        // Bullet indicator transition
+        bullets.forEach((bull) => bull.classList.remove("active"));
+        this.classList.add("active");
+      }
 
+      // Attach slider functionality to bullets
+      bullets.forEach((bullet) => {
+        bullet.addEventListener("click", moveSlider);
+      });
     </script>
-
   </body>
 </html>

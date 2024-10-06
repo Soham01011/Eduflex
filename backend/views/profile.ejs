@@ -990,21 +990,10 @@
                                           id="credly"
                                           name="credly"
                                           placeholder="Enter Your Credly Link"
-                                          value="<%= userProfile.credly || '' %>"
+                                          value="<%= userProfile.link || '' %>"
                                       />
                                   </div>
                       
-                                  <div class="mb-3 col-md-6">
-                                      <label for="linkedin" class="form-label">LinkedIn</label>
-                                      <input
-                                          type="text"
-                                          class="form-control"
-                                          id="linkedin"
-                                          name="linkedin"
-                                          placeholder="Enter Your LinkedIn Link"
-                                          value="<%= userProfile.linkedin || '' %>"
-                                      />
-                                  </div>
                               </div>
                           </div>
                       </form>
@@ -1104,8 +1093,40 @@
                   </tbody>
               </table>
               
-              
-              
+              <table class="w-full whitespace-no-wrap">
+                <thead>
+                  <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                    <th class="px-4 py-3" style="width: 50%;">Certificate</th> <!-- Certificate Name -->
+                    <th class="px-4 py-3">Issuer</th> <!-- Issuer Name -->
+                    <th class="px-4 py-3">Issue Date</th> <!-- Issue Date -->
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                  <% if (Array.isArray(cert) && cert.length > 0) { %>
+                    <% cert.forEach(certificate => { %>
+                      <tr class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-3">
+                          <a href="<%= certificate.link %>" target="_blank" class="text-blue-500 hover:underline">
+                            <%= certificate.cert_name %> <!-- Certificate Name with link -->
+                          </a>
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          <%= certificate.issuer_name %> <!-- Issuer Name -->
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          <%= new Date(certificate.issue_date).toDateString() %> <!-- Formatted Issue Date -->
+                        </td>
+                      </tr>
+                    <% }) %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="3" class="px-4 py-3 text-center text-gray-500">
+                        No Credly certificates.
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
               
               
               </div>

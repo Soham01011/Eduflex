@@ -194,8 +194,15 @@ def upload_file():
         
         else:
             return jsonify({'message': 'Unsupported file type'}), 400
-
-        return jsonify({'data': data})
+        cleaned_data = []
+        for item in data:
+            # Remove unwanted characters, e.g., parentheses, special symbols
+            cleaned_item = re.sub(r'[(){}\[\],;]', '', item).strip()  # Adjust regex as needed
+            if cleaned_item:  # Only add non-empty items
+                cleaned_data.append(cleaned_item)
+        
+        print("MENTOR DATA:", cleaned_data)
+        return jsonify({'data': cleaned_data})
 
     return jsonify({'message': 'Failed to upload file'}), 500
 

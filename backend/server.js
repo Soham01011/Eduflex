@@ -74,26 +74,25 @@ const logMessage = (message) => {
     });
 };
 
-async function addMentees(userUsername, filename, batchname, selection,interface,userIP) {
+async function addMentees(userUsername, filename, batchname, selection, interface, userIP) {
     const form = new FormData();
     const filePath = `C:/Eduflex/backend/uploads/${userUsername}/${filename}`;
     form.append('file', fs.createReadStream(filePath));
-    form.append('selection', selection);
-    console.log(" here in async function");
-    try {
-        const form = new FormData();
-        const filePath = `C:/Eduflex/backend/uploads/${userUsername}/${filename}`;
-        form.append('file', fs.createReadStream(filePath));
-        form.append('selection', selection.toLowerCase());
+    form.append('selection', selection.toLowerCase());
 
+    console.log(" here in async function");
+
+    try {
         console.log("Uploading file...");
 
+        // Post the form data to your endpoint
         const response = await axios.post('http://localhost:5000/upload', form, {
             headers: {
                 ...form.getHeaders(),
             },
         });
 
+        // Extracting data from the response
         const data = response.data.data;
         console.log('Extracted Data:', data);
 
@@ -102,12 +101,13 @@ async function addMentees(userUsername, filename, batchname, selection,interface
 
         for (const name of data) {
             const parts = name.split(' ');
+
             if (parts.length >= 2) {
                 const firstname = parts[0].toLowerCase();
                 const lastname = parts[1].toLowerCase();
-                
 
-                const userExists = await User.findOne({ 
+                // Find a user with either firstname-lastname or lastname-firstname
+                const userExists = await User.findOne({
                     $or: [
                         { firstname: new RegExp(`^${firstname}$`, 'i'), lastname: new RegExp(`^${lastname}$`, 'i') },
                         { firstname: new RegExp(`^${lastname}$`, 'i'), lastname: new RegExp(`^${firstname}$`, 'i') }
@@ -121,6 +121,7 @@ async function addMentees(userUsername, filename, batchname, selection,interface
             }
         }
 
+        // Add mentees to the mentor batch if valid students are found
         if (mentorStudents.length > 0) {
             const existingBatch = await Mentor.findOne({ batch: batchname });
 
@@ -130,28 +131,27 @@ async function addMentees(userUsername, filename, batchname, selection,interface
                 existingBatch.students = Array.from(uniqueStudents);
                 await existingBatch.save();
                 console.log('Mentees updated successfully');
-                logMessage(`[=] ${interface} ${userIP} : New mentees existing group under mentor ${userUsername} `) 
+                logMessage(`[=] ${interface} ${userIP} : New mentees existing group under mentor ${userUsername}`);
             } else {
-                // Create a new batch
+                // Create a new batch with the students
                 const newMentees = new Mentor({
                     mentor: userUsername,
                     students: mentorStudents,
-                    username : mentorStudentsMoodle,
+                    username: mentorStudentsMoodle,
                     batch: batchname,
                 });
                 await newMentees.save();
                 console.log('Mentees added successfully');
-                logMessage(`[=] ${interface} ${userIP} : New mentees added under mentor ${userUsername} `) 
-
+                logMessage(`[=] ${interface} ${userIP} : New mentees added under mentor ${userUsername}`);
             }
-        }
-         else {
+        } else {
             console.log('No valid mentees found');
         }
     } catch (error) {
         console.error('Error processing mentees:', error);
     }
 }
+
 
 async function fetchAndSaveBadges(userUsername) {
     try {
@@ -569,6 +569,7 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
         if (Credly_there) {
             link = Credly_there.link;
         }
+        const cert = await Credly.find({username : username})
 
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
@@ -577,6 +578,7 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
             user_profile,
             missingFields,
             link,
+            cert,
             certificateData: formattedCertificateData // Send formatted certificate data
         });
         
@@ -1113,9 +1115,14 @@ server.post("/upload", upload.single('file'), async (req, res) => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         const userIP = response.data.ip;
-        let { Token, up_username, post_type, post_desc, interface } = req.body;
+        let { Token, up_username, post_type, post_desc, interface,selection } = req.body;
         let { hashtags } = req.body;
         console.log(hashtags, post_type, post_desc, interface);
+
+        if (post_type === "mentor_file_upload") {
+            console.log("MEntor uploading")
+            addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
+        }
 
         // Handle `hashtags` whether it is a string or an array
         if (typeof hashtags === 'string') {
@@ -1252,7 +1259,7 @@ server.post("/upload", upload.single('file'), async (req, res) => {
                     return res.status(500).json({ message: "Error converting PDF to images" });
                 });
         } else if (post_type === "mentor_file_upload") {
-            // Handle other file upload types
+            console.log("MEntor uploading")
             addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
         }
     } catch (error) {
