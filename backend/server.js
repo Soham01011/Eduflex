@@ -374,33 +374,104 @@ server.use(express.json());
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        const uploadDir = `uploads/${req.body.up_username}`;
-        fs.mkdirSync(uploadDir, { recursive: true });
-        callback(null, uploadDir);
+        let username;
+
+        // Check if the request is from the Mobile App (req.body.up_username)
+        if (req.body && req.body.up_username) {
+            username = req.body.up_username; // Use username from the request body (Mobile App)
+        }
+
+        // Otherwise, check if the request is from the Webapp (req.cookies.Token)
+        else if (req.cookies && req.cookies.Token) {
+            try {
+                // Decode the token from the cookie
+                const decodedToken = jwt.verify(req.cookies.Token, serverSK);
+                username = decodedToken.username; // Extract username from decoded token (Webapp)
+            } catch (error) {
+                console.error("Error decoding token from cookie:", error.message);
+                return callback(new Error("Invalid token in cookie"), null);
+            }
+        }
+
+        // Ensure username is available for file storage
+        if (username) {
+            const uploadDir = `uploads/${username}`; // Use the username in the directory structure
+            fs.mkdirSync(uploadDir, { recursive: true }); // Create directory recursively
+            callback(null, uploadDir); // Set the upload directory
+        } else {
+            callback(new Error("Username not found in body or cookie"), null); // Handle missing username
+        }
     },
     filename: (req, file, callback) => {
-        // Replace spaces with underscores in the file name
-        const originalName = file.originalname.replace(/\s+/g, '_');
-        const newFilename = req.body.up_username + "-" + originalName;
-        console.log("Filename:", newFilename);
-        callback(null, newFilename);
+        let username = req.body.up_username; // Default to body username
+        
+        // Check if the request is from Webapp and username is in cookies
+        if (!username && req.cookies && req.cookies.Token) {
+            try {
+                // Decode the token from the cookie
+                const decodedToken = jwt.verify(req.cookies.Token, serverSK);
+                username = decodedToken.username; // Extract username from decoded token (Webapp)
+            } catch (error) {
+                console.error("Error decoding token from cookie:", error.message);
+                return callback(new Error("Invalid token in cookie"), null);
+            }
+        }
+
+        if (username) {
+            // Replace spaces with underscores in the file name
+            const originalName = file.originalname.replace(/\s+/g, '_');
+            const newFilename = username + "-" + originalName; // Format: <username>-<original_filename>
+            console.log("Filename:", newFilename);
+            callback(null, newFilename); // Set the new file name
+        } else {
+            callback(new Error("Username not found"), null); // Handle missing username
+        }
     }
 });
+
 const upload = multer({ storage: storage });
 
+
 const hashtag_storage = multer.diskStorage({
-    destination: (req,file,callback) =>
-    {
-        const hashtag_file = `hashtag_extractions/`;
-        fs.mkdirSync(hashtag_file, {recursive: true});
-        callback(null,hashtag_file);
+    destination: (req, file, callback) => {
+        let username;
+
+        // Check if the request is from the Mobile App (req.body.up_username)
+        if (req.body && req.body.up_username) {
+            username = req.body.up_username; // Use username from the request body (Mobile App)
+        }
+
+        // Otherwise, check if the request is from the Webapp (req.cookies.Token)
+        else if (req.cookies && req.cookies.Token) {
+            try {
+                // Decode the token from the cookie
+                const decodedToken = jwt.verify(req.cookies.Token, serverSK);
+                username = decodedToken.username; // Extract username from decoded token (Webapp)
+            } catch (error) {
+                console.error("Error decoding token from cookie:", error.message);
+                return callback(new Error("Invalid token in cookie"), null);
+            }
+        }
+
+        // Ensure username is available for file storage
+        if (username) {
+            const hashtag_file = `hashtag_extractions/${username}/`; // Store in the directory for the user
+            fs.mkdirSync(hashtag_file, { recursive: true }); // Create directory recursively
+            callback(null, hashtag_file); // Set upload destination
+        } else {
+            callback(new Error("Username not found in body or cookie"), null); // Handle missing username
+        }
     },
-    filename: (req,file,callback) => 
-    {
-        callback(null,req.body.up_username+"-"+file.originalname);
+    filename: (req, file, callback) => {
+        // Use either body 'up_username' or cookie-decoded username in the filename
+        const username = req.body.up_username || req.cookies.username;
+        const newFilename = `${username}-${file.originalname}`; // Filename format: <username>-<original filename>
+        callback(null, newFilename); // Set new filename
     }
 });
-const extract_hashtag_folder = multer({storage : hashtag_storage});
+
+const extract_hashtag_folder = multer({ storage: hashtag_storage });
+
 
 const user_profilepic = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -439,7 +510,6 @@ const user_profilepic = multer.diskStorage({
     }
 });
 
-// Initialize multer with the modified storage configuration
 const profile_pic_upload = multer({ storage: user_profilepic });
 
 
@@ -537,6 +607,10 @@ function formatCertificateData(data) {
     });
 }
 
+server.get("/upload-certificate",checkToken,async(req,res)=>{
+    username = await fetchUser(req,res);
+    res.render("upload",{username : username});
+});
 
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
