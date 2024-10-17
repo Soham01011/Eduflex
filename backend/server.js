@@ -569,6 +569,7 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
         if (Credly_there) {
             link = Credly_there.link;
         }
+        console.log("Credyly link : ",link);
         const cert = await Credly.find({username : username})
 
         // Render the profile page with user data, certificate data, and missing fields
@@ -1548,8 +1549,10 @@ server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (r
 
     const { Token, interface, filename, up_username } = req.body;
     console.log("Token:", Token, "interface:", interface, "Filename:", filename, "username:", up_username);
-    const filePath = req.file.path;
-
+    const filePath = path.join(__dirname, 'hashtag_extractions', req.file.filename);
+    console.log("File path sent to Flask:", filePath);
+    
+    console.log("---------------------",filePath);
     try {
         const flaskResponse = await axios.post('http://localhost:5000/autohash', {
             filePath: filePath,
@@ -1598,7 +1601,7 @@ server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (r
         return res.status(200).json(hashtags);
 
     } catch (error) {
-        console.error('Error communicating with Flask server:', error);
+        logMessage(`Error communicating with Flask server: ${error}`);
         return res.status(500).json({ message: 'Failed to extract hashtags' });
     }
 });

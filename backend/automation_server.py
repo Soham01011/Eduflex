@@ -211,14 +211,17 @@ def upload_file():
 @app.route('/autohash', methods=['POST'])
 def extract_hashtags():
     data = request.json
+    print(data)
     temp = data.get('filePath')
     mode = data.get('mode')
     
-    # Construct the file path
-    file_path = os.path.normpath(os.path.join('./', temp))
-    
-    # Ensure file exists
+    # Correctly construct the absolute file path
+    file_path = os.path.abspath(temp)
+    print(f"Constructed file path: {file_path}")
+
+    # Ensure the file exists
     if not os.path.isfile(file_path):
+        print('File not found:', file_path)
         return jsonify({"error": "File not found"}), 404
 
     try:
@@ -236,6 +239,7 @@ def extract_hashtags():
     except Exception as e:
         print(f"Error processing file: {e}")
         return jsonify({"error": "Failed to extract hashtags"}), 500
+
     
 
 ##################################################################################        CREDLY BADGES
@@ -296,12 +300,13 @@ def validate_certificate():
         if not username or not filename:
             return jsonify({'error': 'Username and filename are required'}), 400
         
-        # Construct the full path for the uploaded file
-        file_path = os.path.join(app.config['CERT_DETECTION'], username, secure_filename(filename))
+        base_dir = 'C:\\Eduflex\\backend\\uploads'  # Update this path to the actual base directory
+        file_path = os.path.join(base_dir, username, secure_filename(filename))
         print("The original file path:", file_path)
         
         # Ensure file exists
         if not os.path.isfile(file_path):
+            print("file not found at validate certificate ")
             return jsonify({'error': 'File not found'}), 404
         
         # Process the PDF file

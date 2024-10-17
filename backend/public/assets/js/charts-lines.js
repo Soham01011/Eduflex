@@ -7,7 +7,7 @@ const lineConfig = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
       {
-        label: 'Organic',
+        label: 'Academics',
         /**
          * These colors come from Tailwind CSS palette
          * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
@@ -18,7 +18,19 @@ const lineConfig = {
         fill: false,
       },
       {
-        label: 'Paid',
+        label: 'Cultural',
+        /**
+         * These colors come from Tailwind CSS palette
+         * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
+         */
+        backgroundColor: '#1c64f2',
+        borderColor: '#1c64f2',
+        data: [17, 60, 55, 64, 58, 65, 75],
+        fill: false,
+      },
+
+      {
+        label: 'Communication',
         fill: false,
         /**
          * These colors come from Tailwind CSS palette
