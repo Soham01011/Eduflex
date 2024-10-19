@@ -591,6 +591,7 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
 
 // Function to format the certificate data
 function formatCertificateData(data) {
+    console.log("DATA HERE : ",data)
     if (!data || !Array.isArray(data)) return []; // Return empty array if no data is found
 
     return data.map(cert => {

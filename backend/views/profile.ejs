@@ -1059,7 +1059,7 @@
                                   <iframe src="<%= cert.pdfLink %>" width="100%" height="200px" style="border: none;"></iframe> <!-- PDF viewer -->
                               </td>
                               <td class="px-4 py-3 text-sm">
-                                 Description here <%= cert.post_desc %> <!-- Display the post description -->
+                                 <%= cert.postDesc %> <!-- Display the post description -->
                               </td>
                               <td class="px-4 py-3 text-sm">
                                   <%= new Date(cert.createdAt).toDateString() %> <!-- Format the date as needed -->
