@@ -1,3 +1,4 @@
+import traceback
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
@@ -16,7 +17,7 @@ import pytesseract
 from PIL import Image
 from nltk.corpus import stopwords
 
-from model import extract_font_information_with_metadata_and_images, prepare_data_for_prediction, model, preprocessor
+from model2 import extract_font_information_with_metadata_and_images, prepare_data_for_prediction, preprocessor, model
 
 nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
@@ -289,8 +290,10 @@ def fetch_badges():
     # Return the JSON response
     return jsonify(badges_data)
 
-@app.route('/validate-certificate', methods=['POST'])
-def validate_certificate():
+##################################################################################         Validate certificate
+
+@app.route('/validate-certificate-two', methods=['POST'])
+def validate_certificate_two():
     try:
         # Get the JSON data from the request
         data = request.json
@@ -304,12 +307,12 @@ def validate_certificate():
         file_path = os.path.join(base_dir, username, secure_filename(filename))
         print("The original file path:", file_path)
         
-        # Ensure file exists
+        # Ensure the file exists
         if not os.path.isfile(file_path):
-            print("file not found at validate certificate ")
+            print("File not found at validate certificate")
             return jsonify({'error': 'File not found'}), 404
         
-        # Process the PDF file
+        # Process the PDF file to extract features
         features = extract_font_information_with_metadata_and_images(file_path)
         if not features:
             return jsonify({'error': 'No features extracted from PDF'}), 500
@@ -331,13 +334,17 @@ def validate_certificate():
                 fake_producer = features[i]['Producer']
                 break
         
+        # Return the result based on prediction
         if all_real:
             return jsonify({"result": "Real"})
         else:
             return jsonify({"result": "Fake", "Edited_By": f"{fake_producer}"})
     
     except Exception as e:
+        # Log the exception for debugging
+        print("Exception occurred:", traceback.format_exc())
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(port=5000)

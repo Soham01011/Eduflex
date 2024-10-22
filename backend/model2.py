@@ -8,13 +8,14 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.pdfpage import PDFPage
 import fitz
+import os
 
 # Load the saved Keras model
-model = load_model('C:\\Eduflex\\backend\\certificate_classifier_keras_model.h5')
+model = load_model('C:\\Eduflex\\backend\\certificate_indentifier.keras')
 
 # Define preprocessing steps
 categorical_features = ['Font Style', 'Producer']
-numerical_features = ['Font Size', 'Color', 'Image Count']
+numerical_features = ['Font Size', 'Color', 'Image Count', 'x0', 'y0', 'x1', 'y1']
 
 categorical_transformer = OneHotEncoder(handle_unknown='ignore')
 numerical_transformer = StandardScaler()
@@ -25,92 +26,104 @@ preprocessor = ColumnTransformer(
         ('cat', categorical_transformer, categorical_features)
     ])
 
-# Load training data to fit preprocessor
+# Load training data to fit the preprocessor
 real_data = pd.read_csv("C:\\Eduflex\\backend\\real_cert.csv")
 fake_data = pd.read_csv("C:\\Eduflex\\backend\\fake_cert.csv")
 data = pd.concat([real_data, fake_data], ignore_index=True)
+
+# Rename columns to match expected names
+data.rename(columns={
+    "Char_x0": "x0",
+    "Char_y0": "y0",
+    "Char_x1": "x1",
+    "Char_y1": "y1"
+}, inplace=True)
+
 X = data.drop(columns=['Label', 'Text'])
 preprocessor.fit(X)
 
 def extract_metadata(pdf_file):
+    """Extract metadata from the PDF file."""
     try:
         document = fitz.open(pdf_file)
         metadata = document.metadata
         return metadata
     except Exception as e:
-        print("Error extracting metadata from {}: {}".format(pdf_file, e))
+        print(f"Error extracting metadata from {pdf_file}: {e}")
         return {}
 
 def extract_font_information(pdf_file):
+    """Extract font information along with text coordinates using pdfminer and fallback to PyMuPDF."""
     font_data = []
-    
-    # Attempt extraction with pdfminer
     try:
+        # Attempt extraction with pdfminer
         with open(pdf_file, 'rb') as file:
             rsrcmgr = PDFResourceManager()
             laparams = LAParams()
             device = PDFPageAggregator(rsrcmgr, laparams=laparams)
             interpreter = PDFPageInterpreter(rsrcmgr, device)
-            for page_number, page in enumerate(PDFPage.get_pages(file), start=1):
+            for page in PDFPage.get_pages(file):
                 interpreter.process_page(page)
                 layout = device.get_result()
                 for element in layout:
                     if isinstance(element, (LTTextBox, LTTextLine)):
                         for text_line in element:
                             line_text = text_line.get_text().strip()
+                            x0, y0, x1, y1 = text_line.bbox  # Get the coordinates of the text line
                             for char in text_line:
                                 if isinstance(char, LTChar):
                                     color = getattr(char.graphicstate, 'ncolor', 'Unknown')
-                                    if isinstance(color, tuple):
-                                        color = sum(color) / len(color)
-                                    elif isinstance(color, np.ndarray):
-                                        color = np.mean(color)
-                                    elif isinstance(color, list):
-                                        color = sum(color) / len(color)
-                                    
+                                    color = np.mean(color) if isinstance(color, (tuple, list, np.ndarray)) else float(color)
                                     font_data.append({
-                                        "Text": str(line_text),
-                                        "Font Style": str(char.fontname),
+                                        "Text": line_text,
+                                        "Font Style": char.fontname,
                                         "Font Size": float(char.size),
                                         "Color": float(color),
-                                        "Label": int(1)
+                                        "x0": x0,
+                                        "y0": y0,
+                                        "x1": x1,
+                                        "y1": y1,
+                                        "Label": 1
                                     })
     except Exception as e:
-        print("Error with pdfminer: {}".format(e))
-        # Fallback to fitz (PyMuPDF) if pdfminer fails
+        print(f"Error with pdfminer: {e}")
+        # Fallback to fitz (PyMuPDF)
         try:
             document = fitz.open(pdf_file)
             for page_number in range(len(document)):
                 page = document.load_page(page_number)
                 blocks = page.get_text('dict')['blocks']
                 for block in blocks:
-                    if block['type'] == 0:  # Text block
+                    if block['type'] == 0:
                         for line in block['lines']:
                             for span in line['spans']:
                                 text = span['text']
                                 font_style = span['font']
                                 font_size = span['size']
                                 color = span.get('color', 'Unknown')
-                                
-                                # Handle color extraction if color is a tuple or list
-                                if isinstance(color, tuple):
-                                    color = sum(color) / len(color)
-                                elif isinstance(color, list):
-                                    color = sum(color) / len(color)
-                                
+                                x0 = span['bbox'][0]  # Starting x-coordinate
+                                y0 = span['bbox'][1]  # Starting y-coordinate
+                                x1 = span['bbox'][2]  # Ending x-coordinate
+                                y1 = span['bbox'][3]  # Ending y-coordinate
+
+                                color = sum(color) / len(color) if isinstance(color, (tuple, list)) else float(color)
                                 font_data.append({
                                     "Text": text,
                                     "Font Style": font_style,
                                     "Font Size": float(font_size),
                                     "Color": float(color),
-                                    "Label": int(1)
+                                    "x0": x0,
+                                    "y0": y0,
+                                    "x1": x1,
+                                    "y1": y1,
+                                    "Label": 1
                                 })
         except Exception as e:
-            print("Error with fitz (PyMuPDF): {}".format(e))
-    
+            print(f"Error with fitz (PyMuPDF): {e}")
     return font_data
 
 def extract_image_count(pdf_file):
+    """Extract the count of images from the PDF file."""
     try:
         document = fitz.open(pdf_file)
         image_count = 0
@@ -119,10 +132,11 @@ def extract_image_count(pdf_file):
             image_count += len(page.get_images(full=True))
         return image_count
     except Exception as e:
-        print("Error counting images in {}: {}".format(pdf_file, e))
+        print(f"Error counting images in {pdf_file}: {e}")
         return 0
 
 def extract_font_information_with_metadata_and_images(pdf_file):
+    """Extract font information, metadata, and image count from the PDF file."""
     metadata = extract_metadata(pdf_file)
     producer = str(metadata.get('producer', 'Unknown'))
     font_data = extract_font_information(pdf_file)
@@ -133,19 +147,45 @@ def extract_font_information_with_metadata_and_images(pdf_file):
     return font_data
 
 def prepare_data_for_prediction(features):
+    # Convert the list of features into a DataFrame
     df = pd.DataFrame(features)
-    feature_order = ["Font Style", "Font Size", "Color", "Producer", "Image Count"]
-    for col in feature_order:
+    
+    # Define the expected columns based on the model's preprocessing requirements
+    expected_columns = [
+        "Font Style", "Font Size", "Color", "Producer", "Image Count",
+        "x0", "y0", "x1", "y1"
+    ]
+    
+    # Ensure all expected columns are present in the DataFrame
+    for col in expected_columns:
         if col not in df.columns:
-            df[col] = np.nan
-    df = df[feature_order]
+            df[col] = np.nan  # Add missing columns with NaN values
+    
+    # Select and reorder columns based on the expected order
+    df = df[expected_columns]
+    
+    # Convert necessary columns to appropriate data types
     df["Font Style"] = df["Font Style"].astype(str)
     df["Producer"] = df["Producer"].astype(str)
+    
+    # Fill missing values with defaults for numerical fields and 'Unknown' for categorical
     df.fillna({
         "Font Style": "Unknown",
         "Producer": "Unknown",
         "Font Size": 0,
         "Color": 0,
-        "Image Count": 0
+        "Image Count": 0,
+        "x0": 0,
+        "y0": 0,
+        "x1": 0,
+        "y1": 0
     }, inplace=True)
+    
     return df
+
+# Example usage
+# pdf_file_path = "path_to_your_pdf_file.pdf"
+# features = extract_font_information_with_metadata_and_images(pdf_file_path)
+# prepared_data = prepare_data_for_prediction(features)
+# predictions = model.predict(preprocessor.transform(prepared_data))
+# print(predictions)

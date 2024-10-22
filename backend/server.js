@@ -216,7 +216,7 @@ async function fetchAndSaveBadges(userUsername) {
 }
 
 async function validatecert(username, filename) {
-    const validateUrl = 'http://127.0.0.1:5000/validate-certificate'; // Flask endpoint for validation
+    const validateUrl = 'http://127.0.0.1:5000/validate-certificate-two'; // Flask endpoint for validation
 
     // Construct the request data
     const requestData = {
