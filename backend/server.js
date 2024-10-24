@@ -947,170 +947,182 @@ server.post("/register", async (req, res) => {
     return res.status(201).json({ message: "User registered successfully" });
 });
 
-server.post("/changeprofile",checkToken,profile_pic_upload.single('file'),  async (req, res) => {
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async (req, res) => {
+        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-
-    // Destructure the request body to get all fields
-    let { 
-        Token,
-        firstName,
-        lastName, 
-        changeemail, 
-        changepwd, 
-        changephoneno, 
-        dob, 
-        github, 
-        website, 
-        bio, 
-        college, 
-        academicyear, 
-        semester, 
-        cgpa, 
-        hobby, 
-        photo, 
-        credly,
-        interface 
-    } = req.body;
-
-    let user_data;
-    
-    console.log("Token:", Token, "Email:", changeemail, "Password:", changepwd, "PhoneNo:", changephoneno);
-
-    if (!Token) {
-        const raw_token = req.cookies.Token;
-
-        if (!raw_token) {
-            return res.status(400).json({ message: "Token is required." });
+        if (Array.isArray(userIP)) {
+            userIP = userIP[0];
+        } else if (userIP.includes(',')) {
+            userIP = userIP.split(',')[0].trim();
         }
 
-        try {
-            // Verify and decode the token using serverSK
-            const decodedToken = jwt.verify(raw_token, serverSK);
+        // Destructure the request body to get all fields
+        let {
+            Token,
+            firstName,
+            lastName,
+            changeemail,
+            changepwd,
+            changephoneno,
+            dob,
+            github,
+            website,
+            bio,
+            college,
+            academicyear,
+            semester,
+            cgpa,
+            hobby,
+            credly,
+            interface
+        } = req.body;
 
-            // Extract userId from the decoded token
-            Token = decodedToken.userId;
-        } catch (error) {
-            console.log("Error decoding token:", error.message);
-            return res.status(400).json({ message: "Invalid or expired token." });
+        console.log(
+            'Token:',
+            Token,
+            'Email:',
+            changeemail,
+            'Password:',
+            changepwd,
+            'PhoneNo:',
+            changephoneno,"First name :",firstName , " Lastname : ", lastName, "CREDLY ", credly
+        );
+
+        if (!Token) {
+            const raw_token = req.cookies.Token;
+
+            if (!raw_token) {
+                return res.status(400).json({ message: 'Token is required.' });
+            }
+
+            try {
+                // Verify and decode the token using serverSK
+                const decodedToken = jwt.verify(raw_token, serverSK);
+                Token = decodedToken.userId; // Extract userId from the decoded token
+            } catch (error) {
+                console.log('Error decoding token:', error.message);
+                return res.status(400).json({ message: 'Invalid or expired token.' });
+            }
         }
-    }
 
-    // Check if the token is provided
-    if (Token) {
+        // Check if the token is provided
         const tokencheck = await CSRFToken.findOne({ token: Token });
 
         // Validate token
         if (!tokencheck || tokencheck.token !== Token) {
-            logMessage(`[-] ${interface} ${userIP} : Invalid token provided for changing user data. Token: ${Token}`);
-            return res.status(400).json({ message: "Invalid token" });
+            logMessage(
+                `[-] ${interface} ${userIP} : Invalid token provided for changing user data. Token: ${Token}`
+            );
+            return res.status(400).json({ message: 'Invalid token' });
         }
-    }
-    
-    const tokencheck = await CSRFToken.findOne({ token: Token });
 
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (changeemail && !emailRegex.test(changeemail)) {
-        logMessage(`[-] ${interface} ${userIP} : Failed to update profile. Invalid email format. Token: ${Token}`);
-        return res.status(400).json({ message: "Invalid email format." });
-    }
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (changeemail && !emailRegex.test(changeemail)) {
+            logMessage(
+                `[-] ${interface} ${userIP} : Failed to update profile. Invalid email format. Token: ${Token}`
+            );
+            return res.status(400).json({ message: 'Invalid email format.' });
+        }
 
-    // Password strength validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    if (changepwd && !passwordRegex.test(changepwd)) {
-        logMessage(`[-] ${interface} ${userIP} : Failed to update profile. Weak password. Token: ${Token}`);
-        return res.status(400).json({
-            message: "Password must be at least 8 characters long, and contain at least one symbol, one uppercase letter, one lowercase letter, and one number."
-        });
-    }
+        // Password strength validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        if (changepwd && !passwordRegex.test(changepwd)) {
+            logMessage(
+                `[-] ${interface} ${userIP} : Failed to update profile. Weak password. Token: ${Token}`
+            );
+            return res.status(400).json({
+                message:
+                    'Password must be at least 8 characters long, and contain at least one symbol, one uppercase letter, one lowercase letter, and one number.'
+            });
+        }
 
-    // Phone number length validation
-    const phoneRegex = /^\d{10,11}$/;
-    if (changephoneno && !phoneRegex.test(changephoneno)) {
-        logMessage(`[-] ${interface} ${userIP} : Failed to update profile. Invalid phone number. Token: ${Token}`);
-        return res.status(400).json({ message: "Invalid phone number." });
-    }
-
-    // Additional validation can be done here (e.g., validating GitHub, website URL, etc.)
-
-    // If all validations pass
-    try {
-        // Update the user data
-        await User.updateOne(
-            { username: tokencheck.username },
-            {
-                $set: {
-                    password: changepwd,
-                    email: changeemail,
-                    phone_number: changephoneno,
-                    dob: dob,
-                    github: github,
-                    website: website,
-                    bio: bio,
-                    college: college,
-                    academic_year: academicyear,
-                    semester: semester,
-                    cgpa: cgpa,
-                    hobby: hobby,
-                }
-            },
-            { upsert: true }
-        );
-
-        if (credly) {
-            const credlylink_template = "https://www.credly.com/users/";
-            
-            // Validate that the credly link is valid
-            if (credly.toLowerCase().includes(firstName.toLowerCase()) && 
-                credly.toLowerCase().includes(lastName.toLowerCase()) &&
-                credly.toLowerCase().includes(credlylink_template)) {
-
-                const response = await axios.get('http://localhost:5000/fetch-badges', {
-                    params: { url: credly }
-                });
-
-                const badgeDataArray = response.data;
-
-                // Insert each badge into the database
-                for (const badge of badgeDataArray) {
-                    try {
-                        const newBadge = new Credly({
-                            firstname: firstName,
-                            lastname: lastName,
-                            username: tokencheck.username,
-                            link: credly,
-                            issuer_name: badge.issuer_name,
-                            cert_name: badge.certificate_name,
-                            issue_date: badge.issued_date
-                        });
-
-                        await newBadge.save();
-                        logMessage(`[=] ${interface} ${userIP} : ${tokencheck.username} fetched and saved credyl badges `)
-                    } catch (error) {
-                        console.error("Badge saving error:", error);
+        // Phone number length validation
+        const phoneRegex = /^\d{10,11}$/;
+        if (changephoneno && !phoneRegex.test(changephoneno)) {
+            logMessage(
+                `[-] ${interface} ${userIP} : Failed to update profile. Invalid phone number. Token: ${Token}`
+            );
+            return res.status(400).json({ message: 'Invalid phone number.' });
+        }
+        console.log(" USERNAME : " , tokencheck.username)
+        // Update user data if all validations pass
+        try {
+            await User.updateOne(
+                { username: tokencheck.username },
+                {
+                    $set: {
+                        firstname: firstName,
+                        lastname: lastName,
+                        password: changepwd,
+                        email: changeemail,
+                        phone_number: changephoneno,
+                        dob: dob,
+                        github: github,
+                        website: website,
+                        bio: bio,
+                        college: college,
+                        academic_year: academicyear,
+                        semester: semester,
+                        cgpa: cgpa,
+                        hobby: hobby
                     }
+                },
+                { upsert: true }
+            );
+
+            // Handle Credly badge fetching
+            if (credly) {
+                const credlylink_template = 'https://www.credly.com/users/';
+
+                // Validate the Credly link
+                if (
+                    credly.toLowerCase().includes(firstName.toLowerCase()) &&
+                    credly.toLowerCase().includes(lastName.toLowerCase()) &&
+                    credly.toLowerCase().includes(credlylink_template)
+                ) {
+                    const response = await axios.get('http://localhost:5000/fetch-badges', {
+                        params: { url: credly }
+                    });
+
+                    const badgeDataArray = response.data;
+
+                    // Insert each badge into the database
+                    for (const badge of badgeDataArray) {
+                        try {
+                            const newBadge = new Credly({
+                                firstname: firstName,
+                                lastname: lastName,
+                                username: tokencheck.username,
+                                link: credly,
+                                issuer_name: badge.issuer_name,
+                                cert_name: badge.certificate_name,
+                                issue_date: badge.issued_date
+                            });
+
+                            await newBadge.save();
+                            logMessage(
+                                `[=] ${interface} ${userIP} : ${tokencheck.username} fetched and saved Credly badges`
+                            );
+                        } catch (error) {
+                            console.error('Badge saving error:', error);
+                        }
+                    }
+                } else {
+                    return res.status(400).json({ message: 'Invalid Credly link.' });
                 }
-            } else {
-                return res.status(400).json({ message: 'Invalid Credly link.' });
             }
+
+            // Delete the used token
+            await CSRFToken.deleteOne({ token: Token });
+            logMessage(`[=] ${interface} ${userIP} : ${tokencheck.username} updated their profile.`);
+            return res.status(200).json({ message: 'Update successful.' });
+        } catch (e) {
+            logMessage(`[*] Internal server error: ${e}`);
+            return res.status(500).json({ message: 'Internal server error' });
         }
-
-        // Delete the used token
-        await CSRFToken.deleteOne({ token: Token });
-        logMessage(`[=] ${interface} ${userIP} : ${tokencheck.username} updated their profile.`)
-        return res.status(200).json({ message: "Update successful." });
-
-    } catch (e) {
-        logMessage(`[*] Internal server error: ${e}`);
-        return res.status(500).json({ message: "Internal server error" });
     }
-});
+);
 
 
 server.post("/upload", upload.single('file'), async (req, res) => {
