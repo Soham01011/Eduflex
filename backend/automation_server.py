@@ -254,11 +254,11 @@ def fetch_badges():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto(url)       
-        page.wait_for_load_state('networkidle', timeout=60000)    
+        page.wait_for_load_state('networkidle', timeout=10000)    
         see_all_button = page.locator("text=See all")
         if see_all_button:
             see_all_button.click()
-            page.wait_for_load_state('networkidle',timeout=60000)  
+            page.wait_for_load_state('networkidle',timeout=10000)  
         html = page.content()
         browser.close()
     soup = BeautifulSoup(html, 'html.parser')

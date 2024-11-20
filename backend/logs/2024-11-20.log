@@ -15,3 +15,26 @@
 [2024-11-20T14:16:26.832Z] [=] User 21104010 attempting to log in
 [2024-11-20T14:16:26.853Z] [=] Webapp 2409:40c0:220:cfb:99ae:d1d:4767:be64 : User 21104010 successfully logged in
 [2024-11-20T14:16:26.863Z] [=] Webapp 2409:40c0:220:cfb:99ae:d1d:4767:be64 : Token provided for user 21104010
+[2024-11-20T14:49:24.762Z] [=] User 21104010 attempting to log in
+[2024-11-20T14:49:24.785Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-11-20T14:49:24.801Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-11-20T15:33:37.991Z] [=] Webapp 152.58.2.191 : Posted a file 21104010-SankalpGunjal-IT Essentials-certificate edited word.pdf
+[2024-11-20T15:34:33.821Z] [=] User 21104010 attempting to log in
+[2024-11-20T15:34:33.827Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-11-20T15:34:33.840Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-11-20T15:38:08.767Z] [*] Internal server error : ReferenceError: jwt is not defined 
+[2024-11-20T15:38:15.086Z] [=] User 21104010 attempting to log in
+[2024-11-20T15:38:15.098Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-11-20T15:38:15.116Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-11-20T15:38:15.218Z] [*] Internal server error : ReferenceError: jwt is not defined 
+[2024-11-20T15:38:23.212Z] [=] User 21104010 attempting to log in
+[2024-11-20T15:38:23.216Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-11-20T15:38:23.224Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-11-20T15:38:23.256Z] [*] Internal server error : ReferenceError: jwt is not defined 
+[2024-11-20T15:40:50.978Z] [=] User 21104010 attempting to log in
+[2024-11-20T15:40:51.004Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-11-20T15:40:51.029Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-11-20T15:40:51.149Z] [*] Internal server error : ReferenceError: serverSK is not defined 
+[2024-11-20T15:42:04.964Z] [=] User 21104010 attempting to log in
+[2024-11-20T15:42:04.978Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-11-20T15:42:04.990Z] [=] Webapp ::1 : Token provided for user 21104010

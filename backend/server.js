@@ -9,14 +9,20 @@ const cookieParser = require("cookie-parser");
 const readline = require("readline");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4, stringify } = require("uuid");
-const { format } = require('date-fns');
-const FormData = require('form-data');
 const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
 const pdf = require('pdf-poppler');
 const { exec } = require('child_process');
 const socketIo = require('socket.io');
+
+const {logMessage} = require('./utils/logger');
+const {addMentees} = require('./utils/mentees');
+const {fetchBadges} = require('./utils/fetchBadges');
+const {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
+const {checkToken} = require('./middleware/checkToken');
+const {validatecert} = require('./utils/validatecert');
+
 const CSRFToken = require("./models/csrfttoken");
 const User = require("./models/users");
 const Profiles = require("./models/profiles");
@@ -48,320 +54,6 @@ const logDirectory = path.join(__dirname, 'logs');
 // Create the logs directory if it doesn't exist
 if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
-}
-
-const getLogFileName = () => {
-    const dateStr = format(new Date(), 'yyyy-MM-dd');
-    return path.join(logDirectory, `${dateStr}.log`);
-};
-
-const logMessage = (message) => {
-    const logFile = getLogFileName();
-    const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] ${message}\n`;
-
-    fs.open(logFile, 'a', (err, fd) => {
-        if (err) {
-            throw err;
-        }
-
-        fs.appendFile(fd, logEntry, (err) => {
-            if (err) throw err;
-            fs.close(fd, (err) => {
-                if (err) throw err;
-            });
-        });
-    });
-};
-
-async function addMentees(userUsername, filename, batchname, selection, interface, userIP) {
-    const form = new FormData();
-    const filePath = `C:/Eduflex/backend/uploads/${userUsername}/${filename}`;
-    form.append('file', fs.createReadStream(filePath));
-    form.append('selection', selection.toLowerCase());
-
-    console.log(" here in async function");
-
-    try {
-        console.log("Uploading file...");
-
-        // Post the form data to your endpoint
-        const response = await axios.post('http://localhost:5000/upload', form, {
-            headers: {
-                ...form.getHeaders(),
-            },
-        });
-
-        // Extracting data from the response
-        const data = response.data.data;
-        console.log('Extracted Data:', data);
-
-        const mentorStudents = [];
-        const mentorStudentsMoodle = [];
-
-        for (const name of data) {
-            const parts = name.split(' ');
-
-            if (parts.length >= 2) {
-                const firstname = parts[0].toLowerCase();
-                const lastname = parts[1].toLowerCase();
-
-                // Find a user with either firstname-lastname or lastname-firstname
-                const userExists = await User.findOne({
-                    $or: [
-                        { firstname: new RegExp(`^${firstname}$`, 'i'), lastname: new RegExp(`^${lastname}$`, 'i') },
-                        { firstname: new RegExp(`^${lastname}$`, 'i'), lastname: new RegExp(`^${firstname}$`, 'i') }
-                    ]
-                });
-
-                if (userExists) {
-                    mentorStudents.push(name);
-                    mentorStudentsMoodle.push(userExists.username);
-                }
-            }
-        }
-
-        // Add mentees to the mentor batch if valid students are found
-        if (mentorStudents.length > 0) {
-            const existingBatch = await Mentor.findOne({ batch: batchname });
-
-            if (existingBatch) {
-                // Append new students to the existing batch
-                const uniqueStudents = new Set([...existingBatch.students, ...mentorStudents]);
-                existingBatch.students = Array.from(uniqueStudents);
-                await existingBatch.save();
-                console.log('Mentees updated successfully');
-                logMessage(`[=] ${interface} ${userIP} : New mentees existing group under mentor ${userUsername}`);
-            } else {
-                // Create a new batch with the students
-                const newMentees = new Mentor({
-                    mentor: userUsername,
-                    students: mentorStudents,
-                    username: mentorStudentsMoodle,
-                    batch: batchname,
-                });
-                await newMentees.save();
-                console.log('Mentees added successfully');
-                logMessage(`[=] ${interface} ${userIP} : New mentees added under mentor ${userUsername}`);
-            }
-        } else {
-            console.log('No valid mentees found');
-        }
-    } catch (error) {
-        console.error('Error processing mentees:', error);
-    }
-}
-
-async function fetchBadges(credly,firstName,lastName,tkusername){
-    if(credly){
-        const credlylink_template = 'https://www.credly.com/users/';
-
-        // Validate the Credly link
-        if (
-            credly.toLowerCase().includes(firstName.toLowerCase()) &&
-            credly.toLowerCase().includes(lastName.toLowerCase()) &&
-            credly.toLowerCase().includes(credlylink_template)
-        ) {
-            const response = await axios.get('http://localhost:5000/fetch-badges', {
-                params: { url: credly }
-            });
-
-            const badgeDataArray = response.data;
-
-            // Insert each badge into the database
-            for (const badge of badgeDataArray) {
-                try {
-                    const newBadge = new Credly({
-                        firstname: firstName,
-                        lastname: lastName,
-                        username: tkusername,
-                        link: credly,
-                        issuer_name: badge.issuer_name,
-                        cert_name: badge.certificate_name,
-                        issue_date: badge.issued_date
-                    });
-
-                    await newBadge.save();
-                    logMessage(
-                        `[=] ${interface} ${userIP} : ${tokencheck.username} fetched and saved Credly badges`
-                    );
-                } catch (error) {
-                    console.error('Badge saving error:', error);
-                }
-            }
-        } else {
-            return res.status(400).json({ message: 'Invalid Credly link.' });
-        }
-    }
-}
-
-async function fetchAndSaveBadges(userUsername) {
-    try {
-        // Retrieve user data from Credly and User collections
-        const mycredly_data = await Credly.findOne({ username: userUsername });
-        const db_user = await User.findOne({ username: userUsername });
-        const firstname = db_user.firstname;
-        const lastname = db_user.lastname;
-
-        if (!mycredly_data) {
-            throw new Error('User not found');
-        }
-        if(mycredly_data.link){
-            const credlylink = mycredly_data.link;
-            const response = await axios.get('http://localhost:5000/fetch-badges', {
-                params: { url: credlylink }
-            });
-
-            const badgeDataArray = response.data;
-
-            // Fetch existing badges for this user from the database
-            const existingBadges = await Credly.find({ username: userUsername });
-
-            // Create a set of existing badge identifiers (e.g., certificate name and issue date)
-            const existingBadgeIdentifiers = new Set(
-                existingBadges.map(badge => `${badge.cert_name}-${badge.issue_date}`)
-            );
-
-            // Prepare an array to hold new badges
-            const newBadges = [];
-
-            // Identify new badges
-            for (const badge of badgeDataArray) {
-                const badgeIdentifier = `${badge.certificate_name}-${badge.issued_date}`;
-                if (!existingBadgeIdentifiers.has(badgeIdentifier)) {
-                    newBadges.push({
-                        firstname: firstname,
-                        lastname: lastname,
-                        username: userUsername,
-                        link: credlylink,
-                        issuer_name: badge.issuer_name,
-                        cert_name: badge.certificate_name,
-                        issue_date: badge.issued_date
-                    });
-                }
-            }
-
-            // Insert only new badges into the database
-            if (newBadges.length > 0) {
-                await Credly.insertMany(newBadges);
-
-            } else {
-                console.log('No new badges to insert.');
-            }
-        }
-        else{
-            next();
-        }
-    } catch (error) {
-        console.error("Error fetching and saving badges:", error);
-    }
-}
-
-async function validatecert(username, filename) {
-    const validateUrl = 'http://127.0.0.1:5000/validate-certificate-two'; // Flask endpoint for validation
-
-    // Construct the request data
-    const requestData = {
-        username: username,
-        filename: username+'-'+filename
-    };
-
-    try {
-        // Validate the uploaded PDF
-        const validateResponse = await fetch(validateUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestData)
-        });
-
-        if (!validateResponse.ok) {
-            throw new Error(`Validation failed with status: ${validateResponse.status}`);
-        }
-
-        const result = await validateResponse.json();
-        console.log('Validation result:', result);
-
-        // Process the result
-        if (result.result === "Real") {
-            return [result.result, null];
-        } else if (result.result === "Fake") {
-            return [result.result, result["Edited_By"]];
-        } else {
-            throw new Error('Unexpected result format');
-        }
-
-    } catch (error) {
-        console.error('Error:', error);
-        return [null, null]; // Return nulls or handle the error as needed
-    }
-};
-
-async function checkToken(req, res, next) {
-    let token;
-    let interfaceType;
-
-    // Determine the source of the token and interface (body for Mobileapp, cookies for Webapp)
-    if (req.body.Token && req.body.interface) {
-        // Mobileapp request (fetching from body)
-        token = req.body.Token;
-        interfaceType = req.body.interface;
-    } else if (req.cookies && req.cookies.Token) {
-        // Webapp request (fetching from cookies)
-        token = req.cookies.Token;
-        interfaceType = "Webapp"; // Default to Webapp if using cookies
-    } else {
-        // Token or interface missing in both Webapp and Mobileapp
-        return res.redirect("/loginpage")
-    }
-
-
-    try {
-        // For Webapp, we need to decode the token (JWT), for Mobileapp, we use the raw token
-        let decodedToken;
-        if (interfaceType === "Webapp") {
-            decodedToken = jwt.verify(token, serverSK); // Decode JWT for Webapp
-            token = decodedToken.userId; // Use the userId as the token to query the database
-        }
-
-        // Fetch the token data from the database
-        const token_data = await CSRFToken.findOne({ token });
-        if (!token_data) {
-            return res.status(400).json({ message: "Invalid token" });
-        }
-
-        // Log user's IP
-        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        if (Array.isArray(userIP)) {
-            userIP = userIP[0];
-        } else if (userIP.includes(',')) {
-            userIP = userIP.split(',')[0].trim();
-        }
-
-        // Check token age and validity based on interface
-        const tokenAgeDays = (Date.now() - token_data.createdAt) / (1000 * 60 * 60 * 24); // age in days
-        const tokenAgeMinutes = (Date.now() - token_data.createdAt) / (1000 * 60); // age in minutes
-
-        if (interfaceType === "Mobileapp") {
-            if (tokenAgeDays > 30) {
-                logMessage(`[=] Mobileapp ${userIP} : Token for user ${token_data.username} has expired`);
-                await CSRFToken.deleteOne({ token: token_data.token });
-                return res.status(400).json({ message: "token expired" });
-            }
-        } else if (interfaceType === "Webapp") {
-            if (tokenAgeMinutes > 15) {
-                logMessage(`[=] Webapp ${userIP} : Token for user ${token_data.username} has expired`);
-                await CSRFToken.deleteOne({ token: token_data.token });
-                return res.status(400).json({ message: "token expired" });
-            }
-        }
-
-        next();
-    } catch (error) {
-        console.log("Error processing token:", error.message);
-        return res.status(400).json({ message: "Invalid token or error during token verification" });
-    }
 }
 
 const fetchUser = async (req, res) => {
@@ -405,6 +97,8 @@ const fetchUser = async (req, res) => {
         return res.redirect('/loginpage');
     }
 };
+
+
 
 server.set("view engine", "ejs");
 server.set("views", path.join(__dirname, "views"));
@@ -1125,7 +819,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
 
             // Handle Credly badge fetching
             if (credly) {
-                fetchBadges(credly,firstName,lastName,tokencheck.username) 
+                fetchBadges(interface,credly,firstName,lastName,tokencheck.username,userIP) 
             }
 
             // Delete the used token
