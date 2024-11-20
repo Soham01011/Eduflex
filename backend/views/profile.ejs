@@ -17,9 +17,19 @@
     
     <script>
       var script = document.createElement('script');
-      script.src = 'https://nice-genuinely-pug.ngrok-free.app/scripts/profileup.js';
+      script.src = '<%= base_url %>scripts/profileup.js';
+    
+      // Fallback to local script if loading fails
+      script.onerror = function() {
+        console.error("Failed to load script from base_url, loading from localhost.");
+        var fallbackScript = document.createElement('script');
+        fallbackScript.src = 'http://localhost:8000/scripts/profileup.js';
+        document.head.appendChild(fallbackScript);
+      };
+    
       document.head.appendChild(script);
     </script>
+    
   </head>
   <body>
     <% if (missingFields.length > 0) { %>
@@ -143,7 +153,7 @@
             <li class="relative px-6 py-3">
               <a
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="upload.html"
+                href="/upload-certificate"
               >
                 <svg
                   class="w-5 h-5"
@@ -337,7 +347,7 @@
             <li class="relative px-6 py-3">
               <a
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="upload.html"
+                href="/upload-certificate"
               >
                 <svg
                   class="w-5 h-5"
@@ -1015,7 +1025,7 @@
 
             <a
               class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
-              href="upload.html"
+              href="/upload-certificate"
             >
               <div class="flex items-center">
                 <svg

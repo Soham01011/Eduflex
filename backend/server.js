@@ -23,7 +23,7 @@ const Profiles = require("./models/profiles");
 const Credly = require("./models/credly");
 const Mentor = require("./models/mentees");
 
-const BASE_URL = 'https://nice-genuinely-pug.ngrok-free.app/';
+const BASE_URL = process.env.BASE_URL;
 const serverSK = process.env.SERVER_SEC_KEY;
 
 const server = express();
@@ -152,6 +152,48 @@ async function addMentees(userUsername, filename, batchname, selection, interfac
     }
 }
 
+async function fetchBadges(credly,firstName,lastName,tkusername){
+    if(credly){
+        const credlylink_template = 'https://www.credly.com/users/';
+
+        // Validate the Credly link
+        if (
+            credly.toLowerCase().includes(firstName.toLowerCase()) &&
+            credly.toLowerCase().includes(lastName.toLowerCase()) &&
+            credly.toLowerCase().includes(credlylink_template)
+        ) {
+            const response = await axios.get('http://localhost:5000/fetch-badges', {
+                params: { url: credly }
+            });
+
+            const badgeDataArray = response.data;
+
+            // Insert each badge into the database
+            for (const badge of badgeDataArray) {
+                try {
+                    const newBadge = new Credly({
+                        firstname: firstName,
+                        lastname: lastName,
+                        username: tkusername,
+                        link: credly,
+                        issuer_name: badge.issuer_name,
+                        cert_name: badge.certificate_name,
+                        issue_date: badge.issued_date
+                    });
+
+                    await newBadge.save();
+                    logMessage(
+                        `[=] ${interface} ${userIP} : ${tokencheck.username} fetched and saved Credly badges`
+                    );
+                } catch (error) {
+                    console.error('Badge saving error:', error);
+                }
+            }
+        } else {
+            return res.status(400).json({ message: 'Invalid Credly link.' });
+        }
+    }
+}
 
 async function fetchAndSaveBadges(userUsername) {
     try {
@@ -514,7 +556,7 @@ server.get("/loginpage", (req,res) =>{
 server.get("/dashboard",checkToken , async(req,res)=>{
     const username = await fetchUser(req,res);
     console.log("username is ", username);
-    res.status(200).render('index', {username : username})
+    res.status(200).render('index', {username : username ,base_url : BASE_URL})
 });
 
 server.get("/profile-web-page", checkToken, async (req, res) => {
@@ -580,7 +622,8 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
             missingFields,
             link,
             cert,
-            certificateData: formattedCertificateData // Send formatted certificate data
+            certificateData: formattedCertificateData,
+            base_url : BASE_URL // Send formatted certificate data
         });
         
     } catch (error) {
@@ -1045,7 +1088,16 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             );
             return res.status(400).json({ message: 'Invalid phone number.' });
         }
-        console.log(" USERNAME : " , tokencheck.username)
+        console.log(
+            'Token:',
+            Token,
+            'Email:',
+            changeemail,
+            'Password:',
+            changepwd,
+            'PhoneNo:',
+            changephoneno,"First name :",firstName , " Lastname : ", lastName, "CREDLY ", credly
+        );
         // Update user data if all validations pass
         try {
             await User.updateOne(
@@ -1073,44 +1125,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
 
             // Handle Credly badge fetching
             if (credly) {
-                const credlylink_template = 'https://www.credly.com/users/';
-
-                // Validate the Credly link
-                if (
-                    credly.toLowerCase().includes(firstName.toLowerCase()) &&
-                    credly.toLowerCase().includes(lastName.toLowerCase()) &&
-                    credly.toLowerCase().includes(credlylink_template)
-                ) {
-                    const response = await axios.get('http://localhost:5000/fetch-badges', {
-                        params: { url: credly }
-                    });
-
-                    const badgeDataArray = response.data;
-
-                    // Insert each badge into the database
-                    for (const badge of badgeDataArray) {
-                        try {
-                            const newBadge = new Credly({
-                                firstname: firstName,
-                                lastname: lastName,
-                                username: tokencheck.username,
-                                link: credly,
-                                issuer_name: badge.issuer_name,
-                                cert_name: badge.certificate_name,
-                                issue_date: badge.issued_date
-                            });
-
-                            await newBadge.save();
-                            logMessage(
-                                `[=] ${interface} ${userIP} : ${tokencheck.username} fetched and saved Credly badges`
-                            );
-                        } catch (error) {
-                            console.error('Badge saving error:', error);
-                        }
-                    }
-                } else {
-                    return res.status(400).json({ message: 'Invalid Credly link.' });
-                }
+                fetchBadges(credly,firstName,lastName,tokencheck.username) 
             }
 
             // Delete the used token
