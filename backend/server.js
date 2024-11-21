@@ -22,6 +22,7 @@ const {fetchBadges} = require('./utils/fetchBadges');
 const {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
 const {validatecert} = require('./utils/validatecert');
+const {fetchUser} = require('./utils/fetchUser');
 
 const CSRFToken = require("./models/csrfttoken");
 const User = require("./models/users");
@@ -56,6 +57,7 @@ if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
 }
 
+/*
 const fetchUser = async (req, res) => {
     try {
         // Retrieve the token from the cookie
@@ -96,7 +98,7 @@ const fetchUser = async (req, res) => {
         logMessage(`[*] Internal server error : ${error} `);
         return res.redirect('/loginpage');
     }
-};
+};*/
 
 
 
