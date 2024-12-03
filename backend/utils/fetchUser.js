@@ -11,20 +11,12 @@ const fetchUser = async (req, res) => {
         if (token) {
             const decoded = jwt.verify(token, serverSK);
             if (decoded && decoded.userId) {
-                const tokenData = await CSRFToken.findOne({ token: decoded.userId });
-
-                if (tokenData) {
-                    if (tokenData.username === decoded.username) {
-                        return tokenData.username;
-                    } else {
-                        return res.redirect('/loginpage');
-                    }
-                } else {
-                    return res.redirect('/loginpage');
-                }
+                return decoded.username;
             } else {
-                return res.redirect('/loginpage');
+                console.log("Decoded data invalid");
+                return res.redirect('/loginpage'); // Return after sending response
             }
+            
         } else {
             return res.redirect('/loginpage');
         }

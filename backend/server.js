@@ -251,7 +251,6 @@ server.get("/loginpage", (req,res) =>{
 
 server.get("/dashboard",checkToken , async(req,res)=>{
     const username = await fetchUser(req,res);
-    console.log("username is ", username);
     res.status(200).render('index', {username : username ,base_url : BASE_URL})
 });
 
@@ -307,7 +306,6 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
         if (Credly_there) {
             link = Credly_there.link;
         }
-        console.log("Credyly link : ",link);
         const cert = await Credly.find({username : username})
 
         // Render the profile page with user data, certificate data, and missing fields
@@ -330,13 +328,12 @@ server.get("/profile-web-page", checkToken, async (req, res) => {
 
 // Function to format the certificate data
 function formatCertificateData(data) {
-    console.log("DATA HERE : ",data)
     if (!data || !Array.isArray(data)) return []; // Return empty array if no data is found
 
     return data.map(cert => {
         return {
-            pdfLink: cert.file, // Assuming the PDF file path is stored in 'file'
-            postDesc: cert.post_desc, // Assuming the post description is stored in 'post_desc'
+            pdfLink: cert.file, 
+            postDesc: cert.post_desc, 
             hashtags: cert.hashtags || [], // Ensure hashtags is an array
             status: cert.mentor_approved === null ? 'Pending' : // If mentor approval is still pending
                     (cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Rejected') // Logic for approved status
@@ -421,7 +418,7 @@ server.post("/login", async (req, res) => {
     }
     
     const { userUsername, userPwd, mobiletoken, interface } = req.body; 
-
+    console.log(userUsername, userPwd, mobiletoken, interface);
     // Set the interface to "Webapp" if it is not provided
     const interfaceType = interface || "Webapp"; 
 
@@ -474,7 +471,7 @@ server.post("/login", async (req, res) => {
             });
             if(await Credly.findOne({username : userUsername}))
             {
-                fetchAndSaveBadges(userUsername);
+                //fetchAndSaveBadges(userUsername);
             }
             const userProfile = await User.findOne({ username: userUsername });
             const mandatoryFields = [

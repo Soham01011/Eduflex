@@ -1,0 +1,73 @@
+[2024-12-03T09:44:54.277Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:44:54.340Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T09:44:54.415Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T09:44:54.666Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T09:45:04.548Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:45:04.554Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T09:45:04.566Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T09:45:04.613Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T09:45:37.088Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:45:37.092Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T09:45:37.099Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T09:45:37.191Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T09:46:56.214Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:46:56.220Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T09:46:56.237Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T09:46:56.436Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T09:49:54.764Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:49:54.769Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T09:49:54.779Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T09:49:54.877Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T09:50:40.679Z] [=] Mobileapp 42.111.104.78 : Token for user Sonal Jain has expired
+[2024-12-03T09:50:53.392Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:50:53.398Z] [=] Mobileapp 42.111.104.78 : User 21104010 successfully logged in
+[2024-12-03T09:50:53.408Z] [=] Mobileapp 42.111.104.78 : Token provided for user 21104010
+[2024-12-03T09:51:13.712Z] [=] Mobileapp 42.111.104.78 : 21104010 pulled their own profile
+[2024-12-03T09:51:13.760Z] [=] Mobileapp 42.111.104.78 : 21104010 pulled their own profile
+[2024-12-03T09:54:36.551Z] [=] User 21104010 attempting to log in
+[2024-12-03T09:54:36.577Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T09:54:36.612Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T09:54:36.791Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T10:01:37.674Z] [=] User 21104010 attempting to log in
+[2024-12-03T10:01:37.680Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T10:01:37.695Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T10:01:37.821Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T10:04:27.796Z] [=] User 21104010 attempting to log in
+[2024-12-03T10:04:27.821Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T10:04:27.843Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T10:04:27.994Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T10:06:28.608Z] [=] User 21104010 attempting to log in
+[2024-12-03T10:06:28.664Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T10:06:28.686Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T10:06:28.845Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T10:07:47.492Z] [=] User 21104010 attempting to log in
+[2024-12-03T10:07:47.528Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T10:07:47.562Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T10:07:47.723Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T10:08:41.995Z] [=] User 21104010 attempting to log in
+[2024-12-03T10:08:42.050Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T10:08:42.076Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T10:08:42.249Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T10:11:00.801Z] [=] User 21104010 attempting to log in
+[2024-12-03T10:11:00.846Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : User 21104010 successfully logged in
+[2024-12-03T10:11:00.876Z] [=] Webapp 2409:40c0:220:d972:511f:30d6:fb29:7197 : Token provided for user 21104010
+[2024-12-03T10:11:01.019Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T13:12:35.740Z] [=] User 21104010 attempting to log in
+[2024-12-03T13:12:35.790Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T13:12:35.869Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T13:12:35.949Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T13:21:02.139Z] [=] User 21104010 attempting to log in
+[2024-12-03T13:21:02.164Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T13:21:02.204Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T13:21:02.292Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T13:24:42.514Z] [=] User 21104010 attempting to log in
+[2024-12-03T13:24:42.537Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T13:24:42.570Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T13:24:42.644Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T13:25:45.623Z] [=] User 21104010 attempting to log in
+[2024-12-03T13:25:45.641Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T13:25:45.658Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-12-03T13:25:45.714Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'findOne')
+[2024-12-03T13:29:03.565Z] [=] User 21104010 attempting to log in
+[2024-12-03T13:29:03.581Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-12-03T13:29:03.619Z] [=] Webapp ::1 : Token provided for user 21104010
