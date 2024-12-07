@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const CSRFToken  = require('../models/csrfttoken');  // Adjust path according to your file structure
 const { logMessage } = require('../utils/logger');  // Assuming logger.js is in utils
 
-const serverSK = "RANKING"
+const serverSK = process.env.SERVER_SEC_KEY;
 
 async function checkToken(req, res, next) {
     let token;

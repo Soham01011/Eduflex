@@ -1,0 +1,101 @@
+const express = require('express')
+const profilepageRoute = express.Router();
+
+const {fetchUser} = require('../utils/fetchUser')
+const {checkToken} = require('../middleware/checkToken')
+const {logMessage} = require('../utils/logger')
+
+const User = require('../models/users');
+const Profiles = require('../models/profiles');
+const Credly = require('../models/credly');
+
+const BASE_URL = process.env.BASE_URL;
+
+profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    // Normalize userIP
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+
+    try {
+        // Fetch the username from the token
+        const username = await fetchUser(req, res);
+
+        // Fetch user data
+        const userProfile = await User.findOne({ username: username });
+        if (!userProfile) {
+            console.log("no user profile for ", username);
+            return res.redirect('/loginpage'); // Redirect if user not found
+        }
+
+        // Fetch bio data and profile
+        const user_bio_data = await User.findOne({ username: username });
+        const user_profile = await Profiles.findOne({ username: username });
+
+        // Fetch certificate data
+        const certificateData = await Profiles.find({ username: username }); // Adjust this query as per your database structure
+
+        // Format certificate data for display
+        const formattedCertificateData = formatCertificateData(certificateData);
+
+        // Check for missing mandatory fields
+        const mandatoryFields = [
+            'firstname',
+            'lastname',
+            'phone_number',
+            'dob',
+            'bio',
+            'college',
+            'academic_year',
+            'semester',
+            'cgpa',
+            'hobby',
+        ];
+
+        const missingFields = mandatoryFields.filter(field => !userProfile[field]);
+        const Credly_there = await Credly.findOne({ username: username });
+        let link;
+        if (Credly_there) {
+            link = Credly_there.link;
+        }
+        const cert = await Credly.find({username : username})
+
+        // Render the profile page with user data, certificate data, and missing fields
+        return res.render('profile', {
+            userProfile,
+            user_bio_data,
+            user_profile,
+            missingFields,
+            link,
+            cert,
+            certificateData: formattedCertificateData,
+            base_url : BASE_URL // Send formatted certificate data
+        });
+        
+    } catch (error) {
+        console.error(error.message);
+        logMessage("[*] Webapp : ", userIP, " : Error fetching profile =", error.message);
+        return res.redirect('/loginpage'); // Redirect on error
+    }
+});
+
+// Function to format the certificate data
+function formatCertificateData(data) {
+    if (!data || !Array.isArray(data)) return []; // Return empty array if no data is found
+
+    return data.map(cert => {
+        return {
+            pdfLink: cert.file, 
+            postDesc: cert.post_desc, 
+            hashtags: cert.hashtags || [], // Ensure hashtags is an array
+            status: cert.mentor_approved === null ? 'Pending' : // If mentor approval is still pending
+                    (cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Rejected') // Logic for approved status
+        };
+    });
+};
+
+module.exports = profilepageRoute;
