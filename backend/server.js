@@ -57,51 +57,6 @@ if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
 }
 
-/*
-const fetchUser = async (req, res) => {
-    try {
-        // Retrieve the token from the cookie
-        const token = req.cookies.Token;
-
-        // If token exists
-        if (token) {
-            // Decode the token using your secret key
-            const decoded = jwt.verify(token, serverSK);
-
-            // Check if the decoded token has the required userId (note: case-sensitive)
-            if (decoded && decoded.userId) {
-                // Look for the token in the CSRFToken collection by the token (uniqueId)
-                const tokenData = await CSRFToken.findOne({ token: decoded.userId });
-
-                if (tokenData) {
-                    // Now, check if the username in the tokenData matches the one in the decoded token
-                    if (tokenData.username === decoded.username) {
-                        // Return the username if it matches
-                        return tokenData.username;
-                    } else {
-                        // If the username does not match, redirect to login
-                        return res.redirect('/loginpage');
-                    }
-                } else {
-                    // If no matching token is found in the database, redirect to login
-                    return res.redirect('/loginpage');
-                }
-            } else {
-                // If the decoded token does not have a valid userId, redirect to login
-                return res.redirect('/loginpage');
-            }
-        } else {
-            // If no token is present, redirect to login page
-            return res.redirect('/loginpage');
-        }
-    } catch (error) {
-        logMessage(`[*] Internal server error : ${error} `);
-        return res.redirect('/loginpage');
-    }
-};*/
-
-
-
 server.set("view engine", "ejs");
 server.set("views", path.join(__dirname, "views"));
 server.use(express.static(path.join(__dirname, "public")));
@@ -471,7 +426,7 @@ server.post("/login", async (req, res) => {
             });
             if(await Credly.findOne({username : userUsername}))
             {
-                //fetchAndSaveBadges(userUsername);
+                fetchAndSaveBadges(userUsername);
             }
             const userProfile = await User.findOne({ username: userUsername });
             const mandatoryFields = [

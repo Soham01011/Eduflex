@@ -245,6 +245,35 @@ def extract_hashtags():
 
 ##################################################################################        CREDLY BADGES
 
+@app.route("/fetch-badges",methods =['GET'])
+def fetch_badges_2():
+    url = request.args.get('url') + '/badges'
+    if not url :
+        return jsonify({'error': "Url not provided"}), 400
+    try:
+        responce = requests.get(url,headers={'User-Agent':'Mozilla/5.0'})
+
+        if responce.status_code ==200:
+            soup = BeautifulSoup(responce.text,'html.parser')
+
+            badges = soup.find_all('div', class_ ='cr-standard-grid-item-content')
+            certificates = []
+            for badge in badges:
+                # Extract details for each badge
+                title = badge.find('div', class_='cr-standard-grid-item-content__title')
+                subtitle = badge.find('div', class_='cr-standard-grid-item-content__subtitle')
+                certificates.append({
+                    'certificate_name': title.text.strip() if title else 'N/A',
+                    'issuer_name': subtitle.text.strip() if subtitle else 'N/A',
+                })
+
+            return jsonify(certificates),200 
+        elif responce.status_code != 200:
+            return jsonify({"error": f"Scrapper status code ${responce.status_code}"}), 500
+    except ExceptionGroup as e:
+        return({"error" : f"Internal server error , ${e.message}"}),500
+    
+'''
 @app.route('/fetch-badges', methods=['GET'])
 def fetch_badges():
     url = request.args.get('url')
@@ -288,7 +317,7 @@ def fetch_badges():
         })
 
     # Return the JSON response
-    return jsonify(badges_data)
+    return jsonify(badges_data)'''
 
 ##################################################################################         Validate certificate
 
