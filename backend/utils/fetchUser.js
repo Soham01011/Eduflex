@@ -13,7 +13,7 @@ const fetchUser = async (req, res) => {
             if (decoded && decoded.userId) {
                 return decoded.username;
             } else {
-                console.log("Decoded data invalid");
+                logMessage("Decoded data invalid in fetchUser util");
                 return res.redirect('/loginpage'); // Return after sending response
             }
             

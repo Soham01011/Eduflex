@@ -1,9 +1,22 @@
+/**
+ * This is the login route which can be used by the mobileapp and the web app
+ */
 const expres = require('express');
 const loginLogicRouter = expres.Router();
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const { v4: uuidv4, stringify } = require("uuid");
 
+/**
+ *
+ * logMessage         : A minimal function which logs all the requests to the server make sure 
+ *                      to understand the format of the logs and do log all the erros and user
+ *                      activities. This can be useflu for further studies. 
+ * fetchAndSaveBadges : A async function which will pull the users credly badges on the login
+ *                      This async function make api call on the python server to pull data 
+ *                      and save automatically. further for more understanding check 
+ *                      fetchAndSavebadges in the utils.
+ */
 const {logMessage} = require('../utils/logger');
 const { fetchAndSaveBadges } = require('../utils/fetchAndSaveBadges');
 

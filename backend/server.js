@@ -16,6 +16,11 @@ const pdf = require('pdf-poppler');
 const { exec } = require('child_process');
 const socketIo = require('socket.io');
 
+/**
+    These are some utilities which are used in the routes to automate some stuff
+    You can use them as there functionaly is what there names are.
+ */
+
 const {logMessage} = require('./utils/logger');
 const {addMentees} = require('./utils/mentees');
 const {fetchBadges} = require('./utils/fetchBadges');
@@ -24,14 +29,27 @@ const {checkToken} = require('./middleware/checkToken');
 const {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
 
+/*
+    These all are the get route requests most of them are just rendering the web 
+    pages thus they are inth GET routes folder
+*/
+
 const loginRoute = require('./routesGET/loginpage');
 const dashboardRoute = require('./routesGET/dashboardRoute');
 const uploadcretRouter = require('./routesGET/uploadcert');
 const profilepageRoute = require('./routesGET/profile-web-page');
 
+/**
+   These are the endpoint  with post request mainly requesting the user data 
+ */
+
 const loginLogicRouter = require('./routesPOST/login');
 const registerLogicRoute = require('./routesPOST/register');
 const getuserprofileLogicRoute = require('./routesPOST/getuserprofile');
+
+/* 
+    These are the schemas / models which are the collections in the database
+*/
 
 const CSRFToken = require("./models/csrfttoken");
 const User = require("./models/users");
@@ -50,7 +68,7 @@ server.use(bodyParser.urlencoded({ extended: true }));
 
 // Use CORS middleware
 server.use(cors({
-    origin: '*', // an coming request
+    origin: '*', 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -65,6 +83,11 @@ if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
 }
 
+/* 
+    We have used ejs as our rendring engine and some routes display and load
+    documents and scripts from the server.
+*/
+
 server.set("view engine", "ejs");
 server.set("views", path.join(__dirname, "views"));
 server.use(express.static(path.join(__dirname, "public")));
@@ -72,6 +95,11 @@ const directoryPath = path.join(__dirname, "uploads");
 server.use('/uploads', express.static(directoryPath));
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
+
+/* 
+    This is multer disk storage which we are usign to store the user uploads
+    ** Dont mess with them until you know checkToken(the utility in the utils folder) working
+*/
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
@@ -163,7 +191,6 @@ const hashtag_storage = multer.diskStorage({
     }
 });
 
-// Multer setup for hashtag extraction folder
 const extract_hashtag_folder = multer({ storage: hashtag_storage });
 
 

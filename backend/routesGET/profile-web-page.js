@@ -1,16 +1,48 @@
 const express = require('express')
 const profilepageRoute = express.Router();
 
+/**
+ * fetchUser  : A utility which you can use and fetch the username directly from the 
+ *              cookie or the request body (To userstand its working open utils/fetchUser)
+ * 
+ * checkToken : Check the token given to the user in the session and also checks if 
+ *              it is valid or invalid if not then user will be logged out and if 
+ *              the token is incorrect then also the user will the redirected to
+ *              loginpage (To understand working open middleware,checkToken)
+ * 
+ * logMessage : A minimal function which logs all the requests to the server make sure 
+ *              to understand the format of the logs and do log all the erros and user
+ *              activities. This can be useflu for further studies. 
+ */
+
 const {fetchUser} = require('../utils/fetchUser')
 const {checkToken} = require('../middleware/checkToken')
 const {logMessage} = require('../utils/logger')
 
+/**
+ * User     : Models of users to fetch their data.
+ * 
+ * Profiles : Model which stores the user posts.
+ * 
+ * Credly   : Model which stores credly badges of all the users.
+ */
 const User = require('../models/users');
 const Profiles = require('../models/profiles');
 const Credly = require('../models/credly');
 
+/**
+ * BASE_URL : This is an env variable to provide your ngrok link and will be used in the 
+ *            front-end to pull some local script to run or to display the user data 
+ */
 const BASE_URL = process.env.BASE_URL;
-
+/**
+ * Steps : 
+ *      - Checks the token validity
+ *      - fetchs username and then pulls their data
+ *      - Formating the data to be display in the json format
+ *      - If the user have not enter all the user bio details then it will prompted to fill it
+ *      - Render all of the data to the webpage
+ */
 profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
