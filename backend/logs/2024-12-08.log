@@ -1,0 +1,45 @@
+[2024-12-08T07:41:31.222Z] [=] User 21104136 attempting to log in
+[2024-12-08T07:41:31.245Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104136 successfully logged in
+[2024-12-08T07:41:31.267Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : Token provided for user 21104136
+[2024-12-08T07:42:09.686Z] [=] undefined 2409:40c0:220:f884:d1a2:830f:565a:3f87 : 21104136 updated their profile.
+[2024-12-08T07:42:29.401Z] [=] User 21104136 attempting to log in
+[2024-12-08T07:42:29.406Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104136 successfully logged in
+[2024-12-08T07:42:29.411Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : Token provided for user 21104136
+[2024-12-08T07:55:45.927Z] [=] Webapp 152.58.3.254 : Posted a file 21104136-compressed-SankalpGunjal-Networking Essen-certificate i love pdf.pdf
+[2024-12-08T08:07:37.226Z] [=] User 21104087 attempting to log in
+[2024-12-08T08:07:37.252Z] [*] Database connection failed: uuidv4 is not defined
+[2024-12-08T08:07:37.251Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104087 successfully logged in
+[2024-12-08T08:08:29.623Z] [=] User 21104010 attempting to log in
+[2024-12-08T08:08:29.651Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104010 successfully logged in
+[2024-12-08T08:08:29.652Z] [*] Database connection failed: uuidv4 is not defined
+[2024-12-08T08:09:37.954Z] [=] User 21104087 attempting to log in
+[2024-12-08T08:09:37.980Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104087 successfully logged in
+[2024-12-08T08:09:38.007Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : Token provided for user 21104087
+[2024-12-08T08:21:01.687Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : New student registered: 21104006
+[2024-12-08T08:21:21.420Z] [=] User 21104006 attempting to log in
+[2024-12-08T08:21:21.425Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104006 successfully logged in
+[2024-12-08T08:21:21.433Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : Token provided for user 21104006
+[2024-12-08T08:23:44.757Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : New student registered: 21104006
+[2024-12-08T08:30:18.835Z] [=] User 21104006 attempting to log in
+[2024-12-08T08:30:18.856Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104006 successfully logged in
+[2024-12-08T08:30:18.880Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : Token provided for user 21104006
+[2024-12-08T08:42:41.506Z] [=] User 21104010 attempting to log in
+[2024-12-08T08:42:41.517Z] [=] Mobileapp 152.58.3.170 : User 21104010 successfully logged in
+[2024-12-08T08:42:41.534Z] [=] Mobileapp 152.58.3.170 : Token provided for user 21104010
+[2024-12-08T08:42:45.071Z] [=] Mobileapp 152.58.3.170 : 21104010 pulled their own profile
+[2024-12-08T08:42:45.009Z] [=] Mobileapp 152.58.3.170 : 21104010 pulled their own profile
+[2024-12-08T08:43:15.975Z] [=] User Sonal Jain attempting to log in
+[2024-12-08T08:43:15.982Z] [=] Mobileapp 152.58.3.170 : User Sonal Jain successfully logged in
+[2024-12-08T08:43:15.987Z] [=] Mobileapp 152.58.3.170 : Token provided for user Sonal Jain
+[2024-12-08T08:43:18.871Z] [=] Mobileapp 152.58.3.170 : Sonal Jain fetched post permissions
+[2024-12-08T08:43:18.887Z] [=] Mobileapp 152.58.3.170 : Sonal Jain fetched post permissions
+[2024-12-08T08:43:41.459Z] Mobileapp 152.58.3.170 : Mentor Sonal Jain fetch their badges info
+[2024-12-08T08:45:55.653Z] [=] User 21104006 attempting to log in
+[2024-12-08T08:45:55.657Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : User 21104006 successfully logged in
+[2024-12-08T08:45:55.664Z] [=] Webapp 2409:40c0:220:f884:d1a2:830f:565a:3f87 : Token provided for user 21104006
+[2024-12-08T08:46:12.718Z] [=] undefined 2409:40c0:220:f884:d1a2:830f:565a:3f87 : 21104006 updated their profile.
+[2024-12-08T08:46:31.640Z] [=] 152.58.3.170 : Sonal Jain deleted thier batch
+[2024-12-08T08:52:49.752Z] [=] Mobileapp 152.58.3.170 : Sonal Jain fetched post permissions
+[2024-12-08T08:52:49.781Z] [=] Mobileapp 152.58.3.170 : Sonal Jain fetched post permissions
+[2024-12-08T08:56:11.916Z] [=] 152.58.2.30 Mobileapp : Mentees added for mentor Sonal Jain in new batch be it sem 8
+[2024-12-08T08:56:17.744Z] Mobileapp 152.58.3.170 : Mentor Sonal Jain fetch their badges info

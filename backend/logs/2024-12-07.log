@@ -27,3 +27,6 @@
 [2024-12-07T13:07:22.728Z] [=] Webapp 2409:40c0:221:21f:f5f1:1260:f513:340b : User 21104010 successfully logged in
 [2024-12-07T13:07:22.774Z] [=] Webapp 2409:40c0:221:21f:f5f1:1260:f513:340b : Token provided for user 21104010
 [2024-12-07T13:07:24.597Z] [*] Webapp ll
+[2024-12-07T14:45:31.566Z] [=] User 21104010 attempting to log in
+[2024-12-07T14:45:31.614Z] [=] Webapp 2409:40c0:221:21f:f5f1:1260:f513:340b : User 21104010 successfully logged in
+[2024-12-07T14:45:31.650Z] [=] Webapp 2409:40c0:221:21f:f5f1:1260:f513:340b : Token provided for user 21104010
