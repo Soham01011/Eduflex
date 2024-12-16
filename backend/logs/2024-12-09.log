@@ -1,0 +1,8 @@
+[2024-12-09T06:51:56.580Z] [=] User 21104006 attempting to log in
+[2024-12-09T06:51:56.616Z] [=] Webapp 152.58.2.74 : User 21104006 successfully logged in
+[2024-12-09T06:51:56.641Z] [=] Webapp 152.58.2.74 : Token provided for user 21104006
+[2024-12-09T06:57:17.134Z] [=] User 211040006 attempting to log in
+[2024-12-09T06:57:17.139Z] [-] Webapp 152.58.2.74 : Unsuccessful login attempt for user 211040006
+[2024-12-09T14:16:53.428Z] [=] User 21104006 attempting to log in
+[2024-12-09T14:16:53.481Z] [=] Webapp ::1 : User 21104006 successfully logged in
+[2024-12-09T14:16:53.565Z] [=] Webapp ::1 : Token provided for user 21104006

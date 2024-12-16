@@ -43,3 +43,8 @@
 [2024-12-08T08:52:49.781Z] [=] Mobileapp 152.58.3.170 : Sonal Jain fetched post permissions
 [2024-12-08T08:56:11.916Z] [=] 152.58.2.30 Mobileapp : Mentees added for mentor Sonal Jain in new batch be it sem 8
 [2024-12-08T08:56:17.744Z] Mobileapp 152.58.3.170 : Mentor Sonal Jain fetch their badges info
+[2024-12-08T16:12:30.888Z] [=] User 21104006 attempting to log in
+[2024-12-08T16:12:30.935Z] [-] Webapp ::ffff:192.168.31.28 : Unsuccessful login attempt for user 21104006
+[2024-12-08T16:12:49.057Z] [=] User 21104006 attempting to log in
+[2024-12-08T16:12:49.064Z] [=] Webapp ::ffff:192.168.31.28 : User 21104006 successfully logged in
+[2024-12-08T16:12:49.079Z] [=] Webapp ::ffff:192.168.31.28 : Token provided for user 21104006

@@ -46,6 +46,8 @@ const profilepageRoute = require('./routesGET/profile-web-page');
 const loginLogicRouter = require('./routesPOST/login');
 const registerLogicRoute = require('./routesPOST/register');
 const getuserprofileLogicRoute = require('./routesPOST/getuserprofile');
+const psychometrictestLogicRoute = require('./routesPOST/softskilltest');
+const feedLogicRoute = require("./routesPOST/feedlogic");
 
 /* 
     These are the schemas / models which are the collections in the database
@@ -1121,7 +1123,9 @@ server.get("/profile", async (req, res) => {
     }
 });
 
+server.post("/psychometrictest",psychometrictestLogicRoute);
 
+server.post('/feed',feedLogicRoute) 
 
 server.listen(8000, () => {
     console.log(`http://localhost:8000`);

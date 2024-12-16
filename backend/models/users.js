@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     semester: { type: String, required: false }, 
     cgpa: { type: Number, required: false }, 
     hobby: { type: String, required: false },
+    MBIT_dementions: { type: String, required: false},
 });
 
 module.exports = mongoose.model('User', userSchema);

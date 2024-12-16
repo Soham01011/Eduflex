@@ -12,6 +12,8 @@ const dashboardrouter = express.Router(); // The router for the dashboard page
 const {fetchUser} = require('../utils/fetchUser')
 const {checkToken} = require('../middleware/checkToken')
 
+const Profiles = require('../models/profiles')
+
 /**
  * BASE_URL : This is an env variable to provide your ngrok link and will be used in the 
  *            front-end to pull some local script to run or to display the user data 

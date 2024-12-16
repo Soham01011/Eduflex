@@ -1,0 +1,14 @@
+[2024-12-16T10:26:33.398Z] [=] User 211040006 attempting to log in
+[2024-12-16T10:26:33.427Z] [-] Mobileapp ::1 : Unsuccessful login attempt for user 211040006
+[2024-12-16T10:26:46.387Z] [=] User 21104006 attempting to log in
+[2024-12-16T10:26:46.397Z] [=] Mobileapp ::1 : User 21104006 successfully logged in
+[2024-12-16T10:26:46.477Z] [=] Mobileapp ::1 : Token provided for user 21104006
+[2024-12-16T10:33:07.424Z] [=] User 21104006 attempting to log in
+[2024-12-16T10:33:07.433Z] [=] Mobileapp ::1 : User 21104006 successfully logged in
+[2024-12-16T10:33:07.443Z] [=] Mobileapp ::1 : Token provided for user 21104006
+[2024-12-16T12:28:19.402Z] [=] User 21104006 attempting to log in
+[2024-12-16T12:28:19.442Z] [=] Webapp ::1 : User 21104006 successfully logged in
+[2024-12-16T12:28:19.475Z] [=] Webapp ::1 : Token provided for user 21104006
+[2024-12-16T17:01:51.325Z] [=] User 21104006 attempting to log in
+[2024-12-16T17:01:51.345Z] [=] Webapp ::1 : User 21104006 successfully logged in
+[2024-12-16T17:01:51.365Z] [=] Webapp ::1 : Token provided for user 21104006
