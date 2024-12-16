@@ -1,0 +1,43 @@
+[2024-10-17T09:05:47.928Z] [=] Mobileapp 152.58.5.132 : Token for user Sonal Jain is valid
+[2024-10-17T09:05:53.059Z] [=] Mobileapp 152.58.5.132 : Sonal Jain fetched post permissions
+[2024-10-17T09:05:53.061Z] [=] Mobileapp 152.58.5.132 : Sonal Jain fetched post permissions
+[2024-10-17T09:06:18.421Z] [=] User 21104010 attempting to log in
+[2024-10-17T09:06:18.426Z] [=] Webapp 2409:40c0:236:ba5f:545f:54f5:e75b:96f0 : User 21104010 successfully logged in
+[2024-10-17T09:06:18.437Z] [=] Webapp 2409:40c0:236:ba5f:545f:54f5:e75b:96f0 : Token provided for user 21104010
+[2024-10-17T09:15:01.388Z] [=] User 21104010 attempting to log in
+[2024-10-17T09:15:01.392Z] [=] Mobileapp 152.58.5.132 : User 21104010 successfully logged in
+[2024-10-17T09:15:01.399Z] [=] Mobileapp 152.58.5.132 : Token provided for user 21104010
+[2024-10-17T09:15:04.489Z] [=] Mobileapp 152.58.5.132 : 21104010 pulled their own profile
+[2024-10-17T09:15:04.504Z] [=] Mobileapp 152.58.5.132 : 21104010 pulled their own profile
+[2024-10-17T09:20:38.841Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:24:13.883Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:25:24.790Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:49:52.432Z] [=] Mobileapp 152.58.5.132 : Token for user 21104010 is valid
+[2024-10-17T09:50:00.761Z] [=] Mobileapp 152.58.5.132 : 21104010 pulled their own profile
+[2024-10-17T09:50:00.767Z] [=] Mobileapp 152.58.5.132 : 21104010 pulled their own profile
+[2024-10-17T09:50:06.830Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:52:26.762Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:52:38.568Z] [=] Mobileapp 152.58.5.98 : Posted a file 21104010-AashayIngale-IOT Fundamentals-certificate.pdf
+[2024-10-17T09:57:35.459Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:57:50.479Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T09:59:24.875Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T10:00:27.391Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T10:03:03.226Z] Error communicating with Flask server: AxiosError: Request failed with status code 404
+[2024-10-17T10:07:11.794Z] [=] Mobileapp 152.58.5.132 : Posted a file 21104010-AashayIngale-Enterprise desig-certificate.pdf
+[2024-10-17T10:11:34.284Z] [=] User Sonal Jain attempting to log in
+[2024-10-17T10:11:34.292Z] [=] Mobileapp 152.58.5.132 : User Sonal Jain successfully logged in
+[2024-10-17T10:11:34.305Z] [=] Mobileapp 152.58.5.132 : Token provided for user Sonal Jain
+[2024-10-17T10:11:37.390Z] [=] Mobileapp 152.58.5.132 : Sonal Jain fetched post permissions
+[2024-10-17T10:11:37.396Z] [=] Mobileapp 152.58.5.132 : Sonal Jain fetched post permissions
+[2024-10-17T10:12:44.117Z] [=] User 21104010 attempting to log in
+[2024-10-17T10:12:44.123Z] [=] Mobileapp 152.58.5.132 : User 21104010 successfully logged in
+[2024-10-17T10:12:44.128Z] [=] Mobileapp 152.58.5.132 : Token provided for user 21104010
+[2024-10-17T10:12:47.320Z] [=] Mobileapp 152.58.5.132 : 21104010 pulled their own profile
+[2024-10-17T10:12:47.358Z] [=] Mobileapp 152.58.5.132 : 21104010 pulled their own profile
+[2024-10-17T10:13:11.664Z] [=] Mobileapp 152.58.5.132 : Posted a file 21104010-AashayIngale-Enterprise desig-certificate.pdf
+[2024-10-17T10:15:26.475Z] [=] Mobileapp 152.58.5.132 : Posted a file 21104010-AashayIngale-IOT Fundamentals-certificate.pdf
+[2024-10-17T10:16:21.417Z] [=] User Sonal Jain attempting to log in
+[2024-10-17T10:16:21.422Z] [=] Mobileapp 152.58.5.132 : User Sonal Jain successfully logged in
+[2024-10-17T10:16:21.427Z] [=] Mobileapp 152.58.5.132 : Token provided for user Sonal Jain
+[2024-10-17T10:16:23.907Z] [=] Mobileapp 152.58.5.132 : Sonal Jain fetched post permissions
+[2024-10-17T10:16:23.951Z] [=] Mobileapp 152.58.5.132 : Sonal Jain fetched post permissions

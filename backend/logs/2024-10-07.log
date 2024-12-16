@@ -1,0 +1,74 @@
+[2024-10-06T18:31:19.980Z] [=] User Sonal Jain attempting to log in
+[2024-10-06T18:31:19.984Z] [=] Mobileapp 152.58.5.155 : User Sonal Jain successfully logged in
+[2024-10-06T18:31:19.989Z] [=] Mobileapp 152.58.5.155 : Token provided for user Sonal Jain
+[2024-10-06T18:31:30.536Z] Mobileapp 152.58.5.155 : Mentor Sonal Jain fetch their badges info
+[2024-10-06T18:32:28.290Z] Mobileapp 152.58.5.155 : Mentor Sonal Jain fetch their badges info
+[2024-10-06T18:47:17.863Z] [=] 152.58.2.143 Mobileapp : New mentees added under mentor Sonal Jain
+[2024-10-06T18:47:39.488Z] Mobileapp 152.58.5.155 : Mentor Sonal Jain fetch their badges info
+[2024-10-06T18:48:42.343Z] Mobileapp 152.58.5.155 : Mentor Sonal Jain fetch their badges info
+[2024-10-06T18:48:52.583Z] Mobileapp 152.58.5.155 : Mentor Sonal Jain fetch their badges info
+[2024-10-06T18:48:55.665Z] [=] 152.58.5.155 : Sonal Jain deleted thier batch
+[2024-10-06T18:48:55.954Z] Mobileapp 152.58.5.155 : Mentor Sonal Jain fetch their badges info
+[2024-10-07T05:09:14.466Z] [=] User 21104010 attempting to log in
+[2024-10-07T05:09:14.495Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-10-07T05:09:14.514Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-10-07T05:17:01.841Z] [=] User 21104010 attempting to log in
+[2024-10-07T05:17:01.845Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-10-07T05:17:01.858Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-10-07T05:31:34.524Z] [=] User 21104010 attempting to log in
+[2024-10-07T05:31:34.549Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-10-07T05:31:34.597Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-10-07T05:47:09.763Z] [=] User 21104010 attempting to log in
+[2024-10-07T05:47:09.768Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-10-07T05:47:09.779Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-10-07T05:54:14.923Z] [=] Webapp 2402:3a80:4190:18a6:a552:5dfa:9b5a:a6c9 : New student registered: 21104136
+[2024-10-07T05:54:27.378Z] [=] User 21104136 attempting to log in
+[2024-10-07T05:54:27.384Z] [=] Webapp 2402:3a80:4190:18a6:a552:5dfa:9b5a:a6c9 : User 21104136 successfully logged in
+[2024-10-07T05:54:27.391Z] [=] Webapp 2402:3a80:4190:18a6:a552:5dfa:9b5a:a6c9 : Token provided for user 21104136
+[2024-10-07T06:46:28.994Z] [=] User 21104010 attempting to log in
+[2024-10-07T06:46:29.014Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-10-07T06:46:29.032Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-10-07T08:17:39.065Z] [=] User 21104010 attempting to log in
+[2024-10-07T08:17:39.086Z] [=] Webapp ::1 : User 21104010 successfully logged in
+[2024-10-07T08:17:39.105Z] [=] Webapp ::1 : Token provided for user 21104010
+[2024-10-07T08:20:41.641Z] [=] Webapp 42.111.96.35 : Posted a file 21104010-SankalpGunjal-Programming Esse-certificate i love pdf.pdf
+[2024-10-07T08:23:28.587Z] [=] User 21104136 attempting to log in
+[2024-10-07T08:23:28.592Z] [=] Webapp 2402:3a80:4190:81e:a552:5dfa:9b5a:a6c9 : User 21104136 successfully logged in
+[2024-10-07T08:23:28.603Z] [=] Webapp 2402:3a80:4190:81e:a552:5dfa:9b5a:a6c9 : Token provided for user 21104136
+[2024-10-07T08:23:29.550Z] [=] User 21104136 attempting to log in
+[2024-10-07T08:23:29.554Z] [=] Webapp 2402:3a80:4190:81e:a552:5dfa:9b5a:a6c9 : User 21104136 successfully logged in
+[2024-10-07T08:23:29.562Z] [=] Webapp 2402:3a80:4190:81e:a552:5dfa:9b5a:a6c9 : Token provided for user 21104136
+[2024-10-07T08:27:35.298Z] [=] Webapp 42.111.96.35 : Posted a file 21104010-Capgemini_Resume_SohamDalvi.pdf
+[2024-10-07T08:30:47.114Z] [=] User 21104136 attempting to log in
+[2024-10-07T08:30:47.119Z] [-] Webapp ::1 : Unsuccessful login attempt for user 21104136
+[2024-10-07T08:31:14.836Z] [=] User 21104136 attempting to log in
+[2024-10-07T08:31:14.841Z] [=] Webapp ::1 : User 21104136 successfully logged in
+[2024-10-07T08:31:14.850Z] [=] Webapp ::1 : Token provided for user 21104136
+[2024-10-07T08:32:14.025Z] [*] Internal server error: AxiosError: Request failed with status code 500
+[2024-10-07T08:33:14.611Z] [=] undefined ::1 : 21104136 updated their profile.
+[2024-10-07T08:33:36.015Z] [=] User 21104136 attempting to log in
+[2024-10-07T08:33:36.019Z] [=] Webapp ::1 : User 21104136 successfully logged in
+[2024-10-07T08:33:36.025Z] [=] Webapp ::1 : Token provided for user 21104136
+[2024-10-07T08:33:58.904Z] [=] undefined ::1 : 21104136 updated their profile.
+[2024-10-07T08:34:10.251Z] [=] User 21104136 attempting to log in
+[2024-10-07T08:34:10.254Z] [=] Webapp ::1 : User 21104136 successfully logged in
+[2024-10-07T08:34:10.258Z] [=] Webapp ::1 : Token provided for user 21104136
+[2024-10-07T14:41:34.819Z] [=] User 21104010 attempting to log in
+[2024-10-07T14:41:34.839Z] [=] Webapp 2409:40c0:236:48d3:d6e4:f15b:dc7b:e8a7 : User 21104010 successfully logged in
+[2024-10-07T14:41:34.861Z] [=] Webapp 2409:40c0:236:48d3:d6e4:f15b:dc7b:e8a7 : Token provided for user 21104010
+[2024-10-07T14:44:51.194Z] [=] User 21104010 attempting to log in
+[2024-10-07T14:44:51.199Z] [=] Webapp 2409:40c0:236:48d3:2daf:906:5e8:ba3b : User 21104010 successfully logged in
+[2024-10-07T14:44:51.211Z] [=] Webapp 2409:40c0:236:48d3:2daf:906:5e8:ba3b : Token provided for user 21104010
+[2024-10-07T14:48:01.564Z] [=] Mobileapp 152.58.4.101 : Token for user Sonal Jain is valid
+[2024-10-07T14:48:11.858Z] [=] Mobileapp 152.58.4.101 : Sonal Jain fetched post permissions
+[2024-10-07T14:48:11.871Z] [=] Mobileapp 152.58.4.101 : Sonal Jain fetched post permissions
+[2024-10-07T14:50:30.142Z] [=] User 21104010 attempting to log in
+[2024-10-07T14:50:30.146Z] [=] Mobileapp 152.58.4.101 : User 21104010 successfully logged in
+[2024-10-07T14:50:30.155Z] [=] Mobileapp 152.58.4.101 : Token provided for user 21104010
+[2024-10-07T14:50:44.183Z] [=] Mobileapp 152.58.4.101 : 21104010 retrieved profile data
+[2024-10-07T14:50:44.188Z] [=] Mobileapp 152.58.4.101 : 21104010 retrieved profile data
+[2024-10-07T14:52:37.438Z] [=] User 2110401 attempting to log in
+[2024-10-07T14:52:37.441Z] [-] Webapp 2409:40c0:236:48d3:2daf:906:5e8:ba3b : Unsuccessful login attempt for user 2110401
+[2024-10-07T14:52:44.748Z] [=] User 21104010 attempting to log in
+[2024-10-07T14:52:44.753Z] [=] Webapp 2409:40c0:236:48d3:2daf:906:5e8:ba3b : User 21104010 successfully logged in
+[2024-10-07T14:52:44.760Z] [=] Webapp 2409:40c0:236:48d3:2daf:906:5e8:ba3b : Token provided for user 21104010
