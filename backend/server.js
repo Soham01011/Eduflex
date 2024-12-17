@@ -48,6 +48,10 @@ const registerLogicRoute = require('./routesPOST/register');
 const getuserprofileLogicRoute = require('./routesPOST/getuserprofile');
 const psychometrictestLogicRoute = require('./routesPOST/softskilltest');
 const feedLogicRoute = require("./routesPOST/feedlogic");
+const myprofileLogicRoute = require('./routesPOST/myprofile');
+const deletepostLogicRoute = require('./routesPOST/deletepost');
+const deletebatchLoginRoute = require('./routesPOST/deletebatch');
+const mybatchesLogicRoute = require('./routesPOST/mybatches');
 
 /* 
     These are the schemas / models which are the collections in the database
@@ -640,7 +644,6 @@ server.post("/upload", upload.single('file'), async (req, res) => {
     }
 });
 
-
 server.post("/getUserProfile", getuserprofileLogicRoute);
 
 server.get("/myprofile",checkToken, async(req,res)=> {
@@ -728,139 +731,16 @@ server.post("/myprofile",checkToken, async (req, res) => {
         res.status(400).json({ message: "Invalid Token" });
     }
 });
+// server.post('/myprofile', myprofileLogicRoute); THIS ROUTE IS BROKEN
+
+server.post('/deletePost', deletepostLogicRoute);
 
 
-server.post('/deletePost', checkToken, async (req, res) => {
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+server.post("/mybatches",mybatchesLogicRoute);
 
 
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-    const { Token, postID, interface } = req.body;
-  
-    const token_check = await CSRFToken.findOne({token : Token});
-    const username = token_check.username;
+server.post('/delete-batch',deletebatchLoginRoute)
 
-    const profilesdata = await Profiles.findOne({ username : username , postID : postID});
-
-    if(profilesdata)
-    {
-        try {
-            await Profiles.deleteOne({ postID: postID });
-            logMessage(`[=] ${interface} ${userIP} : Deleted post ${postID}`);
-
-            // Step 2: Delete the associated files
-            const uploadsDir = path.join(__dirname, `uploads/${username}/`); // Adjust the path as needed
-
-            // Function to delete a file
-            const deleteFile = (filePath) => {
-              fs.unlink(filePath, (err) => {
-                if (err) {
-                  logMessage(`[*] ${interface} ${userIP} : Error deleting file ${filePath} - ${err}`);
-                } else {
-                  logMessage(`[=] ${interface} ${userIP} : Deleted file ${filePath}`);
-                }
-              });
-            };
-        
-            // Delete the PDF file and images
-            const files = fs.readdirSync(uploadsDir);
-            files.forEach((file) => {
-              if (file.includes(postID)) {
-                const filePath = path.join(uploadsDir, file);
-                deleteFile(filePath);
-              }
-            });
-          res.status(200);
-        } catch (error) {
-          logMessage('[*] Error deleting post:', error);
-          res.status(500).json({ message: 'Error deleting post' });
-        }
-    }
-    else{
-        logMessage(`[-] ${interface} ${userIP} : Treid to delete no existing post ${postID}`);
-    }
-  });
-
-
-server.post("/mybatches",checkToken , async(req,res) =>{
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-    const {Token , username , interface} = req.body;
-    if(Token)
-    {
-        try
-        {
-            tocken_check = await CSRFToken.findOne({ token : Token});
-            if (tocken_check.username == username )
-            {
-                const batches = await Mentor.find({mentor : username})
-                if (batches.length > 0 )
-                {
-                    res.status(200).json({ data: batches });
-                    logMessage(`${interface} ${userIP} : Mentor ${username} fetch their badges info`);
-                }
-                else
-                {
-                    res.status(201);
-                }
-            }
-        }
-        catch(e)
-        {
-            logMessage(`${interface} ${userIP} : Internal server error : ${e}`);
-            res.status(500);
-        }
-    }
-    
-
-});
-
-server.post('/delete-batch',checkToken, async (req, res) => {
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-
-    const { username, batchName,Token } = req.body; // Extract username and batchName from request body
-    if (Token) 
-    {    
-
-        try {
-            tocken_check = await CSRFToken.findOne({ token : Token})
-            if (tocken_check.username == username )
-            {// Find and delete the batch for the given username and batch name
-                const result = await Mentor.findOneAndDelete({
-                    mentor: username,
-                    batch: batchName
-                });
-
-                if (result) {
-                    logMessage(`[=] ${userIP} : ${username} deleted thier batch`);
-                    res.status(200).json({ message: 'Batch deleted successfully' });
-                } else {
-                    res.status(404).json({ message: 'Batch not found' });
-                }
-            }
-        } catch (error) {
-            logMessage(`[*] ${userIP} : Internal server error while delteing batch :${error}`);
-            res.status(500).json({ message: 'Internal server error' });
-        }
-    }
-});
 
 
 server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (req, res) => {
@@ -1115,7 +995,7 @@ server.get("/profile", async (req, res) => {
             post_likes: profile.post_likes
         }));
 
-        console.log(responseData);
+        //console.log(responseData);
         res.status(200).json(responseData); // Return the array of profiles
     } catch (error) {
         console.error('Error fetching profiles:', error);

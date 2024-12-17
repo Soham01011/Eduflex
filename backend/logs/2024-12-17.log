@@ -24,3 +24,54 @@
 [2024-12-17T08:53:32.435Z] [=] User 21104006 attempting to log in
 [2024-12-17T08:53:32.442Z] [=] Webapp ::1 : User 21104006 successfully logged in
 [2024-12-17T08:53:32.458Z] [=] Webapp ::1 : Token provided for user 21104006
+[2024-12-17T10:43:52.044Z] [=] Mobileapp 42.111.110.41 : Token for user Sonal Jain is valid
+[2024-12-17T10:43:58.110Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T10:43:58.113Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T10:44:09.699Z] Mobileapp 42.111.110.41 : Mentor Sonal Jain fetch their badges info
+[2024-12-17T10:44:23.779Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T10:44:23.798Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T10:44:48.360Z] [=] User 21104006 attempting to log in
+[2024-12-17T10:44:48.365Z] [=] Mobileapp 42.111.110.41 : User 21104006 successfully logged in
+[2024-12-17T10:44:48.384Z] [=] Mobileapp 42.111.110.41 : Token provided for user 21104006
+[2024-12-17T10:44:51.809Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:44:51.829Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:47:25.435Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:51:27.005Z] [=] Mobileapp 42.111.110.41 : 21104006 retrieved profile data
+[2024-12-17T10:51:27.014Z] [=] Mobileapp 2402:3a80:4170:444e:0:27:fb43:7e01 : 21104006 retrieved profile data
+[2024-12-17T10:53:35.752Z] [*] Mobileapp 2402:3a80:4170:444e:0:27:fb43:7e01 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:53:35.756Z] [*] Mobileapp 2402:3a80:4170:444e:0:27:fb43:7e01 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:54:16.615Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:54:16.640Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:54:19.912Z] [=] Mobileapp 42.111.110.41 : 21104006 retrieved profile data
+[2024-12-17T10:54:19.920Z] [=] Mobileapp 42.111.110.41 : 21104006 retrieved profile data
+[2024-12-17T10:54:21.113Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:54:21.129Z] [*] Mobileapp 42.111.110.41 : Internal server error ReferenceError: path is not defined
+[2024-12-17T10:54:31.482Z] [=] Mobileapp 42.111.110.41 : 21104006 pulled their own profile
+[2024-12-17T10:54:31.490Z] [=] Mobileapp 42.111.110.41 : 21104006 pulled their own profile
+[2024-12-17T10:54:38.401Z] [=] Mobileapp 42.111.110.41 : Deleted post 21104006-a5e1e863-e6a9-4204-b647-7c849d1e97cd
+[2024-12-17T10:55:46.847Z] [=] Mobileapp 42.111.110.41 : 21104006 pulled their own profile
+[2024-12-17T10:57:01.137Z] [=] User 21104010 attempting to log in
+[2024-12-17T10:57:01.143Z] [=] Mobileapp 42.111.110.41 : User 21104010 successfully logged in
+[2024-12-17T10:57:01.149Z] [=] Mobileapp 42.111.110.41 : Token provided for user 21104010
+[2024-12-17T10:57:07.994Z] [=] Mobileapp 42.111.110.41 : 21104010 pulled their own profile
+[2024-12-17T10:57:08.008Z] [=] Mobileapp 42.111.110.41 : 21104010 pulled their own profile
+[2024-12-17T10:57:20.262Z] [=] Mobileapp 42.111.110.41 : Deleted post 21104010-69b501b3-0c5b-46c3-b6e0-b4cfe500d509
+[2024-12-17T10:57:20.262Z] [*] Error deleting post:
+[2024-12-17T10:59:12.842Z] [=] Mobileapp 2402:3a80:4170:444e:0:27:fb43:7e01 : 21104010 pulled their own profile
+[2024-12-17T11:06:41.533Z] [=] Mobileapp 42.111.110.41 : 21104010 pulled their own profile
+[2024-12-17T11:07:04.249Z] [=] Mobileapp 42.111.110.41 : 21104010 pulled their own profile
+[2024-12-17T11:13:28.754Z] [=] User Sonal Jain attempting to log in
+[2024-12-17T11:13:28.760Z] [=] Mobileapp 42.111.110.41 : User Sonal Jain successfully logged in
+[2024-12-17T11:13:28.766Z] [=] Mobileapp 42.111.110.41 : Token provided for user Sonal Jain
+[2024-12-17T11:13:35.597Z] Mobileapp 42.111.110.41 : Mentor Sonal Jain fetch their badges info
+[2024-12-17T11:13:57.352Z] [=] 42.111.110.41 : Sonal Jain deleted thier batch
+[2024-12-17T11:15:14.377Z] [=] 152.58.51.76 Mobileapp : Mentees added for mentor Sonal Jain in new batch be it sem 8
+[2024-12-17T11:15:31.411Z] Mobileapp 42.111.110.41 : Mentor Sonal Jain fetch their badges info
+[2024-12-17T11:15:34.475Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T11:15:34.478Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T11:15:39.288Z] [=] Mobileapp 42.111.110.41 : Sonal Jain rejected post 21104136-f5962219-e2db-4860-9de2-393aed3d63ec
+[2024-12-17T11:15:39.497Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T11:15:47.712Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T11:15:52.746Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T11:15:52.750Z] [=] Mobileapp 42.111.110.41 : Sonal Jain fetched post permissions
+[2024-12-17T11:19:53.476Z] Mobileapp 42.111.110.41 : Mentor Sonal Jain fetch their badges info
