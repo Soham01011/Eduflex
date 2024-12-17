@@ -35,7 +35,7 @@ const {fetchUser} = require('./utils/fetchUser');
 */
 
 const loginRoute = require('./routesGET/loginpage');
-const dashboardRoute = require('./routesGET/dashboardRoute');
+const dashboardRoute = require('./routesPOST/dashboardRoute');
 const uploadcretRouter = require('./routesGET/uploadcert');
 const profilepageRoute = require('./routesGET/profile-web-page');
 
@@ -596,7 +596,7 @@ server.post("/upload", upload.single('file'), async (req, res) => {
                     );
 
                     const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
-
+                    const user_data = await User.findOne({"username": up_username});
                     const [model_result, producer] = await validatecert(up_username, sanitizedFilename);
 
                     const newpost = new Profiles({
@@ -1125,7 +1125,7 @@ server.get("/profile", async (req, res) => {
 
 server.post("/psychometrictest",psychometrictestLogicRoute);
 
-server.post('/feed',feedLogicRoute) 
+server.get('/feed',feedLogicRoute) 
 
 server.listen(8000, () => {
     console.log(`http://localhost:8000`);

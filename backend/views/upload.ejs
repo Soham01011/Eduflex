@@ -530,7 +530,7 @@
                 // Prepare form data to submit via fetch
                 const formData = new FormData();
                 formData.append('file', file); // Add the file
-                formData.append('description', description); // Add description
+                formData.append('post_desc', description); // Add description
                 formData.append('hashtags', selectedTags.join(',')); // Join tags into a comma-separated string
                 formData.append('post_type', 'post');
                 formData.append('interface', 'Webapp');

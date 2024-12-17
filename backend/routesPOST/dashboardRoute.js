@@ -12,7 +12,8 @@ const dashboardrouter = express.Router(); // The router for the dashboard page
 const {fetchUser} = require('../utils/fetchUser')
 const {checkToken} = require('../middleware/checkToken')
 
-const Profiles = require('../models/profiles')
+const Profiles = require('../models/profiles');
+const { logMessage } = require('../utils/logger');
 
 /**
  * BASE_URL : This is an env variable to provide your ngrok link and will be used in the 
@@ -22,7 +23,26 @@ const BASE_URL = process.env.BASE_URL;
 
 dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken will be exeuted first then the next request
     const username = await fetchUser(req,res); //returning the username
-    res.status(200).render('index', {username : username ,base_url : BASE_URL}) //passing the username and baseurl to the front end to display dynamically
+    try {
+        const page = 1; // First page
+        const range = 5; // Number of posts per page
+    
+        // Fetch the latest 5 records by sorting in descending order based on 'createdAt'
+        const cards = await Profiles.find()
+            .select('firstname lastname username post_desc file hashtags')
+            .sort({ createdAt: -1 }) // Sort by 'createdAt' field in descending order
+            .skip(0) // Skip 0 records for the first page
+            .limit(range); // Limit to 'range' posts
+    
+        res.status(200).render('index', {
+            username: username, 
+            base_url: BASE_URL, 
+            cards
+        });
+    } catch (error) {
+        logMessage(`[*] Error fetching dashboard : ${error}`);
+        res.status(500).json({ "error": "Internal server error" });
+    }    
 });
 
 module.exports = dashboardrouter // exporting the router as a module
