@@ -82,3 +82,69 @@
   overflow-y: auto; /* Adds vertical scrolling when content overflows */
 }
 
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tag {
+  padding: 10px 15px;
+  border-radius: 20px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.tag.selected {
+  background-color: #6c2bd9;
+  color: white;
+}
+
+.card {
+  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card .left {
+  width: 30%;
+  padding: 20px;
+  border-right: 2px solid #ddd;
+}
+.card .left h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+.card .left .username {
+  font-size: 18px;
+  color: #555;
+  margin: 10px 0;
+}
+.card .left p {
+  color: #777;
+  font-size: 14px;
+}
+.card .like-btn {
+  background-color: #ff1044;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.card .like-btn:hover {
+  background-color: #0056b3;
+}
+.card .right {
+  width: 70%;
+  padding: 20px;
+}
+.card .pdf-container {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #ddd;
+}
