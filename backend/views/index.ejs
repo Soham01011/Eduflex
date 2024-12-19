@@ -1010,19 +1010,19 @@
             alert('Logout successful! Redirecting to the login page.'); // Alert on successful logout
 
             // Attempt redirection to the primary URL
-            fetch('<%= base_url %>/loginpage', { method: 'HEAD' })
+            fetch('/loginpage', { method: 'HEAD' })
               .then((res) => {
                 if (res.ok) {
                   // Redirect if the primary URL is accessible
-                  window.location.href = '<%= base_url %>/loginpage';
+                  window.location.href = '/loginpage';
                 } else {
                   throw new Error("Primary login page unavailable");
                 }
               })
               .catch(() => {
                 // Fallback to localhost if the primary URL fails
-                console.error("Failed to load the login page from base_url, redirecting to localhost.");
-                window.location.href = 'http://localhost:8000/loginpage';
+                console.error("Failed to load the login page, redirecting to localhost.");
+                window.location.href = '/loginpage';
               });
           }
           else {

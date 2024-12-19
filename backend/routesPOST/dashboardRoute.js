@@ -15,11 +15,6 @@ const {checkToken} = require('../middleware/checkToken')
 const Profiles = require('../models/profiles');
 const { logMessage } = require('../utils/logger');
 
-/**
- * BASE_URL : This is an env variable to provide your ngrok link and will be used in the 
- *            front-end to pull some local script to run or to display the user data 
- */
-const BASE_URL = process.env.BASE_URL;
 
 dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken will be exeuted first then the next request
     const username = await fetchUser(req,res); //returning the username
@@ -36,7 +31,6 @@ dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken
     
         res.status(200).render('index', {
             username: username, 
-            base_url: BASE_URL, 
             cards
         });
     } catch (error) {

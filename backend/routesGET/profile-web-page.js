@@ -30,11 +30,7 @@ const User = require('../models/users');
 const Profiles = require('../models/profiles');
 const Credly = require('../models/credly');
 
-/**
- * BASE_URL : This is an env variable to provide your ngrok link and will be used in the 
- *            front-end to pull some local script to run or to display the user data 
- */
-const BASE_URL = process.env.BASE_URL;
+
 /**
  * Steps : 
  *      - Checks the token validity
@@ -104,8 +100,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             missingFields,
             link,
             cert,
-            certificateData: formattedCertificateData,
-            base_url : BASE_URL // Send formatted certificate data
+            certificateData: formattedCertificateData
         });
         
     } catch (error) {
