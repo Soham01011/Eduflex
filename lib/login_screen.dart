@@ -21,80 +21,67 @@ class _LoginScreenState extends State<LoginScreen> {
     _autoLogin();
   }
 
-  Future<void> _autoLogin() async
-  {
+  Future<void> _autoLogin() async {
+    final token = await _storage.read(key: 'auth_token');
+    if (token != null) {
+      await Future.delayed(Duration(seconds: 2));
+    } else {
+      await Future.delayed(Duration(minutes: 10));
+    }
 
-    final token = await _storage.read(key : 'auth_token');
-    if(token != null)
-      {
-        await Future.delayed(Duration(seconds: 2));
-      }
-    else
-      {
-        await Future.delayed(Duration(minutes: 10));
-      }
+    if (token != null && (trial == 0)) {
+      final response = await http.post(
+        Uri.parse('https://nice-genuinely-pug.ngrok-free.app/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'mobiletoken': token,
+          'interface': 'Mobileapp',
+        }),
+      );
 
-    if (token != null && (trial  == 0))
-      {
-        final responce = await http.post(
-          Uri.parse('https://nice-genuinely-pug.ngrok-free.app/login'),
-          headers: {
-            'Content-Type' : 'application/json',
-          },
-          body: json.encode({
-            'mobiletoken' : token,
-            'interface' : 'Mobileapp',
-          })
-        );
-
-        if (responce.statusCode == 200)
-          {
-            final responceBody = json.decode(responce.body);
-            final message = responceBody['message'];
-            if (message == 'valid' && responceBody['user_type'] == "Student")
-            {
-              String pop = "Succesfull Auto Login";
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            }
-            else if (message == 'valid' && responceBody['user_type'] == "Mentor")
-            {
-              String pop = "Succesfull Auto Login";
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
-              Navigator.pushReplacementNamed(context, '/mentordashboard');
-            }
-          }
-        else if (responce.statusCode == 401)
-        {
-          final responceBody = json.decode(responce.body);
-          final message = responceBody['message'];
-          if (message == 'No token found')
-          {
-            String pop = "PLS login";
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
-            Navigator.pushReplacementNamed(context, '/');
-          }
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final message = responseBody['message'];
+        if (message == 'valid' && responseBody['user_type'] == "Student") {
+          String pop = "Successful Auto Login";
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        } else if (message == 'valid' && responseBody['user_type'] == "Mentor") {
+          String pop = "Successful Auto Login";
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
+          Navigator.pushReplacementNamed(context, '/mentordashboard');
         }
-        else if (responce.statusCode == 400)
-            {
-              final responceBody = json.decode(responce.body);
-              final message = responceBody['message'];
-              if (message == 'expired')
-              {
-                String pop = "PLS login";
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
-                Navigator.pushReplacementNamed(context, '/');
-              }
-            }
+      } else if (response.statusCode == 401) {
+        final responseBody = json.decode(response.body);
+        final message = responseBody['message'];
+        if (message == 'No token found') {
+          // Delete the token
+          await _storage.delete(key: 'auth_token');
+          String pop = "Please login";
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      } else if (response.statusCode == 400) {
+        final responseBody = json.decode(response.body);
+        final message = responseBody['message'];
+        if (message == 'expired') {
+          // Delete the expired token
+          await _storage.delete(key: 'auth_token');
+          String pop = "Token expired, please login";
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
+          Navigator.pushReplacementNamed(context, '/');
+        }
       }
-    else
-      {
-        String pop = "Long Live Token Not Found";
-        trial = trial +1;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
-        Navigator.pushReplacementNamed(context, '/');
-      }
+    } else {
+      String pop = "Long Live Token Not Found";
+      trial = trial + 1;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pop)));
+      Navigator.pushReplacementNamed(context, '/');
+    }
   }
+
 
 
   Future<void> _login() async {

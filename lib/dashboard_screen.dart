@@ -22,6 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     HomePage(),
     ProfilePage(),
     SettingsPage(),
+    TestPage(),
     GoodiesPage(),
     LogoutPage(),
   ];
@@ -73,8 +74,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onTap: () => _onItemTapped(2),
             ),
             ListTile(
-              title: Text('Goodies'),
+              title: Text('Tests'),
               onTap: () => _onItemTapped(3),
+            ),
+            ListTile(
+              title: Text('Goodies'),
+              onTap: () => _onItemTapped(4),
             ),
             ListTile(
               title: Text('Logout'),
@@ -340,8 +345,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 }
-
-
 
 class ChatScreen extends StatefulWidget {
   final String username;
@@ -1235,6 +1238,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
+
+
 
 class GoodiesPage extends StatelessWidget {
   @override
