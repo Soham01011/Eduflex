@@ -1,0 +1,14 @@
+[2024-12-20T10:39:09.238Z] [=] User 21104010 attempting to log in
+[2024-12-20T10:39:19.242Z] [*] Database connection failed: Operation `users.findOne()` buffering timed out after 10000ms
+[2024-12-20T10:40:16.648Z] [=] User 21104006 attempting to log in
+[2024-12-20T10:40:16.664Z] [=] Webapp ::ffff:127.0.0.1 : User 21104006 successfully logged in
+[2024-12-20T10:40:16.669Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104006
+[2024-12-20T11:01:55.627Z] [=] User 21104006 attempting to log in
+[2024-12-20T11:01:55.644Z] [=] Webapp ::ffff:127.0.0.1 : User 21104006 successfully logged in
+[2024-12-20T11:01:55.658Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104006
+[2024-12-20T11:29:27.300Z] [=] User 21104006 attempting to log in
+[2024-12-20T11:29:27.320Z] [=] Webapp ::ffff:127.0.0.1 : User 21104006 successfully logged in
+[2024-12-20T11:29:27.334Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104006
+[2024-12-20T11:29:55.105Z] [*] Validation failed with status: 404
+[2024-12-20T11:30:35.868Z] [*] Validation failed with status: 404
+[2024-12-20T11:30:35.896Z] [=] Webapp 152.58.51.235 : Posted a file 21104006-AashayIngale-cisco-python.pdf

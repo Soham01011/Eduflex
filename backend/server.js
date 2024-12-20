@@ -12,9 +12,7 @@ const { v4: uuidv4, stringify } = require("uuid");
 const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
-const pdf = require('pdf-poppler');
-const { exec } = require('child_process');
-const socketIo = require('socket.io');
+const {Poppler} = require('node-poppler');
 
 /**
     These are some utilities which are used in the routes to automate some stuff
@@ -485,7 +483,11 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
     }
 );
 
-
+/* *
+----------------P.S. => removed converting pdf to images thus direct pdf files will be stored (beause linux dosent support very well)
+                        this wont cause problem at the web app side but the mobile app wont see certificates , thus future update will have pdf file 
+                        instead of images on the mobile app
+*/
 
 server.post("/upload", upload.single('file'), async (req, res) => {
     try {
@@ -551,92 +553,43 @@ server.post("/upload", upload.single('file'), async (req, res) => {
         console.log("-----------", Token, interface, up_username, sanitizedFilename, filePath);
         
         if (post_type === "post") {
-            // Convert PDF to images
             console.log("POST OF STUDENT");
-            const opts = {
-                format: 'jpeg',
-                out_dir: path.dirname(filePath),
-                out_prefix: path.basename(filePath, path.extname(filePath)),
-                page: null // Convert all pages
-            };
+        
+            const cleanedHashtags = hashtags.map(tag => tag
+                .replace(/[^a-zA-Z0-9\s]/g, ' ')  // Replace all non-alphanumeric characters with space
+                .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
+                .trim()  // Remove leading and trailing spaces
+            );
 
-            pdf.convert(filePath, opts)
-                .then(async () => {
-                    // Rename the files with sequential numbers
-                    const renameFiles = (directory, baseName) => {
-                        fs.readdir(directory, (err, files) => {
-                            if (err) {
-                                console.error('Error reading directory:', err);
-                                return;
-                            }
+            const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
+            const user_data = await User.findOne({ "username": up_username });
+            const [model_result, producer] = await validatecert(up_username, sanitizedFilename);
 
-                            const imageFiles = files.filter(file => file.startsWith(baseName) && file.endsWith('.jpeg'));
-                            imageFiles.sort();
+            const newpost = new Profiles({
+                firstname: user_data ? user_data.firstname : null, // Check if user_data exists
+                lastname: user_data ? user_data.lastname : null,
+                username: up_username,
+                postID: `${up_username}-${uuidv4()}`, // Unique post ID
+                file: filePath,
+                post_type: post_type,
+                post_desc: post_desc,
+                post_likes: 0,
+                hashtags: cleanedHashtags,
+                broken_tags: brokenTags,
+                approved: false,  // Initially set to false as the mentor has not reviewed yet
+                mentor_approved: null, // Set to null as default, waiting for mentor approval
+                interface: interface,
+                model_approved: true, // Assuming model approval is granted based on your logic
+                real: model_result === 'Real', // Set real based on validation
+                edited_by: producer // Keep track of who edited the post
+            });
 
-                            imageFiles.forEach((file, index) => {
-                                const oldPath = path.join(directory, file);
-                                const newPath = path.join(directory, `${baseName}-${index + 1}.jpeg`);
-                                fs.rename(oldPath, newPath, err => {
-                                    if (err) {
-                                        console.error('Error renaming file:', err);
-                                    }
-                                });
-                            });
-                        });
-                    };
+            // Save the new post to the database
+            await newpost.save();
 
-                    renameFiles(opts.out_dir, opts.out_prefix);
-
-                    // Collect paths of image files
-                    const uploadDir = path.join(__dirname, `uploads/${up_username}/`);
-                    const imagePaths = fs.readdirSync(uploadDir)
-                        .filter(file => file.startsWith(opts.out_prefix) && file.endsWith('.jpg'))
-                        .map(file => path.join(`uploads/${up_username}/`, file));
-
-                    const cleanedHashtags = hashtags.map(tag => tag
-                        .replace(/[^a-zA-Z0-9\s]/g, ' ')  // Replace all non-alphanumeric characters with space
-                        .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
-                        .trim()  // Remove leading and trailing spaces
-                    );
-
-                    const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
-                    const user_data = await User.findOne({"username": up_username});
-                    const [model_result, producer] = await validatecert(up_username, sanitizedFilename);
-
-                    const newpost = new Profiles({
-                        firstname: user_data ? user_data.firstname : null, // Check if user_data exists
-                        lastname: user_data ? user_data.lastname : null,
-                        username: up_username,
-                        postID: `${up_username}-${uuidv4()}`, // Unique post ID
-                        file: filePath,
-                        imagePaths: imagePaths,
-                        post_type: post_type,
-                        post_desc: post_desc,
-                        post_likes: 0,
-                        hashtags: cleanedHashtags,
-                        broken_tags: brokenTags,
-                        approved: false,  // Initially set to false as the mentor has not reviewed yet
-                        mentor_approved: null, // Set to null as default, waiting for mentor approval
-                        interface: interface,
-                        model_approved: true, // Assuming model approval is granted based on your logic
-                        real: model_result === 'Real', // Set real based on validation
-                        edited_by: producer // Keep track of who edited the post
-                    });
-
-                    // Save the new post to the database
-                    await newpost.save();
-
-
-                    logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
-                    return res.status(200).json({ message: "Uploaded Successfully" });
-                })
-                .catch(error => {
-                    console.error('Error converting PDF to images:', error);
-                    return res.status(500).json({ message: "Error converting PDF to images" });
-                });
-        } else if (post_type === "mentor_file_upload") {
-            console.log("MEntor uploading")
-            addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
+            logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
+            return res.status(200).json({ message: "Uploaded Successfully" });
+        
         }
     } catch (error) {
         console.error(`[*] Internal server error: ${error}`);

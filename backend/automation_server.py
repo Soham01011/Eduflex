@@ -4,7 +4,7 @@ from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-import os ,re ,nltk, fitz
+import os ,re ,nltk
 import pandas as pd
 from werkzeug.utils import secure_filename
 import pdfplumber
