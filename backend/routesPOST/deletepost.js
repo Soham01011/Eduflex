@@ -8,20 +8,29 @@ const Profiles = require('../models/profiles');
 
 const {checkToken} = require('../middleware/checkToken');
 const {logMessage} = require('../utils/logger')
+const {fetchUser} = require('../utils/fetchUser')
 
 deletepostLogicRoute.post('/deletePost', checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-
+    console.log('pingged the server to delete')
     if (Array.isArray(userIP)) {
         userIP = userIP[0];
     } else if (userIP.includes(',')) {
         userIP = userIP.split(',')[0].trim();
     }
     const { Token, postID, interface } = req.body;
-  
-    const token_check = await CSRFToken.findOne({token : Token});
-    const username = token_check.username;
+    let username ='';
+
+    if (Token){
+      const token_check = await CSRFToken.findOne({token : Token});
+      username = token_check.username;
+    }
+    
+    if(!Token){
+      username = await fetchUser(req,res);
+    }
+    console.log("USER NAME :", username , " POST ID TO DEL" ,postID)
 
     const profilesdata = await Profiles.findOne({ username : username , postID : postID});
 
@@ -31,29 +40,7 @@ deletepostLogicRoute.post('/deletePost', checkToken, async (req, res) => {
             await Profiles.deleteOne({ postID: postID });
             logMessage(`[=] ${interface} ${userIP} : Deleted post ${postID}`);
 
-            // Step 2: Delete the associated files
-            const uploadsDir = path.join(__dirname, `uploads/${username}/`); // Adjust the path as needed
-
-            // Function to delete a file
-            const deleteFile = (filePath) => {
-              fs.unlink(filePath, (err) => {
-                if (err) {
-                  logMessage(`[*] ${interface} ${userIP} : Error deleting file ${filePath} - ${err}`);
-                } else {
-                  logMessage(`[=] ${interface} ${userIP} : Deleted file ${filePath}`);
-                }
-              });
-            };
-        
-            // Delete the PDF file and images
-            const files = fs.readdirSync(uploadsDir);
-            files.forEach((file) => {
-              if (file.includes(postID)) {
-                const filePath = path.join(uploadsDir, file);
-                deleteFile(filePath);
-              }
-            });
-          res.status(200);
+            res.status(200).json({"message": "Deleted post successfully"});
         } catch (error) {
           logMessage('[*] Error deleting post:', error);
           res.status(500).json({ message: 'Error deleting post' });

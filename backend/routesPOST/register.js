@@ -47,7 +47,9 @@ registerLogicRoute.post("/register", async (req, res) => {
         try {
             if (credlylink.toLowerCase().includes(firstname.toLowerCase()) && 
                 credlylink.toLowerCase().includes(lastname.toLowerCase()) &&
-                credlylink.toLowerCase().includes(credlylink_template)) {
+                credlylink.toLowerCase().includes(credlylink_template) &&
+                process.env.USE_CREDLY_BADGES) // this is added to check if the feature is enabled or not 
+                {
 
                 const response = await axios.get('http://localhost:5000/fetch-badges', {
                     params: { url: credlylink }

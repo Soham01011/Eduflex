@@ -20,12 +20,33 @@ const {Poppler} = require('node-poppler');
  */
 
 const {logMessage} = require('./utils/logger');
-const {addMentees} = require('./utils/mentees');
-const {fetchBadges} = require('./utils/fetchBadges');
-const {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
+let {addMentees} = require('./utils/mentees');
+let {fetchBadges} = require('./utils/fetchBadges');
+let {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
-const {validatecert} = require('./utils/validatecert');
+let {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
+
+/**
+ * Below is the code to have manual feature enabling and disabling commands to make it scalable 
+ * they have to set in the env file . BY DEFAULT IT WILL WORK IF NOT SET AS FALSE
+ */
+
+if(process.env.USE_PYTHON_SERVER === "false"){
+    addMentees, fetchAndSaveBadges, fetchBadges ,validatecert =false; 
+}
+
+if(process.env.USE_CREDLY_BADGES === "false"){
+    fetchAndSaveBadges, fetchBadges = false;
+}
+
+if(process.env.USE_VALIDATE_CERT === "false"){
+    validatecert = false;
+}
+
+if(process.env.USE_ADD_MENTES === "false"){
+    addMentees = false;
+}
 
 /*
     These all are the get route requests most of them are just rendering the web 
@@ -294,10 +315,15 @@ server.post("/mobiletoken", async(req,res) => {
             return res.status(401).json({message : "No token found"});
         }
         else{
-            fetchAndSaveBadges(mobile_token_check.username);
-            logMessage(`[=] Mobileapp ${userIP} : Token for user ${mobile_token_check.username} is valid`);
-            console.log("token found");
-            return res.status(200).json({ message : "valid" ,user_type : user.user_type });
+            if(fetchAndSaveBadges){
+                fetchAndSaveBadges(mobile_token_check.username);
+                logMessage(`[=] Mobileapp ${userIP} : Token for user ${mobile_token_check.username} is valid`);
+                console.log("token found");
+                return res.status(200).json({ message : "valid" ,user_type : user.user_type });
+            }
+            else{
+                console.log('[INFO] * Credly system is disabled , enable it in env file')
+            }
         }
     }
     catch (e)
@@ -468,8 +494,11 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             );
 
             // Handle Credly badge fetching
-            if (credly) {
+            if (credly && fetchBadges) {
                 fetchBadges(interface,credly,firstName,lastName,tokencheck.username,userIP) 
+            }
+            else if (credly){
+                console.log('[INFO] * Credly system is disabled, enable it in env file')
             }
 
             // Delete the used token
@@ -499,7 +528,12 @@ server.post("/upload", upload.single('file'), async (req, res) => {
 
         if (post_type === "mentor_file_upload") {
             console.log("MEntor uploading")
+            if(addMentees){
             addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
+            }
+            else{
+                console.log('[INFO] * Mentess part is disabled, enable it in env file.')
+            }
         }
 
         // Handle `hashtags` whether it is a string or an array
@@ -563,7 +597,13 @@ server.post("/upload", upload.single('file'), async (req, res) => {
 
             const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
             const user_data = await User.findOne({ "username": up_username });
-            const [model_result, producer] = await validatecert(up_username, sanitizedFilename);
+            let [model_result, producer] = '';
+            if(validatecert){
+                [model_result, producer] = await validatecert(up_username, sanitizedFilename);
+            }
+            else{
+                console.log('[INFO] * Validate cert is disabled , enable it in env file')
+            }
 
             const newpost = new Profiles({
                 firstname: user_data ? user_data.firstname : null, // Check if user_data exists

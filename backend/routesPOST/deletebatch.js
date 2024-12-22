@@ -1,6 +1,13 @@
 const express = require('express')
 const deletebatchlogicRoute = express.Router()
 
+/**
+ * This is the route to delete the batch created by the mentor. Flow:
+ * 1) check token : checks the validity of the user
+ * 2) delete batch : checks if the batch is under mentor and then deletes it
+ * 3) Done, that's it
+ */
+
 const {checkToken} = require('../middleware/checkToken');
 const {logMessage} = require('../utils/logger');
 
