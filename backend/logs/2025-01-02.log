@@ -1,0 +1,7 @@
+[2025-01-02T07:03:18.023Z] [=] User 21104010 attempting to log in
+[2025-01-02T07:03:18.039Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-02T07:03:18.050Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-02T07:35:14.149Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'username')
+[2025-01-02T07:35:21.671Z] [=] User 21104010 attempting to log in
+[2025-01-02T07:35:21.673Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-02T07:35:21.677Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010

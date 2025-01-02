@@ -57,6 +57,7 @@ const loginRoute = require('./routesGET/loginpage');
 const dashboardRoute = require('./routesPOST/dashboardRoute');
 const uploadcretRouter = require('./routesGET/uploadcert');
 const profilepageRoute = require('./routesGET/profile-web-page');
+const explorepageRoute = require('./routesGET/explorepage');
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -267,6 +268,8 @@ server.get("/dashboard", dashboardRoute);
 server.get("/profile-web-page",profilepageRoute);
 
 server.get("/upload-certificate",uploadcretRouter);
+
+server.get("/explore", explorepageRoute);
 
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
