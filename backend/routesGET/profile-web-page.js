@@ -25,10 +25,13 @@ const {logMessage} = require('../utils/logger')
  * Profiles : Model which stores the user posts.
  * 
  * Credly   : Model which stores credly badges of all the users.
+ * 
+ * Allskills : Data of the user about their expirence , education and skills
  */
 const User = require('../models/users');
 const Profiles = require('../models/profiles');
 const Credly = require('../models/credly');
+const Allskills = require('../models/expeduskill');
 
 
 /**
@@ -91,6 +94,12 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         }
         const cert = await Credly.find({username : username})
 
+        const userskillsdata = await Allskills.findOne({ username : username});
+        const userexp = userskillsdata.experience;
+        const useredu = userskillsdata.education;
+        const userskills = userskillsdata.skills;
+        console.log(userexp, useredu, userskills)
+
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
             userProfile,
@@ -99,7 +108,10 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             missingFields,
             link,
             cert,
-            certificateData: formattedCertificateData
+            certificateData: formattedCertificateData,
+            userexp,
+            useredu,
+            userskills
         });
         
     } catch (error) {

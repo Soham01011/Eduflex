@@ -46,4 +46,38 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    const deleteexpButtons = document.querySelectorAll('.delete-exp-btn');
+
+        deleteexpButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const experienceId = event.target.getAttribute('data-exp-id');
+                
+                if (experienceId) {
+                    const confirmation = confirm("Are you sure you want to delete this experience?");
+                    if (!confirmation) return;
+
+                    try {
+                        const response = await fetch(`/experience/experience/${experienceId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message);
+                            location.reload(); // Reload the page to refresh the data
+                        } else {
+                            alert(result.message || "Failed to delete experience.");
+                        }
+                    } catch (error) {
+                        console.error("Error deleting experience:", error);
+                        alert("An error occurred. Please try again.");
+                    }
+                }
+            });
+        });
+
 });

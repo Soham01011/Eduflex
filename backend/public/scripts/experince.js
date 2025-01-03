@@ -38,4 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Unexpected error occurred.");
         }
     });
+
+
 });

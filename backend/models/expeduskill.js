@@ -13,7 +13,7 @@ const educationSchema = new mongoose.Schema({
     id: { type: String, required: true },
     institute: { type: String, required: true },
     degree: { type: String, required: true },
-    major_minor: { type: String, required: true },
+    major_minor: { type: String, required: false },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: false }
 });
