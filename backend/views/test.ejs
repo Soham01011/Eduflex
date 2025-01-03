@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Form</title>
+</head>
+<body>
+  <h1>Experience Form</h1>
+  <form id="testForm" action="/experience/" method="POST">
+    <div>
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" placeholder="Job Title" required />
+    </div>
+    <div>
+      <label for="companyName">Company Name:</label>
+      <input type="text" id="companyName" name="companyName" placeholder="Company Name" required />
+    </div>
+    <div>
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" name="startDate" required />
+    </div>
+    <div>
+      <label for="endDate">End Date:</label>
+      <input type="date" id="endDate" name="endDate" />
+    </div>
+    <span >Employment Type :</span>
+                                <select id="employmentType" name="employmentType" class="">
+                                  <option value="">Select</option>
+                                  <option value="Internship">Internship</option>
+                                  <option value="Full-time">Full-time</option>
+                                  <option value="Part-time">Part-time</option>
+                                  <option value="Freelance">Freelance</option>
+                                  <option value="Self-employed">Self-employed</option>
+                                  <option value="Trainee">Trainee</option>
+                                </select>
+    <button type="submit">Save</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log("Script loaded and ready.");
+      
+      const form = document.getElementById("testForm");
+
+      if (!form) {
+        console.error("Form not found.");
+        return;
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        console.log("Submit event triggered.");
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        console.log("Collected form data:", data);
+
+        try {
+          const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log("API response:", result);
+            alert("Experience added successfully!");
+          } else {
+            console.error("API error:", response.status, response.statusText);
+            alert("Failed to add experience. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error during API call:", error);
+          alert("Unexpected error occurred.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

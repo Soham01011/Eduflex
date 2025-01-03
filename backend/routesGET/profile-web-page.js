@@ -69,7 +69,6 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
 
         // Format certificate data for display
         const formattedCertificateData = formatCertificateData(certificateData);
-        console.log(formattedCertificateData)
         // Check for missing mandatory fields
         const mandatoryFields = [
             'firstname',
@@ -104,7 +103,6 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         });
         
     } catch (error) {
-        console.error(error.message);
         logMessage("[*] Webapp : ", userIP, " : Error fetching profile =", error.message);
         return res.redirect('/loginpage'); // Redirect on error
     }

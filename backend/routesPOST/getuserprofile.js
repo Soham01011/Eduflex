@@ -67,7 +67,6 @@ getuserprofileLogicRoute.post("/getUserProfile", checkToken, async (req, res) =>
                 github: userAccountData.github,
                 website: userAccountData.website,
             };
-            console.log("user profile : ", userProfile);
 
             logMessage(`[=] ${req.body.interface} ${userIP} : ${tokencheck.username} retrieved profile data`);
             res.status(200).json(userProfile);

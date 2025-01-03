@@ -73,6 +73,7 @@ const myprofileLogicRoute = require('./routesPOST/myprofile');
 const deletepostLogicRoute = require('./routesPOST/deletepost');
 const deletebatchLoginRoute = require('./routesPOST/deletebatch');
 const mybatchesLogicRoute = require('./routesPOST/mybatches');
+const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
 
 /* 
     These are the schemas / models which are the collections in the database
@@ -1003,7 +1004,17 @@ server.get("/profile", async (req, res) => {
 
 server.post("/psychometrictest",psychometrictestLogicRoute);
 
-server.get('/feed',feedLogicRoute) 
+server.get('/feed',feedLogicRoute);
+
+server.use('/experience',skillexpeduRoute);
+
+// TESTING ROUTES -------------------------------------------------------------------------------------------------------------
+
+server.get('/testingroute',checkToken , async(req,res) => {
+    res.render('test');
+});
+
+// TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
 server.listen(8000, () => {
     console.log(`http://localhost:8000`);
