@@ -1,0 +1,48 @@
+[2024-12-21T06:36:34.089Z] [=] User 21104006 attempting to log in
+[2024-12-21T06:36:44.094Z] [*] Database connection failed: Operation `users.findOne()` buffering timed out after 10000ms
+[2024-12-21T06:37:12.118Z] [=] User 21104006 attempting to log in
+[2024-12-21T06:37:12.125Z] [=] Webapp ::ffff:127.0.0.1 : User 21104006 successfully logged in
+[2024-12-21T06:37:12.131Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104006
+[2024-12-21T07:55:30.265Z] [=] User 21104006 attempting to log in
+[2024-12-21T07:55:30.282Z] [=] Webapp ::ffff:127.0.0.1 : User 21104006 successfully logged in
+[2024-12-21T07:55:30.293Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104006
+[2024-12-21T08:17:50.849Z] [=] User 21104010 attempting to log in
+[2024-12-21T08:17:50.853Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T08:17:50.857Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T14:32:49.667Z] [=] User 21104010 attempting to log in
+[2024-12-21T14:32:49.672Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T14:32:49.677Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T14:32:49.683Z] [*] Database connection failed: fetchAndSaveBadges is not a function
+[2024-12-21T14:38:39.183Z] [=] User 21104010 attempting to log in
+[2024-12-21T14:38:39.186Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T14:38:39.191Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T14:38:39.195Z] [*] Database connection failed: fetchAndSaveBadges is not a function
+[2024-12-21T14:38:52.203Z] [=] User 21104010 attempting to log in
+[2024-12-21T14:38:52.209Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T14:38:52.213Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:16:49.063Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:16:49.068Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:16:49.072Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:30:22.458Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:30:22.461Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:30:22.465Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:32:13.843Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:32:13.850Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:32:13.854Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:33:03.068Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:33:03.075Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:33:03.080Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:34:28.237Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:34:28.243Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:34:28.248Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:37:19.363Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:37:19.368Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:37:19.373Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T15:52:39.486Z] [=] User 21104010 attempting to log in
+[2024-12-21T15:52:39.490Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T15:52:39.500Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T16:10:19.069Z] [=] User 21104010 attempting to log in
+[2024-12-21T16:10:19.087Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-21T16:10:19.100Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-21T16:12:18.307Z] [-] Webapp ::ffff:127.0.0.1 : Treid to delete no existing post 
+[2024-12-21T16:15:17.713Z] [-] Webapp ::ffff:127.0.0.1 : Treid to delete no existing post 

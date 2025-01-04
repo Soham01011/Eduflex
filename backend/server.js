@@ -12,9 +12,7 @@ const { v4: uuidv4, stringify } = require("uuid");
 const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
-const pdf = require('pdf-poppler');
-const { exec } = require('child_process');
-const socketIo = require('socket.io');
+const {Poppler} = require('node-poppler');
 
 /**
     These are some utilities which are used in the routes to automate some stuff
@@ -22,12 +20,33 @@ const socketIo = require('socket.io');
  */
 
 const {logMessage} = require('./utils/logger');
-const {addMentees} = require('./utils/mentees');
-const {fetchBadges} = require('./utils/fetchBadges');
-const {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
+let {addMentees} = require('./utils/mentees');
+let {fetchBadges} = require('./utils/fetchBadges');
+let {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
-const {validatecert} = require('./utils/validatecert');
+let {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
+
+/**
+ * Below is the code to have manual feature enabling and disabling commands to make it scalable 
+ * they have to set in the env file . BY DEFAULT IT WILL WORK IF NOT SET AS FALSE
+ */
+
+if(process.env.USE_PYTHON_SERVER === "false"){
+    addMentees, fetchAndSaveBadges, fetchBadges ,validatecert =false; 
+}
+
+if(process.env.USE_CREDLY_BADGES === "false"){
+    fetchAndSaveBadges, fetchBadges = false;
+}
+
+if(process.env.USE_VALIDATE_CERT === "false"){
+    validatecert = false;
+}
+
+if(process.env.USE_ADD_MENTES === "false"){
+    addMentees = false;
+}
 
 /*
     These all are the get route requests most of them are just rendering the web 
@@ -35,9 +54,12 @@ const {fetchUser} = require('./utils/fetchUser');
 */
 
 const loginRoute = require('./routesGET/loginpage');
-const dashboardRoute = require('./routesGET/dashboardRoute');
+const dashboardRoute = require('./routesPOST/dashboardRoute');
 const uploadcretRouter = require('./routesGET/uploadcert');
 const profilepageRoute = require('./routesGET/profile-web-page');
+const explorepageRoute = require('./routesGET/explorepage');
+const leaderboardroute = require('./routesGET/leaderboardpage');
+const searchuserprofileRoute = require('./routesGET/searchuser');
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -48,6 +70,11 @@ const registerLogicRoute = require('./routesPOST/register');
 const getuserprofileLogicRoute = require('./routesPOST/getuserprofile');
 const psychometrictestLogicRoute = require('./routesPOST/softskilltest');
 const feedLogicRoute = require("./routesPOST/feedlogic");
+const myprofileLogicRoute = require('./routesPOST/myprofile');
+const deletepostLogicRoute = require('./routesPOST/deletepost');
+const deletebatchLoginRoute = require('./routesPOST/deletebatch');
+const mybatchesLogicRoute = require('./routesPOST/mybatches');
+const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
 
 /* 
     These are the schemas / models which are the collections in the database
@@ -245,6 +272,11 @@ server.get("/profile-web-page",profilepageRoute);
 
 server.get("/upload-certificate",uploadcretRouter);
 
+server.get("/explore", explorepageRoute);
+
+server.get('/leaderboard', leaderboardroute);
+
+server.get('/search-profile/:search_query', searchuserprofileRoute);
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
@@ -292,10 +324,15 @@ server.post("/mobiletoken", async(req,res) => {
             return res.status(401).json({message : "No token found"});
         }
         else{
-            fetchAndSaveBadges(mobile_token_check.username);
-            logMessage(`[=] Mobileapp ${userIP} : Token for user ${mobile_token_check.username} is valid`);
-            console.log("token found");
-            return res.status(200).json({ message : "valid" ,user_type : user.user_type });
+            if(fetchAndSaveBadges){
+                fetchAndSaveBadges(mobile_token_check.username);
+                logMessage(`[=] Mobileapp ${userIP} : Token for user ${mobile_token_check.username} is valid`);
+                console.log("token found");
+                return res.status(200).json({ message : "valid" ,user_type : user.user_type });
+            }
+            else{
+                console.log('[INFO] * Credly system is disabled , enable it in env file')
+            }
         }
     }
     catch (e)
@@ -466,8 +503,11 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             );
 
             // Handle Credly badge fetching
-            if (credly) {
+            if (credly && fetchBadges) {
                 fetchBadges(interface,credly,firstName,lastName,tokencheck.username,userIP) 
+            }
+            else if (credly){
+                console.log('[INFO] * Credly system is disabled, enable it in env file')
             }
 
             // Delete the used token
@@ -481,7 +521,11 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
     }
 );
 
-
+/* *
+----------------P.S. => removed converting pdf to images thus direct pdf files will be stored (beause linux dosent support very well)
+                        this wont cause problem at the web app side but the mobile app wont see certificates , thus future update will have pdf file 
+                        instead of images on the mobile app
+*/
 
 server.post("/upload", upload.single('file'), async (req, res) => {
     try {
@@ -493,7 +537,12 @@ server.post("/upload", upload.single('file'), async (req, res) => {
 
         if (post_type === "mentor_file_upload") {
             console.log("MEntor uploading")
+            if(addMentees){
             addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
+            }
+            else{
+                console.log('[INFO] * Mentess part is disabled, enable it in env file.')
+            }
         }
 
         // Handle `hashtags` whether it is a string or an array
@@ -547,99 +596,55 @@ server.post("/upload", upload.single('file'), async (req, res) => {
         console.log("-----------", Token, interface, up_username, sanitizedFilename, filePath);
         
         if (post_type === "post") {
-            // Convert PDF to images
             console.log("POST OF STUDENT");
-            const opts = {
-                format: 'jpeg',
-                out_dir: path.dirname(filePath),
-                out_prefix: path.basename(filePath, path.extname(filePath)),
-                page: null // Convert all pages
-            };
+        
+            const cleanedHashtags = hashtags.map(tag => tag
+                .replace(/[^a-zA-Z0-9\s]/g, ' ')  // Replace all non-alphanumeric characters with space
+                .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
+                .trim()  // Remove leading and trailing spaces
+            );
 
-            pdf.convert(filePath, opts)
-                .then(async () => {
-                    // Rename the files with sequential numbers
-                    const renameFiles = (directory, baseName) => {
-                        fs.readdir(directory, (err, files) => {
-                            if (err) {
-                                console.error('Error reading directory:', err);
-                                return;
-                            }
+            const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
+            const user_data = await User.findOne({ "username": up_username });
+            let [model_result, producer] = '';
+            if(validatecert){
+                [model_result, producer] = await validatecert(up_username, sanitizedFilename);
+            }
+            else{
+                console.log('[INFO] * Validate cert is disabled , enable it in env file')
+            }
 
-                            const imageFiles = files.filter(file => file.startsWith(baseName) && file.endsWith('.jpeg'));
-                            imageFiles.sort();
+            const newpost = new Profiles({
+                firstname: user_data ? user_data.firstname : null, // Check if user_data exists
+                lastname: user_data ? user_data.lastname : null,
+                username: up_username,
+                postID: `${up_username}-${uuidv4()}`, // Unique post ID
+                file: filePath,
+                post_type: post_type,
+                post_desc: post_desc,
+                post_likes: 0,
+                hashtags: cleanedHashtags,
+                broken_tags: brokenTags,
+                approved: false,  // Initially set to false as the mentor has not reviewed yet
+                mentor_approved: null, // Set to null as default, waiting for mentor approval
+                interface: interface,
+                model_approved: true, // Assuming model approval is granted based on your logic
+                real: model_result === 'Real', // Set real based on validation
+                edited_by: producer // Keep track of who edited the post
+            });
 
-                            imageFiles.forEach((file, index) => {
-                                const oldPath = path.join(directory, file);
-                                const newPath = path.join(directory, `${baseName}-${index + 1}.jpeg`);
-                                fs.rename(oldPath, newPath, err => {
-                                    if (err) {
-                                        console.error('Error renaming file:', err);
-                                    }
-                                });
-                            });
-                        });
-                    };
+            // Save the new post to the database
+            await newpost.save();
 
-                    renameFiles(opts.out_dir, opts.out_prefix);
-
-                    // Collect paths of image files
-                    const uploadDir = path.join(__dirname, `uploads/${up_username}/`);
-                    const imagePaths = fs.readdirSync(uploadDir)
-                        .filter(file => file.startsWith(opts.out_prefix) && file.endsWith('.jpg'))
-                        .map(file => path.join(`uploads/${up_username}/`, file));
-
-                    const cleanedHashtags = hashtags.map(tag => tag
-                        .replace(/[^a-zA-Z0-9\s]/g, ' ')  // Replace all non-alphanumeric characters with space
-                        .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
-                        .trim()  // Remove leading and trailing spaces
-                    );
-
-                    const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
-
-                    const [model_result, producer] = await validatecert(up_username, sanitizedFilename);
-
-                    const newpost = new Profiles({
-                        firstname: user_data ? user_data.firstname : null, // Check if user_data exists
-                        lastname: user_data ? user_data.lastname : null,
-                        username: up_username,
-                        postID: `${up_username}-${uuidv4()}`, // Unique post ID
-                        file: filePath,
-                        imagePaths: imagePaths,
-                        post_type: post_type,
-                        post_desc: post_desc,
-                        post_likes: 0,
-                        hashtags: cleanedHashtags,
-                        broken_tags: brokenTags,
-                        approved: false,  // Initially set to false as the mentor has not reviewed yet
-                        mentor_approved: null, // Set to null as default, waiting for mentor approval
-                        interface: interface,
-                        model_approved: true, // Assuming model approval is granted based on your logic
-                        real: model_result === 'Real', // Set real based on validation
-                        edited_by: producer // Keep track of who edited the post
-                    });
-
-                    // Save the new post to the database
-                    await newpost.save();
-
-
-                    logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
-                    return res.status(200).json({ message: "Uploaded Successfully" });
-                })
-                .catch(error => {
-                    console.error('Error converting PDF to images:', error);
-                    return res.status(500).json({ message: "Error converting PDF to images" });
-                });
-        } else if (post_type === "mentor_file_upload") {
-            console.log("MEntor uploading")
-            addMentees(up_username, req.file.filename, post_desc, selection, userIP, interface);
+            logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
+            return res.status(200).json({ message: "Uploaded Successfully" });
+        
         }
     } catch (error) {
         console.error(`[*] Internal server error: ${error}`);
         res.status(500).json({ message: "Internal server error" });
     }
 });
-
 
 server.post("/getUserProfile", getuserprofileLogicRoute);
 
@@ -728,139 +733,16 @@ server.post("/myprofile",checkToken, async (req, res) => {
         res.status(400).json({ message: "Invalid Token" });
     }
 });
+// server.post('/myprofile', myprofileLogicRoute); THIS ROUTE IS BROKEN
+
+server.post('/deletePost', deletepostLogicRoute);
 
 
-server.post('/deletePost', checkToken, async (req, res) => {
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+server.post("/mybatches",mybatchesLogicRoute);
 
 
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-    const { Token, postID, interface } = req.body;
-  
-    const token_check = await CSRFToken.findOne({token : Token});
-    const username = token_check.username;
+server.post('/delete-batch',deletebatchLoginRoute)
 
-    const profilesdata = await Profiles.findOne({ username : username , postID : postID});
-
-    if(profilesdata)
-    {
-        try {
-            await Profiles.deleteOne({ postID: postID });
-            logMessage(`[=] ${interface} ${userIP} : Deleted post ${postID}`);
-
-            // Step 2: Delete the associated files
-            const uploadsDir = path.join(__dirname, `uploads/${username}/`); // Adjust the path as needed
-
-            // Function to delete a file
-            const deleteFile = (filePath) => {
-              fs.unlink(filePath, (err) => {
-                if (err) {
-                  logMessage(`[*] ${interface} ${userIP} : Error deleting file ${filePath} - ${err}`);
-                } else {
-                  logMessage(`[=] ${interface} ${userIP} : Deleted file ${filePath}`);
-                }
-              });
-            };
-        
-            // Delete the PDF file and images
-            const files = fs.readdirSync(uploadsDir);
-            files.forEach((file) => {
-              if (file.includes(postID)) {
-                const filePath = path.join(uploadsDir, file);
-                deleteFile(filePath);
-              }
-            });
-          res.status(200);
-        } catch (error) {
-          logMessage('[*] Error deleting post:', error);
-          res.status(500).json({ message: 'Error deleting post' });
-        }
-    }
-    else{
-        logMessage(`[-] ${interface} ${userIP} : Treid to delete no existing post ${postID}`);
-    }
-  });
-
-
-server.post("/mybatches",checkToken , async(req,res) =>{
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-    const {Token , username , interface} = req.body;
-    if(Token)
-    {
-        try
-        {
-            tocken_check = await CSRFToken.findOne({ token : Token});
-            if (tocken_check.username == username )
-            {
-                const batches = await Mentor.find({mentor : username})
-                if (batches.length > 0 )
-                {
-                    res.status(200).json({ data: batches });
-                    logMessage(`${interface} ${userIP} : Mentor ${username} fetch their badges info`);
-                }
-                else
-                {
-                    res.status(201);
-                }
-            }
-        }
-        catch(e)
-        {
-            logMessage(`${interface} ${userIP} : Internal server error : ${e}`);
-            res.status(500);
-        }
-    }
-    
-
-});
-
-server.post('/delete-batch',checkToken, async (req, res) => {
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-
-    const { username, batchName,Token } = req.body; // Extract username and batchName from request body
-    if (Token) 
-    {    
-
-        try {
-            tocken_check = await CSRFToken.findOne({ token : Token})
-            if (tocken_check.username == username )
-            {// Find and delete the batch for the given username and batch name
-                const result = await Mentor.findOneAndDelete({
-                    mentor: username,
-                    batch: batchName
-                });
-
-                if (result) {
-                    logMessage(`[=] ${userIP} : ${username} deleted thier batch`);
-                    res.status(200).json({ message: 'Batch deleted successfully' });
-                } else {
-                    res.status(404).json({ message: 'Batch not found' });
-                }
-            }
-        } catch (error) {
-            logMessage(`[*] ${userIP} : Internal server error while delteing batch :${error}`);
-            res.status(500).json({ message: 'Internal server error' });
-        }
-    }
-});
 
 
 server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (req, res) => {
@@ -1115,7 +997,7 @@ server.get("/profile", async (req, res) => {
             post_likes: profile.post_likes
         }));
 
-        console.log(responseData);
+        //console.log(responseData);
         res.status(200).json(responseData); // Return the array of profiles
     } catch (error) {
         console.error('Error fetching profiles:', error);
@@ -1125,7 +1007,17 @@ server.get("/profile", async (req, res) => {
 
 server.post("/psychometrictest",psychometrictestLogicRoute);
 
-server.post('/feed',feedLogicRoute) 
+server.get('/feed',feedLogicRoute);
+
+server.use('/experience',skillexpeduRoute);
+
+// TESTING ROUTES -------------------------------------------------------------------------------------------------------------
+
+server.get('/testingroute',checkToken , async(req,res) => {
+    res.render('test');
+});
+
+// TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
 server.listen(8000, () => {
     console.log(`http://localhost:8000`);

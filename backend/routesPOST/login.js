@@ -18,7 +18,21 @@ const { v4: uuidv4, stringify } = require("uuid");
  *                      fetchAndSavebadges in the utils.
  */
 const {logMessage} = require('../utils/logger');
-const { fetchAndSaveBadges } = require('../utils/fetchAndSaveBadges');
+let { fetchAndSaveBadges } = require('../utils/fetchAndSaveBadges');
+
+/**
+ * Below is the code to have manual feature enabling and disabling commands to make it scalable 
+ * they have to set in the env file . BY DEFAULT IT WILL WORK IF NOT SET AS FALSE
+ */
+
+if(process.env.USE_PYTHON_SERVER==='false'){
+    fetchAndSaveBadges =null; 
+}
+
+if(process.env.USE_CREDLY_BADGES === 'false'){
+    fetchAndSaveBadges = null;
+}
+
 
 const User = require('../models/users');
 const Credly = require("../models/credly");
@@ -90,7 +104,12 @@ loginLogicRouter.post("/login", async (req, res) => {
             });
             if(await Credly.findOne({username : userUsername}))
             {
-                fetchAndSaveBadges(userUsername);
+                if(fetchAndSaveBadges){
+                    fetchAndSaveBadges(userUsername);
+                }
+                else{
+                    console.log('[INFO] * Credly system is disabled , enable it in env file')
+                }
             }
             const userProfile = await User.findOne({ username: userUsername });
             const mandatoryFields = [

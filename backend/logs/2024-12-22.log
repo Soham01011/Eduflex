@@ -1,0 +1,15 @@
+[2024-12-22T04:11:25.152Z] [=] User 2114010 attempting to log in
+[2024-12-22T04:11:35.157Z] [*] Database connection failed: Operation `users.findOne()` buffering timed out after 10000ms
+[2024-12-22T04:12:11.272Z] [=] User 2114010 attempting to log in
+[2024-12-22T04:12:11.277Z] [-] Webapp ::ffff:127.0.0.1 : Unsuccessful login attempt for user 2114010
+[2024-12-22T04:12:21.791Z] [=] User 21104010 attempting to log in
+[2024-12-22T04:12:21.794Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-22T04:12:21.808Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-22T04:24:56.110Z] [=] Webapp ::ffff:127.0.0.1 : Deleted post 21104010-3113be60-6b16-4a46-a890-610b2b768b40
+[2024-12-22T04:24:56.110Z] [*] Error deleting post:
+[2024-12-22T04:27:41.608Z] [=] User 21104010 attempting to log in
+[2024-12-22T04:27:41.609Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-22T04:27:41.612Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2024-12-22T04:50:19.218Z] [=] User 21104010 attempting to log in
+[2024-12-22T04:50:19.224Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2024-12-22T04:50:19.229Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010

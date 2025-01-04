@@ -1,0 +1,51 @@
+[2025-01-03T18:38:52.191Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'username')
+[2025-01-03T18:38:53.867Z] [=] User 21104010 attempting to log in
+[2025-01-03T18:38:53.872Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-03T18:38:53.887Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-03T18:53:18.010Z] [=] Webapp ::ffff:127.0.0.1 : 21104010 added new experience
+[2025-01-03T18:53:29.640Z] [=] ::ffff:127.0.0.1 : 21104010 deleted experience fa39819e-1b0d-481b-9166-496c46127c7f
+[2025-01-03T18:54:59.216Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'username')
+[2025-01-03T18:55:00.624Z] [=] User 21104010 attempting to log in
+[2025-01-03T18:55:00.627Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-03T18:55:00.633Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-03T19:06:52.520Z] [=] Webapp ::ffff:127.0.0.1 : 21104010 added new experience
+[2025-01-03T19:08:15.028Z] [=] ::ffff:127.0.0.1 : 21104010 deleted experience f4ff28c6-9cc4-4769-b5b9-4f206b948ca9
+[2025-01-03T19:09:08.054Z] [=] ::ffff:127.0.0.1 : 21104010 deleted experience 38e4d7df-e13f-4c84-9ef2-c0083723a2a6
+[2025-01-04T11:38:32.959Z] [=] User 21104010 attempting to log in
+[2025-01-04T11:38:32.965Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T11:38:32.972Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T11:48:29.958Z] [=] Webapp ::ffff:127.0.0.1 : 21104010 added new experience
+[2025-01-04T12:03:48.369Z] [=] User 21104010 attempting to log in
+[2025-01-04T12:03:48.386Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T12:03:48.397Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T12:08:22.126Z] [=] ::ffff:127.0.0.1 : 21104010 deleted experience 64325b9c-5050-48ae-a99a-7665d62438a4
+[2025-01-04T12:09:31.341Z] [=] Webapp ::ffff:127.0.0.1 : 21104010 added education 53d737e7-bdbc-4c51-a83f-1b0048db568c
+[2025-01-04T12:19:06.815Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'username')
+[2025-01-04T12:19:08.217Z] [=] User 21104010 attempting to log in
+[2025-01-04T12:19:08.221Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T12:19:08.233Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T12:21:30.227Z] [=] ::ffff:127.0.0.1 : 21104010 deleted experience 4e8a7120-9dae-4355-9599-4e6325f41a5e
+[2025-01-04T12:26:15.075Z] [=] Webapp ::ffff:127.0.0.1 : 21104010 added education d8c2ae6e-9403-4ed0-9de7-fc5f15e1dae1
+[2025-01-04T12:38:09.268Z] [=] User 21104010 attempting to log in
+[2025-01-04T12:38:09.271Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T12:38:09.281Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T12:38:32.067Z] [=] Webapp ::ffff:127.0.0.1 : 21104010 added new experience
+[2025-01-04T12:43:33.395Z] [=] ::ffff:127.0.0.1 : 21104010 deleted experience 28e5d491-d19f-44d0-bc34-ed868e43705f
+[2025-01-04T12:53:57.819Z] [=] User 21104010 attempting to log in
+[2025-01-04T12:53:57.836Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T12:53:57.850Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T13:53:52.382Z] [=] User 21104010 attempting to log in
+[2025-01-04T13:53:52.388Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T13:53:52.394Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T14:19:29.516Z] [=] User 21104010 attempting to log in
+[2025-01-04T14:19:29.521Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T14:19:29.525Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T14:27:09.105Z] [=] Webapp ::ffff:127.0.0.1 : Deleted post 21104010-f95d1b59-05b7-4eb2-90d3-89c550d604ed
+[2025-01-04T14:35:02.254Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'username')
+[2025-01-04T14:35:03.654Z] [=] User 21104010 attempting to log in
+[2025-01-04T14:35:03.655Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T14:35:03.659Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010
+[2025-01-04T14:51:54.689Z] [*] Internal server error : TypeError: Cannot read properties of undefined (reading 'username')
+[2025-01-04T14:51:56.173Z] [=] User 21104010 attempting to log in
+[2025-01-04T14:51:56.174Z] [=] Webapp ::ffff:127.0.0.1 : User 21104010 successfully logged in
+[2025-01-04T14:51:56.177Z] [=] Webapp ::ffff:127.0.0.1 : Token provided for user 21104010

@@ -25,16 +25,15 @@ const {logMessage} = require('../utils/logger')
  * Profiles : Model which stores the user posts.
  * 
  * Credly   : Model which stores credly badges of all the users.
+ * 
+ * Allskills : Data of the user about their expirence , education and skills
  */
 const User = require('../models/users');
 const Profiles = require('../models/profiles');
 const Credly = require('../models/credly');
+const Allskills = require('../models/expeduskill');
 
-/**
- * BASE_URL : This is an env variable to provide your ngrok link and will be used in the 
- *            front-end to pull some local script to run or to display the user data 
- */
-const BASE_URL = process.env.BASE_URL;
+
 /**
  * Steps : 
  *      - Checks the token validity
@@ -73,7 +72,6 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
 
         // Format certificate data for display
         const formattedCertificateData = formatCertificateData(certificateData);
-
         // Check for missing mandatory fields
         const mandatoryFields = [
             'firstname',
@@ -96,6 +94,22 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         }
         const cert = await Credly.find({username : username})
 
+        const userskillsdata = await Allskills.findOne({ username : username});
+        const userskills = userskillsdata.skills;
+
+        const userexp = userskillsdata.experience.sort((a, b) => {
+            const dateA = new Date(a.endTime || a.startTime); 
+            const dateB = new Date(b.endTime || b.startTime);
+            return dateB - dateA; // Sort in descending order
+        });
+        
+        const useredu = userskillsdata.education.sort((a, b) => {
+            const dateA = new Date(a.endTime || a.startTime); 
+            const dateB = new Date(b.endTime || b.startTime);
+            return dateB - dateA; // Sort in descending order
+        });
+        
+
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
             userProfile,
@@ -105,11 +119,12 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             link,
             cert,
             certificateData: formattedCertificateData,
-            base_url : BASE_URL // Send formatted certificate data
+            userexp,
+            useredu,
+            userskills
         });
         
     } catch (error) {
-        console.error(error.message);
         logMessage("[*] Webapp : ", userIP, " : Error fetching profile =", error.message);
         return res.redirect('/loginpage'); // Redirect on error
     }
@@ -121,6 +136,7 @@ function formatCertificateData(data) {
 
     return data.map(cert => {
         return {
+            postId : cert.postID,
             pdfLink: cert.file, 
             postDesc: cert.post_desc, 
             hashtags: cert.hashtags || [], // Ensure hashtags is an array

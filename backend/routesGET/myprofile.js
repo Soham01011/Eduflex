@@ -49,7 +49,7 @@ myprofileRoute.get("/myprofile",checkToken, async(req,res)=> {
 
     if (Array.isArray(userIP)) {                // This part of code to trace the IP address to log it
         userIP = userIP[0];                     //
-    } else if (userIP.includes(',')) {          // This important to keep chekc if the it is deployed
+    } else if (userIP.includes(',')) {          // This important to keep chekc to trace back the user
         userIP = userIP.split(',')[0].trim();   //
     }                                           //
 
