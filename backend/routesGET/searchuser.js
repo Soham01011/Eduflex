@@ -72,9 +72,25 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
         }
         let editable = false
 
-        if (await fetchUser(req,res)== searchQuery){
+        if (await fetchUser(req,res)== user.username){
             editable = true
         }   
+
+        if(!editable && userProfile){
+            userProfile.forEach(profile => {
+                delete profile.postID;
+            });
+        };
+
+        if(!editable && userAllskills){
+            userAllskills.education.forEach(skill => {
+                delete skill.id
+            });
+            userAllskills.experience.forEach(skill => {
+                delete skill.id
+            });
+        };
+
         if (userAllskills) {
             // Sort experience and education by dates (latest first)
             userAllskills.experience = userAllskills.experience.sort((a, b) => {

@@ -75,7 +75,7 @@
           </li>
           <li class="relative px-6 py-3">
             <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-              href="upload-certificate">
+              href="/upload-certificate">
               <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -89,7 +89,7 @@
             <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
               aria-hidden="true"></span>
             <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-              href="profile-web-page">
+              href="/profile-web-page">
               <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -343,7 +343,23 @@
               </div>
               <input
                 class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                type="text" placeholder="Search" aria-label="Search" />
+                type="text" placeholder="Search" aria-label="Search for profiles" id="searchInput"/>
+                <script>
+                  const searchInput = document.getElementById('searchInput');
+              
+                  searchInput.addEventListener('keypress', function (event) {
+                    if (event.key === 'Enter') { // Check if the Enter key is pressed
+                      event.preventDefault(); // Prevent the default form submission behavior
+                      const searchQuery = searchInput.value.trim(); // Get the search query
+                      console.log("search query ", searchQuery)
+                      if (searchQuery) {
+                        window.location.href = `/search-profile/${encodeURIComponent(searchQuery)}`;
+                      } else {
+                        alert('Please enter a search query');
+                      }
+                    }
+                  });
+                </script>
             </div>
           </div>
           <ul class="flex items-center flex-shrink-0 space-x-6">
@@ -498,7 +514,7 @@
                   <thead>
                     <tr
                       class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                      <th class="px-4 py-3">Name</th>
+                      
                       <th class="px-4 py-3">Description</th>
                       <th class="px-4 py-3">Status</th>
                       <th class="px-4 py-3">Date</th>
@@ -506,123 +522,69 @@
                     </tr>
                   </thead>
                   <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    <tr class="text-gray-700 dark:text-gray-400">
-                      <td class="px-4 py-3">
-                        <div class="flex items-center text-sm">
-                          <!-- Avatar with inset shadow -->
-                          <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                            <img class="object-cover w-full h-full rounded-full"
-                              src="https://w7.pngwing.com/pngs/862/624/png-transparent-aws-vector-brand-logos-icon-thumbnail.png"
-                              alt="" loading="lazy" />
-                            <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                          </div>
-                          <div>
-                            <p class="font-semibold">AWS Academy Cloud Architecting</p>
-
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        Amazon Web Series
-                      </td>
-                      <td class="px-4 py-3 text-xs">
-                        <span
-                          class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
-                          Approved
-                        </span>
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        6/10/2020
-                      </td>
-                      <td class="px-4 py-3">
-                        <div class="flex items-center space-x-4 text-sm">
-                          <button
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                            aria-label="Delete">
-                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                              <path fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"></path>
-                            </svg>
-                          </button>
-                    <tr class="text-gray-700 dark:text-gray-400">
-                      <td colspan="5" class="px-4 py-3">
-                        <div class="mt-4">
-                          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Uploaded PDF:
-                          </label>
-                          <div id="pdfBox"
-                            class="p-4 border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600"
-                            style="min-height: 400px;">
-                            <!-- Embedding the PDF from the provided link -->
-                            <embed src="path_to_your_uploaded_pdf.pdf" type="application/pdf" width="100%"
-                              height="500px" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-              </div>
-              </td>
-              </tr>
-
-              <tr class="text-gray-700 dark:text-gray-400">
-                <td class="px-4 py-3">
-                  <div class="flex items-center text-sm">
-                    <!-- Avatar with inset shadow -->
-                    <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                      <img class="object-cover w-full h-full rounded-full"
-                        src="https://www.finsmes.com/wp-content/uploads/2019/11/celonis.png" alt="" loading="lazy" />
-                      <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                    </div>
-                    <div>
-                      <p class="font-semibold">Academic Process Mining Fundamentals</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  Celenois Academy
-                </td>
-                <td class="px-4 py-3 text-xs">
-                  <span
-                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
-                    Pending
-                  </span>
-                </td>
-                <td class="px-4 py-3 text-sm">
-                  6/10/2020
-                </td>
-                <td class="px-4 py-3">
-                  <div class="flex items-center space-x-4 text-sm">
-
-                    <button
-                      class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                      aria-label="Delete">
-                      <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                          clip-rule="evenodd"></path>
-                      </svg>
-                    </button>
-              <tr class="text-gray-700 dark:text-gray-400">
-                <td colspan="5" class="px-4 py-3">
-                  <div class="mt-auto">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                      Uploaded PDF:
-                    </label>
-                    <div id="pdfBox"
-                      class="p-4 border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600"
-                      style="min-height: 300px; height: 100%;">
-                      <!-- Embedding the PDF from the provided link -->
-                      <embed src="assets/certificates/Celonis Academic Process Mining Fundamentals.pdf"
-                        type="application/pdf" width="800px" height="650px" />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </div>
-            </td>
-            </tr>
-            </tbody>
+                    <% if (post && post.length > 0) { %>
+                      <% post.forEach(p => { %>
+                        <!-- Row for post details -->
+                        <tr class="text-gray-700 dark:text-gray-400">
+                          <!-- Description -->
+                          <td class="px-4 py-3 text-sm"><%= p.post_desc || 'No description available' %></td>
+                  
+                          <!-- Status -->
+                          <td class="px-4 py-3 text-xs">
+                            <% if (p.approved === true) { %>
+                              <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                Approved
+                              </span>
+                            <% } else if (p.approved === false) { %>
+                              <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">
+                                Rejected
+                              </span>
+                            <% } else { %>
+                              <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
+                                Pending
+                              </span>
+                            <% } %>
+                          </td>
+                  
+                          <!-- Date -->
+                          <td class="px-4 py-3 text-sm"><%= new Date(p.createdAt).toLocaleDateString() %></td>
+                  
+                          <!-- Actions -->
+                          <td class="px-4 py-3">
+                            <div class="flex items-center space-x-4 text-sm">
+                              <button
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg dark:text-red-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Delete" data-post-id="<%= p.postID %>" data-action="delete">
+                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                  
+                        <!-- Row for PDF -->
+                        <tr>
+                          <td colspan="4" class="px-4 py-3">
+                            <% if (p.file) { %>
+                              <div class="p-4 border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600" style="min-height: 400px;">
+                                <iframe src="<%= p.file %>" width="100%" height="500px"></iframe>
+                              </div>
+                            <% } else { %>
+                              <span class="text-sm text-gray-500">No PDF available</span>
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="4" class="text-center py-3 text-sm text-gray-500">
+                          No posts available.
+                        </td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                  
             </table>
           </div>
 

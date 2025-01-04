@@ -581,7 +581,24 @@
                   type="text"
                   placeholder="Search for profiles  "
                   aria-label="Search"
+                  id="searchInput"
                 />
+                <script>
+                  const searchInput = document.getElementById('searchInput');
+              
+                  searchInput.addEventListener('keypress', function (event) {
+                    if (event.key === 'Enter') { // Check if the Enter key is pressed
+                      event.preventDefault(); // Prevent the default form submission behavior
+                      const searchQuery = searchInput.value.trim(); // Get the search query
+                      console.log("search query ", searchQuery)
+                      if (searchQuery) {
+                        window.location.href = `/search-profile/${encodeURIComponent(searchQuery)}`;
+                      } else {
+                        alert('Please enter a search query');
+                      }
+                    }
+                  });
+                </script>
               </div>
             </div>
             <ul class="flex items-center flex-shrink-0 space-x-6">
