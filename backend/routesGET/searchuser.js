@@ -113,6 +113,8 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             firstname: userData.firstname || null,
             lastname : userData.lastname || null,
             workplace: userData.college || null,
+            userProfile: user,
+            link : userCredly.link,
             bio: userData.bio || null,
             credlyData: userCredly || false,
             post : userProfile || false,
