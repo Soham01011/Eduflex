@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 const result = await response.json();
-                console.log("API response:", result);
                 alert("Experience added successfully!");
+                location.reload();
             } else {
                 console.error("API error:", response.status, response.statusText);
                 alert("Failed to add experience. Please try again.");

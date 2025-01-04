@@ -193,4 +193,45 @@ skillexpeduRoute.post('/education', checkToken, async (req, res) => {
     }
 });
 
+skillexpeduRoute.delete('/education/:id' , checkToken , async(req,res)=> {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+
+    const username = await fetchUser(req, res);
+    const interface = await interfaceFetch(req,res);
+
+    const educationID = req.params.id; 
+
+    try {
+        const user = await Allskills.findOne({ username });
+
+        if (!user) {
+            logMessage(`[!] ${userIP} : User not found (${username})`);
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Find the experience by ID and remove it
+        const educationIndex = user.education.findIndex(edu => edu.id === educationID);
+        if (educationIndex === -1) {
+            logMessage(`[!] ${userIP} : Experience not found for ${username}`);
+            return res.status(404).json({ message: "Experience not found" });
+        }
+
+        user.education.splice(educationIndex, 1); // Remove the experience
+        await user.save();
+
+        logMessage(`[=] ${userIP} : ${username} deleted experience ${educationID}`);
+        res.status(200).json({ message: "Experience deleted successfully" });
+    } catch (error) {
+        logMessage(`[*] ${userIP} : Error deleting experience for ${username}`);
+        res.status(500).json({ message: "Error deleting experience", error: error.message });
+    }
+
+});
+
 module.exports = skillexpeduRoute;

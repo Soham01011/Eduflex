@@ -80,4 +80,37 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
+        const deleteEduButtons = document.querySelectorAll('.delete-edu-btn');
+
+        deleteEduButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const educationId = event.target.getAttribute('data-id'); // Match the attribute
+                if (educationId) {
+                    const confirmation = confirm("Are you sure you want to delete this education?");
+                    if (!confirmation) return;
+        
+                    try {
+                        const response = await fetch(`/experience/education/${educationId}`, { // Corrected URL
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+        
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message || "Education deleted successfully.");
+                            location.reload(); // Reload the page to refresh the data
+                        } else {
+                            alert(result.message || "Failed to delete education.");
+                        }
+                    } catch (error) {
+                        console.error("Error deleting education:", error);
+                        alert("An error occurred. Please try again.");
+                    }
+                }
+            });
+        });
+        
+
 });

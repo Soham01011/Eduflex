@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="/assets/js/init-alpine.js"></script>
   <script src="/scripts/deletepost.js"></script>
+  <script src="/scripts/experince.js"></script>
 
 
   <script>
@@ -486,7 +487,7 @@
 
                               <input type="file" name="file" class="form-control mt-3" accept="image/*" />
                               <br><br>
-                              
+
                             </form>
 
                           </div>
@@ -503,8 +504,8 @@
               <div class="card-body flex items-center justify-between">
                 <!-- Left: Profile Image -->
                 <div class="flex items-center gap-4">
-                  <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar" class="rounded" height="100" width="100"
-                    id="uploadedAvatar" />
+                  <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar" class="rounded"
+                    height="100" width="100" id="uploadedAvatar" />
                 </div>
 
                 <!-- Right: Button -->
@@ -552,134 +553,138 @@
                       </p>
                       <br>
                       <form id="formAccountSettings" method="post" enctype="multipart/form-data">
-                      <div class="flex items-center gap-4">
-                        <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar" class="rounded" height="100" width="100"
-                          id="uploadedAvatar" />
-                      </div>
-                      <input type="file" name="file" class="form-control mt-3" accept="image/*" />
-                      <br>
-                      <br>
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="mb-3 col-md-6">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input class="form-control" type="text" id="firstName" name="firstName"
-                              placeholder="Enter First Name" value="<%= userProfile.firstname || '' %>" autofocus />
-                          </div>
+                        <div class="flex items-center gap-4">
+                          <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar"
+                            class="rounded" height="100" width="100" id="uploadedAvatar" />
+                        </div>
+                        <input type="file" name="file" class="form-control mt-3" accept="image/*" />
+                        <br>
+                        <br>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="mb-3 col-md-6">
+                              <label for="firstName" class="form-label">First Name</label>
+                              <input class="form-control" type="text" id="firstName" name="firstName"
+                                placeholder="Enter First Name" value="<%= userProfile.firstname || '' %>" autofocus />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input class="form-control" type="text" name="lastName" id="lastName"
-                              placeholder="Enter Last Name" value="<%= userProfile.lastname || '' %>" />
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="lastName" class="form-label">Last Name</label>
+                              <input class="form-control" type="text" name="lastName" id="lastName"
+                                placeholder="Enter Last Name" value="<%= userProfile.lastname || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="email" class="form-label">E-mail</label>
-                            <input class="form-control" type="text" id="email" name="changeemail"
-                              placeholder="Enter Your Email" value="<%= userProfile.email || '' %>"/>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="email" class="form-label">E-mail</label>
+                              <input class="form-control" type="text" id="email" name="changeemail"
+                                placeholder="Enter Your Email" value="<%= userProfile.email || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="email" class="form-label">Password</label>
-                            <input class="form-control" type="password" id="changepwd" name="changepwd"
-                              placeholder="Enter your new password" value="<%= userProfile.password || '' %>" />
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="email" class="form-label">Password</label>
+                              <input class="form-control" type="password" id="changepwd" name="changepwd"
+                                placeholder="Enter your new password" value="<%= userProfile.password || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="organization" class="form-label">Website Link</label>
-                            <input type="text" class="form-control" id="organization" name="website"
-                              placeholder="Add a link that will appear at the top of your profile" value="<%= userProfile.website || '' %>"/>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="organization" class="form-label">Website Link</label>
+                              <input type="text" class="form-control" id="organization" name="website"
+                                placeholder="Add a link that will appear at the top of your profile"
+                                value="<%= userProfile.website || '' %>" />
+                            </div>
 
 
-                          <div class="mb-3 col-md-6">
-                            <label for="phoneNumber" class="form-label">Phone Number</label>
-                            <input type="text" id="phoneNumber" name="changephoneno" class="form-control"
-                              placeholder="+91 1234567890" value="<%= userProfile.phone_number || '' %>"/>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="phoneNumber" class="form-label">Phone Number</label>
+                              <input type="text" id="phoneNumber" name="changephoneno" class="form-control"
+                                placeholder="+91 1234567890" value="<%= userProfile.phone_number || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="dob" class="form-label">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob" name="dob" value="<%= userProfile.dob ? userProfile.dob.toISOString().split('T')[0] : '' %>" />
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="dob" class="form-label">Date of Birth</label>
+                              <input type="date" class="form-control" id="dob" name="dob"
+                                value="<%= userProfile.dob ? userProfile.dob.toISOString().split('T')[0] : '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="bio" class="form-label">Bio</label>
-                            <input class="form-control" type="text" id="bio" name="bio" placeholder="Bio" value="<%= userProfile.bio || '' %>" />
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="bio" class="form-label">Bio</label>
+                              <input class="form-control" type="text" id="bio" name="bio" placeholder="Bio"
+                                value="<%= userProfile.bio || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="hobby" class="form-label">Hobby</label>
-                            <input type="text" class="form-control" id="hobby" name="hobby" placeholder="Hobby" value="<%= userProfile.hobby || '' %>" />
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="hobby" class="form-label">Hobby</label>
+                              <input type="text" class="form-control" id="hobby" name="hobby" placeholder="Hobby"
+                                value="<%= userProfile.hobby || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="cgpa" class="form-label">Cumulative CGPA</label>
-                            <input type="text" class="form-control" id="cgpa" name="cgpa"
-                              placeholder="Cumulative CGPA" value="<%= userProfile.cgpa || '' %>"/>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="cgpa" class="form-label">Cumulative CGPA</label>
+                              <input type="text" class="form-control" id="cgpa" name="cgpa"
+                                placeholder="Cumulative CGPA" value="<%= userProfile.cgpa || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="college" class="form-label">College Name</label>
-                            <input type="text" class="form-control" id="college" name="college"
-                              placeholder="Enter your College Name" value="<%= userProfile.college || '' %>"/>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="college" class="form-label">College Name</label>
+                              <input type="text" class="form-control" id="college" name="college"
+                                placeholder="Enter your College Name" value="<%= userProfile.college || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label class="form-label" for="academic_year">Year</label>
-                            <select id="academic_year" name="academicyear" class="select2 form-select">
-                              <option value="">Select</option>
-                              <option value="First Year" <%=userProfile.academic_year==='First Year'
-                                ? 'selected' : '' %>>First Year</option>
-                              <option value="Second Year" <%=userProfile.academic_year==='Second Year'
-                                ? 'selected' : '' %>>Second Year</option>
-                              <option value="Third Year" <%=userProfile.academic_year==='Third Year'
-                                ? 'selected' : '' %>>Third Year</option>
-                              <option value="Final Year" <%=userProfile.academic_year==='Final Year'
-                                ? 'selected' : '' %>>Fourth Year</option>
-                              <option value="Alumni" <%=userProfile.academic_year==='Alumni' ? 'selected' : ''
-                                %>>Alumni</option>
-                            </select>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label class="form-label" for="academic_year">Year</label>
+                              <select id="academic_year" name="academicyear" class="select2 form-select">
+                                <option value="">Select</option>
+                                <option value="First Year" <%=userProfile.academic_year==='First Year' ? 'selected' : ''
+                                  %>>First Year</option>
+                                <option value="Second Year" <%=userProfile.academic_year==='Second Year' ? 'selected'
+                                  : '' %>>Second Year</option>
+                                <option value="Third Year" <%=userProfile.academic_year==='Third Year' ? 'selected' : ''
+                                  %>>Third Year</option>
+                                <option value="Final Year" <%=userProfile.academic_year==='Final Year' ? 'selected' : ''
+                                  %>>Fourth Year</option>
+                                <option value="Alumni" <%=userProfile.academic_year==='Alumni' ? 'selected' : '' %>
+                                  >Alumni</option>
+                              </select>
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label class="form-label" for="semester">Semester</label>
-                            <select id="semester" name="semester" class="select2 form-select">
-                              <option value="">Select</option>
-                              <option value="Sem 1" <%=userProfile.semester==='Sem 1' ? 'selected' : '' %>
-                                >Semester I</option>
-                              <option value="Sem 2" <%=userProfile.semester==='Sem 2' ? 'selected' : '' %>
-                                >Semester II</option>
-                              <option value="Sem 3" <%=userProfile.semester==='Sem 3' ? 'selected' : '' %>
-                                >Semester III</option>
-                              <option value="Sem 4" <%=userProfile.semester==='Sem 4' ? 'selected' : '' %>
-                                >Semester IV</option>
-                              <option value="Sem 5" <%=userProfile.semester==='Sem 5' ? 'selected' : '' %>
-                                >Semester V</option>
-                              <option value="Sem 6" <%=userProfile.semester==='Sem 6' ? 'selected' : '' %>
-                                >Semester VI</option>
-                              <option value="Sem 7" <%=userProfile.semester==='Sem 7' ? 'selected' : '' %>
-                                >Semester VII</option>
-                              <option value="Sem 8" <%=userProfile.semester==='Sem 8' ? 'selected' : '' %>
-                                >Semester VIII</option>
-                              <option value="Alumni" <%=userProfile.semester==='Alumni' ? 'selected' : '' %>
-                                >Alumni</option>
-                            </select>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label class="form-label" for="semester">Semester</label>
+                              <select id="semester" name="semester" class="select2 form-select">
+                                <option value="">Select</option>
+                                <option value="Sem 1" <%=userProfile.semester==='Sem 1' ? 'selected' : '' %>
+                                  >Semester I</option>
+                                <option value="Sem 2" <%=userProfile.semester==='Sem 2' ? 'selected' : '' %>
+                                  >Semester II</option>
+                                <option value="Sem 3" <%=userProfile.semester==='Sem 3' ? 'selected' : '' %>
+                                  >Semester III</option>
+                                <option value="Sem 4" <%=userProfile.semester==='Sem 4' ? 'selected' : '' %>
+                                  >Semester IV</option>
+                                <option value="Sem 5" <%=userProfile.semester==='Sem 5' ? 'selected' : '' %>
+                                  >Semester V</option>
+                                <option value="Sem 6" <%=userProfile.semester==='Sem 6' ? 'selected' : '' %>
+                                  >Semester VI</option>
+                                <option value="Sem 7" <%=userProfile.semester==='Sem 7' ? 'selected' : '' %>
+                                  >Semester VII</option>
+                                <option value="Sem 8" <%=userProfile.semester==='Sem 8' ? 'selected' : '' %>
+                                  >Semester VIII</option>
+                                <option value="Alumni" <%=userProfile.semester==='Alumni' ? 'selected' : '' %>
+                                  >Alumni</option>
+                              </select>
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="github" class="form-label">GitHub</label>
-                            <input type="text" class="form-control" id="github" name="github"
-                              placeholder="Enter Your GitHub Link" value="<%= userProfile.github || '' %>"/>
-                          </div>
+                            <div class="mb-3 col-md-6">
+                              <label for="github" class="form-label">GitHub</label>
+                              <input type="text" class="form-control" id="github" name="github"
+                                placeholder="Enter Your GitHub Link" value="<%= userProfile.github || '' %>" />
+                            </div>
 
-                          <div class="mb-3 col-md-6">
-                            <label for="credly" class="form-label">Credly</label>
-                            <input type="text" class="form-control" id="credly" name="credly"
-                              placeholder="Enter Your Credly Link" value="<%= link || '' %>"/>
+                            <div class="mb-3 col-md-6">
+                              <label for="credly" class="form-label">Credly</label>
+                              <input type="text" class="form-control" id="credly" name="credly"
+                                placeholder="Enter Your Credly Link" value="<%= link || '' %>" />
+                            </div>
                           </div>
                         </div>
-                      </div>
                     </div>
 
                     <footer
@@ -688,20 +693,24 @@
                         class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
                         Cancel
                       </button>
-                      <button
-                      type="submit"
+                      <button type="submit"
                         class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                         Save
                       </button>
                     </footer>
-                  </form>
+                    </form>
                   </div>
                 </div>
 
               </div>
               <br>
-              <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300"> <%= userProfile.firstname %> <%= userProfile.lastname %> </h4>
-              <h5 class="text-gray-100 dark:text-gray-00"> <%= userProfile.college || '' %> </h5>
+              <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
+                <%= userProfile.firstname %>
+                  <%= userProfile.lastname %>
+              </h4>
+              <h5 class="text-gray-100 dark:text-gray-00">
+                <%= userProfile.college || '' %>
+              </h5>
               <br>
 
               <button
@@ -1036,10 +1045,11 @@
                                     </p>
                                     <br>
                                     <button
-                                      class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                      class="delete-edu-btn flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                                       aria-label="Delete" data-id="<%= edu.id %>">
                                       Delete
                                     </button>
+
                                   </div>
                                   <% }) %>
 

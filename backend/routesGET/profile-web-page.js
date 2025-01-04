@@ -95,10 +95,20 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         const cert = await Credly.find({username : username})
 
         const userskillsdata = await Allskills.findOne({ username : username});
-        const userexp = userskillsdata.experience;
-        const useredu = userskillsdata.education;
         const userskills = userskillsdata.skills;
-        console.log(userexp, useredu, userskills)
+
+        const userexp = userskillsdata.experience.sort((a, b) => {
+            const dateA = new Date(a.endTime || a.startTime); 
+            const dateB = new Date(b.endTime || b.startTime);
+            return dateB - dateA; // Sort in descending order
+        });
+        
+        const useredu = userskillsdata.education.sort((a, b) => {
+            const dateA = new Date(a.endTime || a.startTime); 
+            const dateB = new Date(b.endTime || b.startTime);
+            return dateB - dateA; // Sort in descending order
+        });
+        
 
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
