@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Successful</title>
+</head>
+<body>
+    <h1>File Uploaded Successfully!</h1>
+    <p>Your file <strong>{{ filename }}</strong> has been uploaded.</p>
+    <p>Certificate Type: <strong>{{ cert_type }}</strong></p>
+    <p>Points Awarded: <strong>{{ points }}</strong></p>
+    <h2>Leaderboard</h2>
+    <table border="1">
+        <tr>
+            <th>Username</th>
+            <th>Points</th>
+        </tr>
+        {% for user, score in leaderboard.items() %}
+        <tr>
+            <td>{{ user }}</td>
+            <td>{{ score }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/">Upload Another File</a>
+</body>
+</html>
