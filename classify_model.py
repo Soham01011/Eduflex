@@ -9,7 +9,7 @@ POINTS = {
 
 # Keywords to identify certificate types
 KEYWORDS = {
-    "global": ["global", "http", "international", "worldwide"],
+    "global": ["global", "https", "international", "worldwide"],
     "internship": ["internship", "training", "intern"],
     "local": ["local", "regional", "domestic"]
 }
