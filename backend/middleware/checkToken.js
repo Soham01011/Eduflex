@@ -29,10 +29,12 @@ async function checkToken(req, res, next) {
             decodedToken = jwt.verify(token, serverSK); // Decode JWT for Webapp
             token = decodedToken.userId; // Use the userId as the token to query the database
         }
-
+        console.log("CHECK TOKEN :",token)
         // Fetch the token data from the database
         const token_data = await CSRFToken.findOne({ token });
+        console.log(token_data)
         if (!token_data) {
+            console.log("invalid token")
             return res.status(400).json({ message: "Invalid token" });
         }
 
@@ -50,18 +52,20 @@ async function checkToken(req, res, next) {
 
         if (interfaceType === "Mobileapp") {
             if (tokenAgeDays > 30) {
+                console.log("token expired")
                 logMessage(`[=] Mobileapp ${userIP} : Token for user ${token_data.username} has expired`);
                 await CSRFToken.deleteOne({ token: token_data.token });
                 return res.status(400).json({ message: "token expired" });
             }
         } else if (interfaceType === "Webapp") {
             if (tokenAgeMinutes > 15) {
+                console.log("token expired")
                 logMessage(`[=] Webapp ${userIP} : Token for user ${token_data.username} has expired`);
                 await CSRFToken.deleteOne({ token: token_data.token });
                 return res.status(400).json({ message: "token expired" });
             }
         }
-
+        console.log(" token going next ")
         next();  // Continue to the next middleware or route handler
     } catch (error) {
         console.log("Error processing token:", error.message);

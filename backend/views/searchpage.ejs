@@ -11,6 +11,7 @@
   <script src="/assets/js/init-alpine.js"></script>
   <script src="/scripts/experince.js"></script>
   <script src="/scripts/deletepost.js"></script>
+  <script src="/scripts/likespost.js"></script>
 </head>
 
 <body>
@@ -437,6 +438,7 @@
                 </div>
 
                 <!-- Right: Button -->
+                <% if(editable) { %>
                 <button @click="openModal"
                   class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                   aria-label="Edit">
@@ -446,6 +448,7 @@
                     </path>
                   </svg>
                 </button>
+                <% } %>
 
                 <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
                   x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -711,6 +714,7 @@
                           <!-- Actions -->
                           <td class="px-4 py-3">
                             <div class="flex items-center space-x-4 text-sm">
+                              <% if(editable) { %>
                               <button
                                 class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg dark:text-red-400 focus:outline-none focus:shadow-outline-gray"
                                 aria-label="Delete" data-post-id="<%= p.postID %>" data-action="delete">
@@ -718,6 +722,8 @@
                                   <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                 </svg>
                               </button>
+                              <% } else{ %> <button class="like-post" data-post-id="<%= p.postID %>" data-action="like"> LIKE THIS POST</button> 
+                              <% } %>
                             </div>
                           </td>
                         </tr>

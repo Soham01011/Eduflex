@@ -26,6 +26,7 @@
     <script src="./assets/js/charts-pie.js" defer></script>
 
     <script src="/scripts/feed.js"></script> <!-- FEED LOGIC SCRIPT CONNECTED TO BACKEND-->
+    <script src="/scripts/likespost.js"></script>
   </head>
   <body>
     <div
@@ -735,6 +736,8 @@
                                   <% }) %>
                               </div>
                           <% } %>
+                          LIKES <%= card.likes %><br>
+                          <button class="like-post" data-post-id="<%= card.postID %>" data-action="like"> LIKE THIS POST</button>
                       </div>
                       <div class="right">
                           <div class="pdf-container">
