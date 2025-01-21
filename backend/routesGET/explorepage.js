@@ -6,26 +6,6 @@ const {fetchUser} = require('../utils/fetchUser');
   * This is a basic feed page where user can see recently uploaded posts as feed
   */
 
-<<<<<<< HEAD
-const Profiles = require("../models/profiles");
-
-explorepageRoute.get("/explore",async(req,res)=> {
-
-    const username = await fetchUser(req,res);
-
-
-    const page = 1; // First page
-    const range = 5; // Number of posts per page
-
-    // Fetch the latest 5 records by sorting in descending order based on 'createdAt'
-    const cards = await Profiles.find()
-        .select('firstname lastname username post_desc file hashtags')
-        .sort({ createdAt: -1 }) // Sort by 'createdAt' field in descending order
-        .skip(0) // Skip 0 records for the first page
-        .limit(range); // Limit to 'range' posts
-
-    res.status(200).render('explore', { cards ,username} )
-=======
 const Profiles = require('../models/profiles')
 const Likes = require("../models/likes")
 
@@ -67,7 +47,6 @@ explorepageRoute.get("/explore", async (req, res) => {
         console.error("Error fetching explore data:", error);
         res.status(500).send("An error occurred while fetching data.");
     }
->>>>>>> fa749ab9f4dc18f64c8a45dceb1d671ff566a12c
 });
 
 module.exports = explorepageRoute;

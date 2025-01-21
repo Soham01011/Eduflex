@@ -89,10 +89,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
     
         // Format certificate data for display
         const formattedCertificateData = formatCertificateData(certificateData);
-<<<<<<< HEAD
-=======
-    
->>>>>>> fa749ab9f4dc18f64c8a45dceb1d671ff566a12c
+
         // Check for missing mandatory fields
         const mandatoryFields = [
             'firstname',
@@ -114,26 +111,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         if (Credly_there) {
             link = Credly_there.link;
         }
-<<<<<<< HEAD
-        const cert = await Credly.find({username : username})
 
-        const userskillsdata = await Allskills.findOne({ username : username});
-        const userskills = userskillsdata.skills;
-
-        const userexp = userskillsdata.experience.sort((a, b) => {
-            const dateA = new Date(a.endTime || a.startTime); 
-            const dateB = new Date(b.endTime || b.startTime);
-            return dateB - dateA; // Sort in descending order
-        });
-        
-        const useredu = userskillsdata.education.sort((a, b) => {
-            const dateA = new Date(a.endTime || a.startTime); 
-            const dateB = new Date(b.endTime || b.startTime);
-            return dateB - dateA; // Sort in descending order
-        });
-        
-
-=======
         const cert = await Credly.find({ username: username });
     
         const userskillsdata = await Allskills.findOne({ username: username });
@@ -151,7 +129,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             return dateB - dateA; // Sort in descending order
         });
     
->>>>>>> fa749ab9f4dc18f64c8a45dceb1d671ff566a12c
+
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
             userProfile,
@@ -165,14 +143,10 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             useredu,
             userskills
         });
-<<<<<<< HEAD
-        
-    } catch (error) {
-=======
-    
+ 
     }
      catch (error) {
->>>>>>> fa749ab9f4dc18f64c8a45dceb1d671ff566a12c
+
         logMessage("[*] Webapp : ", userIP, " : Error fetching profile =", error.message);
         return res.redirect('/loginpage'); // Redirect on error
     }

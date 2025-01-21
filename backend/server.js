@@ -75,10 +75,8 @@ const deletepostLogicRoute = require('./routesPOST/deletepost');
 const deletebatchLoginRoute = require('./routesPOST/deletebatch');
 const mybatchesLogicRoute = require('./routesPOST/mybatches');
 const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
-<<<<<<< HEAD
-=======
 const likesRoute = require('./routesPOST/likesRoute');
->>>>>>> fa749ab9f4dc18f64c8a45dceb1d671ff566a12c
+
 
 /* 
     These are the schemas / models which are the collections in the database
@@ -740,11 +738,9 @@ server.post("/myprofile",checkToken, async (req, res) => {
 // server.post('/myprofile', myprofileLogicRoute); THIS ROUTE IS BROKEN
 
 server.post('/deletePost', deletepostLogicRoute);
-<<<<<<< HEAD
-=======
 
 server.use("/likeapi",likesRoute);
->>>>>>> fa749ab9f4dc18f64c8a45dceb1d671ff566a12c
+
 
 
 server.post("/mybatches",mybatchesLogicRoute);
