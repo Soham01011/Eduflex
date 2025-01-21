@@ -111,6 +111,40 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         });
-        
+
+        const deleteProjectButtons = document.querySelectorAll('.delete-proj-bt');
+
+        deleteProjectButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const projectId = event.target.getAttribute('data-id');
+                if (projectId) {
+                    const confirmation = confirm("Are you sure you want to remove this project?");
+                    if (!confirmation) return;
+                
+                    try {
+                        const response = await fetch(`/experience/project/${projectId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                    
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message || "Project deleted successfully");
+                        
+                            // Remove the project from the DOM after successful deletion
+                            event.target.closest('.project-item').remove();
+                        } else {
+                            alert(result.message || "Failed to delete project");
+                        }
+                    } catch (error) {
+                        console.error("ERROR:", error);
+                        alert("An error occurred while deleting the project");
+                    }
+                }
+            });
+        });
+
 
 });

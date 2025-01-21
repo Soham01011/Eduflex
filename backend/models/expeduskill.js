@@ -18,11 +18,19 @@ const educationSchema = new mongoose.Schema({
     endTime: { type: Date, required: false }
 });
 
+const projectSchema = new mongoose.Schema({
+    id: { type: String , required: false},
+    title: { type: String , required: false},
+    description: {type : String, required: false},
+    url: {type: String, required: false}
+});
+
 const allskillsSchema = new mongoose.Schema({
     username: { type: String, required: false },
     experience: { type: [experienceSchema], required: false, default: [] },
     education: { type: [educationSchema], required: false, default: [] },
-    skills: { type: [String], required: false, default: [] }
+    skills: { type: [String], required: false, default: [] },
+    projects: {type: [projectSchema] , required: false, default: []}
 });
 
 module.exports = mongoose.model('Allskills', allskillsSchema);

@@ -128,6 +128,9 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             const dateB = new Date(b.endTime || b.startTime);
             return dateB - dateA; // Sort in descending order
         });
+
+        const userproj = userskillsdata.projects;
+        console.log(userproj)
     
 
         // Render the profile page with user data, certificate data, and missing fields
@@ -141,7 +144,8 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             certificateData: formattedCertificateData,
             userexp,
             useredu,
-            userskills
+            userskills,
+            userproj
         });
  
     }
