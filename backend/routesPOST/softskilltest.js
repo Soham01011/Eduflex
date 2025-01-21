@@ -24,6 +24,7 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
                 feedback: "",
             });
             await session.save();
+            const userId = await fetchUser(req,res);
 
             const user = await Users.findOne({ username: userId });
             if (!user) {

@@ -286,7 +286,7 @@ def validate_certificate_two():
         if not username or not filename:
             return jsonify({'error': 'Username and filename are required'}), 400
         
-        base_dir = 'C:\\Eduflex\\backend\\uploads'  # Update this path to the actual base directory
+        base_dir = 'uploads'  # Update this path to the actual base directory
         file_path = os.path.join(base_dir, username, secure_filename(filename))
         print("The original file path:", file_path)
         
@@ -328,6 +328,27 @@ def validate_certificate_two():
         print("Exception occurred:", traceback.format_exc())
         return jsonify({'error': str(e)}), 500
 
+@app.route("/check-upload-type", methods=['POST'])
+def check_upload_type():
+    data = request.json
+    try:
+        upload_type = data.get("upload_type")
+        filename = data.get('filename')
+        username = data.get('username')
 
+        if not username or not filename:
+            return jsonify({'error': 'Username and filename are required'}), 400
+        
+        base_dir = 'uploads'  # Update this path to the actual base directory
+        file_path = os.path.join(base_dir, username, secure_filename(filename))
+
+        if not os.path.isfile(file_path):
+            print("File not found at validate certificate")
+            return jsonify({'error': 'File not found'}), 404
+
+
+    except Exception as e:
+        print("AUTOMATION SERVER ERROR : " , traceback.format_exc())
+        return jsonify({"error":str(e) }),500
 if __name__ == '__main__':
     app.run(port=5000)
