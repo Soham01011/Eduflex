@@ -46,7 +46,7 @@ myprofileLogicRoute.post("/myprofile",checkToken, async (req, res) => {
             });
 
             console.log(user_profile_data); 
-            console.log(profilePosts); 
+            console.log("PROFILES",profilePosts); 
 
             logMessage(`[=] ${interfaceType} ${userIP} : ${tokencheck.username} pulled their own profile`);
             if(interfaceType === "Mobileapp"){

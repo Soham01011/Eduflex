@@ -198,19 +198,8 @@ const hashtag_storage = multer.diskStorage({
         fs.mkdirSync(hashtag_file, { recursive: true });
         callback(null, hashtag_file); // Ensure the directory exists or create it
     },
-    filename: (req, file, callback) => {
-        let username = req.body.up_username; // First, try to get the username from request body
-
-        // If username is not in the request body, assume Webapp and get it from the Token cookie
-        if (!username && req.cookies && req.cookies.Token) {
-            try {
-                const tokenPayload = jwt.verify(req.cookies.Token, serverSK); // Decode the token
-                username = tokenPayload.username; // Extract username from token
-            } catch (err) {
-                console.error("Error decoding token: ", err);
-                return callback(new Error('Invalid token'), null); // Handle invalid token scenario
-            }
-        }
+    filename: async(req, file, callback) => {
+        let username = await fetchUser(req,res); // First, try to get the username from request body
 
         // If username is still undefined, throw an error
         if (!username) {
