@@ -129,7 +129,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             return dateB - dateA; // Sort in descending order
         });
 
-        const userproj = userskillsdata.projects;
+        const userproj = userskillsdata?.projects || [];
         console.log(userproj)
     
 

@@ -518,7 +518,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
                         instead of images on the mobile app
 */
 
-server.post("/upload", upload.single('file'), async (req, res) => {
+server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         const userIP = response.data.ip;
