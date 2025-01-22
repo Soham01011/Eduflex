@@ -26,14 +26,19 @@ let {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
 let {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
+let {certificatelevelcheck} = require('./utils/certlevelcheck');
 
 /**
  * Below is the code to have manual feature enabling and disabling commands to make it scalable 
  * they have to set in the env file . BY DEFAULT IT WILL WORK IF NOT SET AS FALSE
  */
 
-if(process.env.USE_PYTHON_SERVER === "false"){
-    addMentees, fetchAndSaveBadges, fetchBadges ,validatecert =false; 
+if (process.env.USE_PYTHON_SERVER === "false") {
+    certificatelevelcheck = false;
+    addMentees = false;
+    fetchAndSaveBadges = false;
+    fetchBadges = false;
+    validatecert = false;
 }
 
 if(process.env.USE_CREDLY_BADGES === "false"){
@@ -87,6 +92,7 @@ const User = require("./models/users");
 const Profiles = require("./models/profiles");
 const Credly = require("./models/credly");
 const Mentor = require("./models/mentees");
+const Pointshistory = require("./models/pointshistory");
 
 const serverSK = process.env.SERVER_SEC_KEY;
 
@@ -199,8 +205,22 @@ const hashtag_storage = multer.diskStorage({
         callback(null, hashtag_file); // Ensure the directory exists or create it
     },
     filename: async(req, file, callback) => {
-        let username = await fetchUser(req,res); // First, try to get the username from request body
 
+        const token = req.cookies.Token;
+        var username = '';
+        if (token) {
+            const decoded = jwt.verify(token, serverSK);
+            if (decoded && decoded.userId) {
+              username = decoded.username;
+            } else {
+                logMessage("Decoded data invalid in fetchUser util");
+                return res.redirect('/loginpage'); // Return after sending response
+            }
+            
+        } else if (req.body) {
+            username = res.body.username;
+        }
+                
         // If username is still undefined, throw an error
         if (!username) {
             return callback(new Error('Username not found'), null);
@@ -522,7 +542,7 @@ server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         const userIP = response.data.ip;
-        let { Token, up_username, post_type, post_desc, interface,selection } = req.body;
+        let { Token, up_username, post_type, post_desc, interface,selection ,post_name, post_org,post_cred_id,post_cred_url,start_time,end_time } = req.body;
         let { hashtags } = req.body;
         console.log(hashtags, post_type, post_desc, interface);
 
@@ -594,43 +614,87 @@ server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
                 .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
                 .trim()  // Remove leading and trailing spaces
             );
-
+        
             const brokenTags = cleanedHashtags.flatMap(tag => tag.split(' ')).filter(word => word.length > 0);
             const user_data = await User.findOne({ "username": up_username });
             let [model_result, producer] = '';
-            if(validatecert){
+            let [post_type, post_subtype] = ['post', null]; // Set post_subtype to null instead of ''
+        
+            if (validatecert) {
                 [model_result, producer] = await validatecert(up_username, sanitizedFilename);
+            } else {
+                console.log('[INFO] * Validate cert is disabled, enable it in the env file');
             }
-            else{
-                console.log('[INFO] * Validate cert is disabled , enable it in env file')
+        
+            if (certificatelevelcheck) {
+                const certResult = await certificatelevelcheck(filePath);
+                if (certResult) {
+                    const { type, subtype } = certResult;
+                    post_type = type || post_type; // Default to 'post' if type is missing
+                    post_subtype = subtype || null; // Default to null if subtype is missing
+                }
+            } else {
+                console.log('[INFO] * Flask server is disabled, enable it in the env file');
             }
 
+            console.log(post_type , post_subtype);
+
+            let points = 0;
+
+            // Determine points based on post_type and post_subtype
+            if (post_type === 'academic') {
+                if (post_subtype === 'local') {
+                    points = 5;
+                } else if (post_subtype === 'global') {
+                    points = 10;
+                } else if (post_subtype === 'intermediate') {
+                    points = 7;
+                }
+            }
+            
+            // Save points history
+            const newPointsHistory = new Pointshistory({
+                username: up_username, // Add the username
+                post_type: post_type, // Post type
+                post_subtype: post_subtype, // Post subtype
+                points: points, // Points calculated based on post_subtype
+                time: new Date() // Save the current time
+            });
+            
+            await newPointsHistory.save();
+        
             const newpost = new Profiles({
                 firstname: user_data ? user_data.firstname : null, // Check if user_data exists
                 lastname: user_data ? user_data.lastname : null,
                 username: up_username,
                 postID: `${up_username}-${uuidv4()}`, // Unique post ID
                 file: filePath,
-                post_type: post_type,
-                post_desc: post_desc,
+                post_subtype: post_subtype, // Use null if no subtype is set
+                post_type: post_type,       // Use 'post' if no type is set
+                post_name: post_name,       // Include post_name
+                post_org: post_org,         // Include post_org
+                post_cred_id: post_cred_id, // Include post_cred_id
+                post_cred_url: post_cred_url, // Include post_cred_url
+                start_time: start_time,     // Include start_time
+                end_time: end_time,         // Include end_time
                 post_likes: 0,
                 hashtags: cleanedHashtags,
                 broken_tags: brokenTags,
-                approved: false,  // Initially set to false as the mentor has not reviewed yet
-                mentor_approved: null, // Set to null as default, waiting for mentor approval
+                approved: false,            // Initially set to false as the mentor has not reviewed yet
+                mentor_approved: null,      // Set to null as default, waiting for mentor approval
                 interface: interface,
-                model_approved: true, // Assuming model approval is granted based on your logic
+                model_approved: true,       // Assuming model approval is granted based on your logic
                 real: model_result === 'Real', // Set real based on validation
-                edited_by: producer // Keep track of who edited the post
+                edited_by: producer        // Keep track of who edited the post
             });
-
+        
             // Save the new post to the database
             await newpost.save();
-
+        
             logMessage(`[=] ${interface} ${userIP} : Posted a file ${up_username}-${filename}`);
             return res.status(200).json({ message: "Uploaded Successfully" });
-        
         }
+        
     } catch (error) {
         console.error(`[*] Internal server error: ${error}`);
         res.status(500).json({ message: "Internal server error" });
@@ -760,6 +824,8 @@ server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (r
             mode: "pdf"
         });
         const hashtags = flaskResponse.data.hashtags;
+        const level = flaskResponse.data.level;
+        console.log("LEVEL", level)
 
         if (!hashtags || hashtags.length === 0) {
             const opts = {
