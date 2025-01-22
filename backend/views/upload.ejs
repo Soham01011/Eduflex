@@ -458,11 +458,47 @@
             <form id="upload-form" enctype="multipart/form-data">
               <!-- Description input -->
               <label class="block text-sm">
-                <span class="text-gray-700 dark:text-gray-400">Description</span>
+                <span class="text-gray-700 dark:text-gray-400">Name *</span>
                 <input name="post_desc" id="post_desc"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Enter Description" required />
               </label>
+              <br>
+
+              <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Issuing Organization *</span>
+                <input name="post_desc" id="post_desc"
+                  class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                  placeholder="Enter Description" required />
+              </label>
+              <br>
+
+              <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Credential ID</span>
+                <input name="post_desc" id="post_desc"
+                  class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                  placeholder="Enter Description" required />
+              </label>
+              <br>
+
+              <label class="block text-sm">
+                <span class="text-gray-700 dark:text-gray-400">Credential URL</span>
+                <input name="post_desc" id="post_desc"
+                  class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                  placeholder="Enter Description" required />
+              </label>
+              <br>
+
+              <div class="flex items-center space-x-4">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">Issue Date:</span>
+                  <input type="date" id="startTime" name="startTime" class="form-input" required>
+                </label>
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">Expiration Date:</span>
+                  <input type="date" id="endTime" name="endTime" class="form-input" required>
+                </label>
+              </div>
               <br>
 
               <!-- File input for PDF -->
