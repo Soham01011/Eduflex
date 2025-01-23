@@ -233,9 +233,7 @@ def extract_hashtags():
         else:
             return jsonify({"error": "Invalid mode"}), 400
         
-        hashtags = create_hashtags_from_lines(lines)       
-        print(hashtags)
-        return jsonify({"hashtags": hashtags})
+        return jsonify({"lines": lines})
     
     except Exception as e:
         print(f"Error processing file: {e}")
@@ -353,6 +351,10 @@ def checkcertlevel():
     keywords_sports = [
         "sports", "athletics", "tournament", "match", 
         "competition", "winner", "runner", "medal"
+    ]
+
+    keywords_intern_job_enterprenuer = [
+        "intern" , "internship" , "trainee"
     ]
     
     # Determine the type of certificate
