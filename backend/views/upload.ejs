@@ -459,7 +459,7 @@
               <!-- Description input -->
               <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Name *</span>
-                <input name="post_desc" id="post_desc"
+                <input name="post_desc" id="post_name"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Enter Description" required />
               </label>
@@ -467,7 +467,7 @@
 
               <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Issuing Organization *</span>
-                <input name="post_desc" id="post_desc"
+                <input name="post_desc" id="post_org"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   placeholder="Enter Description" required />
               </label>
@@ -475,17 +475,17 @@
 
               <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Credential ID</span>
-                <input name="post_desc" id="post_desc"
+                <input name="post_desc" id="post_cred_id"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="Enter Description" required />
+                  placeholder="Enter Description"  />
               </label>
               <br>
 
               <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Credential URL</span>
-                <input name="post_desc" id="post_desc"
+                <input name="post_desc" id="post_cred_url"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="Enter Description" required />
+                  placeholder="Enter Description"  />
               </label>
               <br>
 
@@ -535,17 +535,17 @@
                   const file = fileInput.files[0];
                   const formData = new FormData();
                   formData.append('file', file);
-
+            
                   // Disable the file input while uploading
                   fileInput.disabled = true;
-
+            
                   try {
                     // Send the file to the server for hashtag extraction
                     const response = await fetch('/extract-hashtags', {
                       method: 'POST',
                       body: formData,
                     });
-
+            
                     if (response.ok) {
                       const hashtags = await response.json(); // Get the extracted hashtags
                       displayHashtags(hashtags); // Display them in the UI
@@ -559,57 +559,68 @@
                   }
                 }
               });
-
+            
               // Function to display the extracted hashtags
               function displayHashtags(hashtags) {
                 const container = document.getElementById('tag-container');
                 container.innerHTML = "";  // Clear any existing hashtags
-
+            
                 hashtags.forEach(tag => {
                   const tagElement = document.createElement('div');
                   tagElement.classList.add('tag');
                   tagElement.textContent = tag;
                   container.appendChild(tagElement);
-
+            
                   // Add click functionality to select/deselect the tag
                   tagElement.addEventListener('click', () => {
                     tagElement.classList.toggle('selected');
                   });
                 });
               }
-
+            
               // Handle form submission
               document.getElementById('upload-form').addEventListener('submit', async function (event) {
                 event.preventDefault(); // Prevent default form submission
-
+            
                 // Collect selected hashtags
                 const selectedTags = Array.from(document.querySelectorAll('.tag.selected'))
                   .map(tag => tag.textContent);
-
-                const description = document.getElementById('post_desc').value;
+            
+                // Collect form values
+                const description = document.getElementById('post_name').value;
+                const organization = document.getElementById('post_org').value;
+                const credentialId = document.getElementById('post_cred_id').value;
+                const credentialUrl = document.getElementById('post_cred_url').value;
+                const startTime = document.getElementById('startTime').value;
+                const endTime = document.getElementById('endTime').value;
                 const fileInput = document.getElementById('file');
                 const file = fileInput.files[0];
-                console.log("Description : ",description , file, fileInput , "TAGS :",selectedTags)
-
-                // Ensure that a file is selected
-                if (!file) {
-                  alert("Please select a file.");
+            
+                // Ensure required fields are filled
+                if (!description || !organization || !file) {
+                  alert("Please fill in all required fields and select a file.");
                   return;
                 }
-
+            
                 // Prepare form data to submit via fetch
                 const formData = new FormData();
                 formData.append('file', file); // Add the file
-                formData.append('post_desc', description); // Add description
+                formData.append('post_name', description); // Add description
+                formData.append('post_org', organization); // Add issuing organization
+                formData.append('post_cred_id', credentialId); // Add credential ID
+                formData.append('post_cred_url', credentialUrl); // Add credential URL
+                formData.append('start_time', startTime); // Add start time
+                formData.append('end_time', endTime); // Add end time
                 formData.append('hashtags', selectedTags.join(',')); // Join tags into a comma-separated string
-                formData.append('post_type', 'post');
-                formData.append('interface', 'Webapp');
+                formData.append('post_type', 'post'); // Add post type
+                formData.append('interface', 'Webapp'); // Add interface type
+            
                 try {
                   const response = await fetch('/upload', {
                     method: 'POST',
                     body: formData,
                   });
-
+            
                   if (response.ok) {
                     const result = await response.json();
                     alert(result.message); // Display success message
@@ -623,6 +634,7 @@
                 }
               });
             </script>
+            
 
 
 
