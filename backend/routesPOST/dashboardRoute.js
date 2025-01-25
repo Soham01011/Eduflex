@@ -13,6 +13,7 @@ const {fetchUser} = require('../utils/fetchUser')
 const {checkToken} = require('../middleware/checkToken')
 
 const Profiles = require('../models/profiles');
+const Pointshistory = require("../models/pointshistory");
 const { logMessage } = require('../utils/logger');
 
 
@@ -28,10 +29,13 @@ dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken
             .sort({ createdAt: -1 }) // Sort by 'createdAt' field in descending order
             .skip(0) // Skip 0 records for the first page
             .limit(range); // Limit to 'range' posts
+
+        const pointsData = await Pointshistory.find({"username": username}).select("post_type post_subtype points time")
     
         res.status(200).render('index', {
             username: username, 
-            cards
+            cards,
+            pointsData
         });
     } catch (error) {
         logMessage(`[*] Error fetching dashboard : ${error}`);

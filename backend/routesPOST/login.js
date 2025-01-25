@@ -122,7 +122,7 @@ loginLogicRouter.post("/login", async (req, res) => {
                 'academic_year',
                 'semester',
                 'cgpa',
-                'hobby',
+                'department',
             ];
 
             // Check for missing mandatory fields

@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="/assets/css/tailwind.output1.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="/assets/js/init-alpine.js"></script>
-  <script src="/scripts/certmeta.js"></script>
 </head>
 
 <body>
@@ -545,19 +544,26 @@
 
                   // Add click functionality to select/deselect the tag
                   tagElement.addEventListener('click', () => {
+                    // Deselect other tags when one is selected
+                    document.querySelectorAll('.tag.selected').forEach(selectedTag => {
+                      selectedTag.classList.remove('selected');
+                    });
                     tagElement.classList.toggle('selected');
                   });
                 });
               });
 
-
               // Handle form submission
               document.getElementById('upload-form').addEventListener('submit', async function (event) {
                 event.preventDefault(); // Prevent default form submission
 
-                // Collect selected hashtags
-                const selectedTags = Array.from(document.querySelectorAll('.tag.selected'))
-                  .map(tag => tag.textContent);
+                // Collect the selected tag
+                const selectedTag = document.querySelector('.tag.selected');
+                if (!selectedTag) {
+                  alert("Please select a tag.");
+                  return;
+                }
+                const selection = selectedTag.textContent; // Get the selected tag value
 
                 // Collect form values
                 const description = document.getElementById('post_name').value;
@@ -566,6 +572,7 @@
                 const credentialUrl = document.getElementById('post_cred_url').value;
                 const startTime = document.getElementById('startTime').value;
                 const endTime = document.getElementById('endTime').value;
+                const cert_type = document.getElementById('cert_type').value;
                 const fileInput = document.getElementById('file');
                 const file = fileInput.files[0];
 
@@ -584,12 +591,15 @@
                 formData.append('post_cred_url', credentialUrl); // Add credential URL
                 formData.append('start_time', startTime); // Add start time
                 formData.append('end_time', endTime); // Add end time
-                formData.append('hashtags', selectedTags.join(',')); // Join tags into a comma-separated string
-                formData.append('post_type', 'post'); // Add post type
-                formData.append('interface', 'Webapp'); // Add interface type
+                formData.append('hashtags', selectedTag.textContent); // Send the selected tag as a hashtag
+                formData.append('cert_type', cert_type); // Add certificate type
+                formData.append('selection', selection); // Add the selected tag name as 'selection'
+
+                console.log("CERT TYPE:", cert_type);
+                console.log("SELECTION:", selection);
 
                 try {
-                  const response = await fetch('/upload', {
+                  const response = await fetch('/postsmanage/post/webapp', {
                     method: 'POST',
                     body: formData,
                   });

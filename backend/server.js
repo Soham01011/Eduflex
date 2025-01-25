@@ -81,6 +81,7 @@ const deletebatchLoginRoute = require('./routesPOST/deletebatch');
 const mybatchesLogicRoute = require('./routesPOST/mybatches');
 const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
 const likesRoute = require('./routesPOST/likesRoute');
+const postsLogicRoute = require("./routesPOST/postsRoute");
 
 
 /* 
@@ -407,19 +408,10 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             cgpa,
             hobby,
             credly,
-            interface
+            interface,
+            department
         } = req.body;
 
-        console.log(
-            'Token:',
-            Token,
-            'Email:',
-            changeemail,
-            'Password:',
-            changepwd,
-            'PhoneNo:',
-            changephoneno,"First name :",firstName , " Lastname : ", lastName, "CREDLY ", credly
-        );
 
         if (!Token) {
             const raw_token = req.cookies.Token;
@@ -478,16 +470,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             );
             return res.status(400).json({ message: 'Invalid phone number.' });
         }
-        console.log(
-            'Token:',
-            Token,
-            'Email:',
-            changeemail,
-            'Password:',
-            changepwd,
-            'PhoneNo:',
-            changephoneno,"First name :",firstName , " Lastname : ", lastName, "CREDLY ", credly
-        );
+
         // Update user data if all validations pass
         try {
             await User.updateOne(
@@ -507,7 +490,8 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
                         academic_year: academicyear,
                         semester: semester,
                         cgpa: cgpa,
-                        hobby: hobby
+                        hobby: hobby,
+                        department: department
                     }
                 },
                 { upsert: true }
@@ -533,10 +517,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
 );
 
 /* *
-----------------P.S. => removed converting pdf to images thus direct pdf files will be stored (beause linux dosent support very well)
-                        this wont cause problem at the web app side but the mobile app wont see certificates , thus future update will have pdf file 
-                        instead of images on the mobile app
-*/
+----------------P.S. => The uploads route is retoured to postsmanage to avoid complexity 
 
 server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
     try {
@@ -700,6 +681,8 @@ server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+*/
+
 
 server.post("/getUserProfile", getuserprofileLogicRoute);
 
@@ -802,6 +785,8 @@ server.post("/mybatches",mybatchesLogicRoute);
 server.post('/delete-batch',deletebatchLoginRoute)
 
 
+/*
+==== > FUTURE PLAN TO AUTO MATE THE CERT METADATA
 
 server.post("/extract-hashtags", checkToken, extract_hashtag_folder.single('file'), async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -914,7 +899,7 @@ server.post("/extract-hashtags", checkToken, extract_hashtag_folder.single('file
         console.error(`Error: ${error.message}`);
         return res.status(500).json({ message: 'An error occurred during the process.', error: error.message });
     }
-});
+});*/
 
 
 server.post("/postpermission", checkToken, async (req, res) => {
@@ -1113,6 +1098,8 @@ server.post("/psychometrictest",psychometrictestLogicRoute);
 server.get('/feed',feedLogicRoute);
 
 server.use('/experience',skillexpeduRoute);
+
+server.use('/postsmanage', postsLogicRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
