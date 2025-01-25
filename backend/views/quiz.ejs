@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cards - Windmill Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/tailwind.output.css" />
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+      defer
+    ></script>
+    <script src="./assets/js/init-alpine.js"></script>
+    <script src="./assets/js/myscript.js"></script>
+    <script>
+      function checkCompletion() {
+        const questions = document.querySelectorAll(".question");
+        const allAnswered = Array.from(questions).every((q) =>
+          Array.from(q.querySelectorAll("input[type='radio']")).some(
+            (input) => input.checked
+          )
+        );
+        document.getElementById("submit-button").style.display = allAnswered
+          ? "block"
+          : "none";
+      }
+
+      function submitQuiz() {
+        alert("Your responses have been submitted successfully!");
+        window.location.href = "cards.html"; // Redirect to cards.html
+      }
+    </script>
+  </head>
+  <body>
+    <div
+      class="h-screen bg-gray-50 dark:bg-gray-900"
+      :class="{ 'overflow-hidden': isSideMenuOpen }"
+    >
+      <main class="h-full pb-16 overflow-y-auto">
+        <div class="container px-6 mx-auto grid">
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Psychometric Test
+          </h2>
+
+          <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <!-- Question 1 -->
+            <label class="block mt-4 text-sm question">
+              <p class="font-semibold text-gray-600 dark:text-gray-300">
+                1. Question One?
+              </p>
+              <label>
+                <input
+                  class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                  type="radio"
+                  name="q1"
+                  value="1"
+                  onclick="checkCompletion()"
+                />
+                Option 1
+              </label>
+              <br />
+              <label>
+                <input
+                  class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                  type="radio"
+                  name="q1"
+                  value="2"
+                  onclick="checkCompletion()"
+                />
+                Option 2
+              </label>
+              <br />
+              <label>
+                <input
+                  class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                  type="radio"
+                  name="q1"
+                  value="3"
+                  onclick="checkCompletion()"
+                />
+                Option 3
+              </label>
+              <br />
+              <label>
+                <input
+                  class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                  type="radio"
+                  name="q1"
+                  value="4"
+                  onclick="checkCompletion()"
+                />
+                Option 4
+              </label>
+            </label>
+
+            <!-- Question 2 -->
+            <label class="block mt-4 text-sm question">
+                <p class="font-semibold text-gray-600 dark:text-gray-300">
+                  2. Question Two?
+                </p>
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q2"
+                    value="1"
+                    onclick="checkCompletion()"
+                  />
+                  Option 1
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q2"
+                    value="2"
+                    onclick="checkCompletion()"
+                  />
+                  Option 2
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q2"
+                    value="3"
+                    onclick="checkCompletion()"
+                  />
+                  Option 3
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q2"
+                    value="4"
+                    onclick="checkCompletion()"
+                  />
+                  Option 4
+                </label>
+            </label>
+
+            <!-- Question 3 -->
+            <label class="block mt-4 text-sm question">
+                <p class="font-semibold text-gray-600 dark:text-gray-300">
+                  3. Question Three?
+                </p>
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q3"
+                    value="1"
+                    onclick="checkCompletion()"
+                  />
+                  Option 1
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q3"
+                    value="2"
+                    onclick="checkCompletion()"
+                  />
+                  Option 2
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q3"
+                    value="3"
+                    onclick="checkCompletion()"
+                  />
+                  Option 3
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q3"
+                    value="4"
+                    onclick="checkCompletion()"
+                  />
+                  Option 4
+                </label>
+            </label>
+
+            <!-- Question 4 -->
+            <label class="block mt-4 text-sm question">
+                <p class="font-semibold text-gray-600 dark:text-gray-300">
+                  4. Question Four?
+                </p>
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q4"
+                    value="1"
+                    onclick="checkCompletion()"
+                  />
+                  Option 1
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q4"
+                    value="2"
+                    onclick="checkCompletion()"
+                  />
+                  Option 2
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q4"
+                    value="3"
+                    onclick="checkCompletion()"
+                  />
+                  Option 3
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q4"
+                    value="4"
+                    onclick="checkCompletion()"
+                  />
+                  Option 4
+                </label>
+            </label>
+
+            <!-- Question 5 -->
+            <label class="block mt-4 text-sm question">
+                <p class="font-semibold text-gray-600 dark:text-gray-300">
+                  5. Question Five?
+                </p>
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q5"
+                    value="1"
+                    onclick="checkCompletion()"
+                  />
+                  Option 1
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q5"
+                    value="2"
+                    onclick="checkCompletion()"
+                  />
+                  Option 2
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q5"
+                    value="3"
+                    onclick="checkCompletion()"
+                  />
+                  Option 3
+                </label>
+                <br />
+                <label>
+                  <input
+                    class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                    type="radio"
+                    name="q5"
+                    value="4"
+                    onclick="checkCompletion()"
+                  />
+                  Option 4
+                </label>
+            </label>
+  
+            <!-- Submit Button -->
+            <button
+              type="button"
+              id="submit-button"
+              class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hidden"
+              onclick="submitQuiz()"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
