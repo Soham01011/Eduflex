@@ -31,18 +31,6 @@
 </head>
 
 <body>
-  <% if (missingFields.length> 0) { %>
-    <div class="alert alert-warning">
-      <p>Please fill in the following missing fields:</p>
-      <ul>
-        <% missingFields.forEach(field=> { %>
-          <li>
-            <%= field %>
-          </li>
-          <% }) %>
-      </ul>
-    </div>
-    <% } %>
       <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
         <!-- Desktop sidebar -->
         <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
@@ -485,6 +473,26 @@
         <!-- Content wrapper -->
         <main class="h-full pb-16 overflow-y-auto">
           <div class="container grid px-6 mx-auto">
+
+            <br>
+
+            <div class=" justify-center ">
+              <div class="w-full max-w-lg px-4">
+                <div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
+                  <% if (missingFields.length > 0) { %>
+                    <div class="alert alert-warning">
+                      <p class="font-semibold">
+                        Enter missing fields : <span><%= missingFields.join(", ") %></span>
+                      </p>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            
+
+            <br>
+
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
               Profile
             </h2>
