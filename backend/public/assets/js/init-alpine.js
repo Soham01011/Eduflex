@@ -112,10 +112,22 @@ function data() {
     trapCleanup: null,
     openModal6() {
       this.isModal6Open = true
-      this.trapCleanup = focusTrap(document.querySelector('#modal5'))
+      this.trapCleanup = focusTrap(document.querySelector('#modal6'))
     },
     closeModal6() {
       this.isModal6Open = false
+      this.trapCleanup()
+    },
+
+    // Modal7
+    isModal7Open: false,
+    trapCleanup: null,
+    openModal7() {
+      this.isModal7Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal7'))
+    },
+    closeModal7() {
+      this.isModal7Open = false
       this.trapCleanup()
     },
 

@@ -31,18 +31,6 @@
 </head>
 
 <body>
-  <% if (missingFields.length> 0) { %>
-    <div class="alert alert-warning">
-      <p>Please fill in the following missing fields:</p>
-      <ul>
-        <% missingFields.forEach(field=> { %>
-          <li>
-            <%= field %>
-          </li>
-          <% }) %>
-      </ul>
-    </div>
-    <% } %>
       <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
         <!-- Desktop sidebar -->
         <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
@@ -92,7 +80,7 @@
               </li>
               <li class="relative px-6 py-3">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="buttons.html">
+                  href="/alltest">
                   <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -255,7 +243,7 @@
               </li>
               <li class="relative px-6 py-3">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="buttons.html">
+                  href="/alltest">
                   <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -485,6 +473,26 @@
         <!-- Content wrapper -->
         <main class="h-full pb-16 overflow-y-auto">
           <div class="container grid px-6 mx-auto">
+
+            <br>
+
+            <div class=" justify-center ">
+              <div class="w-full max-w-lg px-4">
+                <div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
+                  <% if (missingFields.length > 0) { %>
+                    <div class="alert alert-warning">
+                      <p class="font-semibold">
+                        Enter missing fields : <span><%= missingFields.join(", ") %></span>
+                      </p>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            
+
+            <br>
+
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
               Profile
             </h2>
@@ -624,6 +632,12 @@
                               <label for="college" class="form-label">College Name</label>
                               <input type="text" class="form-control" id="college" name="college"
                                 placeholder="Enter your College Name" value="<%= userProfile.college || '' %>" />
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                              <label for="college" class="form-label">Department</label>
+                              <input type="text" class="form-control" id="department" name="department"
+                                placeholder="Enter your department name" value="<%= userProfile.department || '' %>" />
                             </div>
 
                             <div class="mb-3 col-md-6">
@@ -895,7 +909,7 @@
                             <%= cert.postDesc %> <!-- Display the post description -->
                           </td>
                           <td class="px-4 py-3 text-sm">
-                            <%= new Date(cert.createdAt).toDateString() %> <!-- Format the date as needed -->
+                            <%= cert.createdAt %> <!-- Format the date as needed -->
                           </td>
                           <td class="px-4 py-3 text-xs">
                             <span class="px-2 py-1 font-semibold leading-tight

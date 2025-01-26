@@ -65,6 +65,8 @@ const profilepageRoute = require('./routesGET/profile-web-page');
 const explorepageRoute = require('./routesGET/explorepage');
 const leaderboardroute = require('./routesGET/leaderboardpage');
 const searchuserprofileRoute = require('./routesGET/searchuser');
+const maintestpageRoute = require("./routesGET/maintestpage");
+const psyychometrictestpageRoute = require("./routesGET/pyschometrictestpage");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -1094,6 +1096,10 @@ server.get("/profile", async (req, res) => {
 });
 
 server.post("/psychometrictest",psychometrictestLogicRoute);
+
+server.get("/psychometrictestpage", psyychometrictestpageRoute);
+
+server.get("/alltest", maintestpageRoute);
 
 server.get('/feed',feedLogicRoute);
 

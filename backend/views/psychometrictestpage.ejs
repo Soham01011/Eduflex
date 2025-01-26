@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cards - Windmill Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <script src="./assets/js/init-alpine.js"></script>
+  <script src="./assets/js/myscript.js"></script>
+
+</head>
+
+<body>
+  <h1>Psychometric Test</h1>
+  <button id="startTestBtn">START TEST</button>
+
+  <div id="testContainer" style="margin-top: 20px; display: none;">
+    <div id="questionsContainer"></div> <!-- Container to hold all questions -->
+
+    <form id="answerForm">
+      <p id="currentQuestionText"></p>
+
+      <label>
+        <input type="radio" name="answer" value="Strongly Agree" required />
+        Strongly Agree
+      </label>
+      <br />
+      <label>
+        <input type="radio" name="answer" value="Agree" />
+        Agree
+      </label>
+      <br />
+      <label>
+        <input type="radio" name="answer" value="Neutral" />
+        Neutral
+      </label>
+      <br />
+      <label>
+        <input type="radio" name="answer" value="Disagree" />
+        Disagree
+      </label>
+      <br />
+      <label>
+        <input type="radio" name="answer" value="Strongly Disagree" />
+        Strongly Disagree
+      </label>
+      <br />
+      <button type="submit">Submit Answer</button>
+    </form>
+  </div>
+</body>
+
+
+<script src="./scripts/psycho.js"></script>
+
+</html>
