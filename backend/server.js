@@ -1073,8 +1073,8 @@ server.use('/experience',skillexpeduRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
-server.get('/testingroute',checkToken , async(req,res) => {
-    res.render('test');
+server.get('/testingroute' , async(req,res) => {
+    res.render('buttons');
 });
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
