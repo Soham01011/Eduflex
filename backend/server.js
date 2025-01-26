@@ -65,6 +65,8 @@ const profilepageRoute = require('./routesGET/profile-web-page');
 const explorepageRoute = require('./routesGET/explorepage');
 const leaderboardroute = require('./routesGET/leaderboardpage');
 const searchuserprofileRoute = require('./routesGET/searchuser');
+const maintestpageRoute = require("./routesGET/maintestpage");
+const psyychometrictestpageRoute = require("./routesGET/pyschometrictestpage");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -81,6 +83,7 @@ const deletebatchLoginRoute = require('./routesPOST/deletebatch');
 const mybatchesLogicRoute = require('./routesPOST/mybatches');
 const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
 const likesRoute = require('./routesPOST/likesRoute');
+const postsLogicRoute = require("./routesPOST/postsRoute");
 
 
 /* 
@@ -407,19 +410,10 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             cgpa,
             hobby,
             credly,
-            interface
+            interface,
+            department
         } = req.body;
 
-        console.log(
-            'Token:',
-            Token,
-            'Email:',
-            changeemail,
-            'Password:',
-            changepwd,
-            'PhoneNo:',
-            changephoneno,"First name :",firstName , " Lastname : ", lastName, "CREDLY ", credly
-        );
 
         if (!Token) {
             const raw_token = req.cookies.Token;
@@ -478,16 +472,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             );
             return res.status(400).json({ message: 'Invalid phone number.' });
         }
-        console.log(
-            'Token:',
-            Token,
-            'Email:',
-            changeemail,
-            'Password:',
-            changepwd,
-            'PhoneNo:',
-            changephoneno,"First name :",firstName , " Lastname : ", lastName, "CREDLY ", credly
-        );
+
         // Update user data if all validations pass
         try {
             await User.updateOne(
@@ -507,7 +492,8 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
                         academic_year: academicyear,
                         semester: semester,
                         cgpa: cgpa,
-                        hobby: hobby
+                        hobby: hobby,
+                        department: department
                     }
                 },
                 { upsert: true }
@@ -533,16 +519,13 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
 );
 
 /* *
-----------------P.S. => removed converting pdf to images thus direct pdf files will be stored (beause linux dosent support very well)
-                        this wont cause problem at the web app side but the mobile app wont see certificates , thus future update will have pdf file 
-                        instead of images on the mobile app
-*/
+----------------P.S. => The uploads route is retoured to postsmanage to avoid complexity 
 
 server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
     try {
         const response = await axios.get('https://api.ipify.org?format=json');
         const userIP = response.data.ip;
-        let { Token, up_username, post_type, post_desc, interface,selection ,post_name, post_org,post_cred_id,post_cred_url,start_time,end_time } = req.body;
+        let { Token, up_username, post_type, post_desc, interface,selection ,post_name, post_org,post_cred_id,post_cred_url,start_time,end_time,cert_type } = req.body;
         let { hashtags } = req.body;
         console.log(hashtags, post_type, post_desc, interface);
 
@@ -700,6 +683,8 @@ server.post("/upload", checkToken, upload.single('file'), async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+*/
+
 
 server.post("/getUserProfile", getuserprofileLogicRoute);
 
@@ -802,8 +787,10 @@ server.post("/mybatches",mybatchesLogicRoute);
 server.post('/delete-batch',deletebatchLoginRoute)
 
 
+/*
+==== > FUTURE PLAN TO AUTO MATE THE CERT METADATA
 
-server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (req, res) => {
+server.post("/extract-hashtags", checkToken, extract_hashtag_folder.single('file'), async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     if (Array.isArray(userIP)) {
@@ -813,65 +800,108 @@ server.post("/extract-hashtags", extract_hashtag_folder.single('file'), async (r
     }
 
     const { Token, interface, filename, up_username } = req.body;
-    console.log("Token:", Token, "interface:", interface, "Filename:", filename, "username:", up_username);
+
     const filePath = path.join(__dirname, 'hashtag_extractions', req.file.filename);
-    console.log("File path sent to Flask:", filePath);
-    
-    console.log("---------------------",filePath);
+
+    console.log("---------------------", filePath);
     try {
+        // Step 1: Extract lines from Flask server
         const flaskResponse = await axios.post('http://localhost:5000/autohash', {
             filePath: filePath,
             mode: "pdf"
         });
-        const hashtags = flaskResponse.data.hashtags;
-        const level = flaskResponse.data.level;
-        console.log("LEVEL", level)
 
-        if (!hashtags || hashtags.length === 0) {
-            const opts = {
-                format: 'jpeg',
-                out_dir: path.join(__dirname, 'hashtag_extractions'),
-                out_prefix: `${path.basename(filePath, path.extname(filePath))}`,
-                page: 1 // Only convert the first page
-            };
+        const lines = flaskResponse.data.lines;
 
-            if (!fs.existsSync(opts.out_dir)) {
-                fs.mkdirSync(opts.out_dir, { recursive: true });
-            }
-
-            await pdf.convert(filePath, opts);
-            console.log("First page of PDF converted to image successfully");
-
-            const imageFiles = fs.readdirSync(opts.out_dir)
-                .filter(file => file.startsWith(opts.out_prefix) && file.endsWith('.jpeg'))
-                .sort();
-
-            if (imageFiles.length > 0) {
-                const oldPath = path.join(opts.out_dir, imageFiles[0]);
-                const newPath = path.join(opts.out_dir, `${opts.out_prefix}-1.jpeg`);
-                fs.renameSync(oldPath, newPath);
-                console.log(`Renamed ${imageFiles[0]} to ${opts.out_prefix}-1.jpeg \n NEWPATHS ${newPath}`);
-
-                // Call the Flask OCR function with the image path for further hashtag extraction
-                const ocrResponse = await axios.post('http://localhost:5000/autohash', {
-                    filePath: newPath,
-                    mode: "image"
-                });
-
-                const ocrHashtags = ocrResponse.data.hashtags || [];
-                return res.status(200).json(ocrHashtags);
-            } else {
-                console.error('No image file was created.');
-                return res.status(500).json({ message: 'Failed to create image for OCR' });
-            }
+        if (!lines || lines.length === 0) {
+            return res.status(400).json({ message: 'No lines extracted from the file.' });
         }
-        return res.status(200).json(hashtags);
+
+        // Prepare the prompt for Ollama
+        const llamaPrompt = `
+        From the following lines, extract:
+        - The certificate name or position at work.
+        - The name of the issuer, which could be an institute, company, or organizer (e.g., sports organizer or event organizer).
+        
+        Return the results strictly as JSON with the fields:
+        - "certificatename": for the certificate name or position.
+        - "issuer": for the issuer name, company name, or organizer and not the name of any college.
+        
+        If no relevant data can be extracted, return:
+        {
+          "certificatename": "",
+          "issuer": ""
+        }
+        
+        Lines:
+        ${lines.join('\n')}
+        `;
+        
+        // Step 2: Send to Ollama model
+        const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
+            model: 'llama3.2:3b',
+            prompt: llamaPrompt,
+        });
+
+        let fullResponse = '';
+        const dataArray = ollamaResponse.data.split("\n");
+
+        // Step 3: Rebuild the full response by concatenating "response" fields
+        dataArray.forEach(item => {
+            const responseMatch = item.match(/"response":"(.*?)"/); // Match the response value
+            if (responseMatch && responseMatch[1]) {
+                fullResponse += responseMatch[1]; // Append the response value to the full response
+            }
+        });
+
+        console.log('Full concatenated response before sanitization:', fullResponse);
+
+        // Step 4: Fix invalid JSON format
+        fullResponse = fullResponse
+            .replace(/\\n/g, "") // Remove newline escape sequences
+            .replace(/\\+"/g, '"') // Replace \" with "
+            .replace(/\\'/g, "'") // Replace \' with '
+            .replace(/\\(.)/g, '$1'); // Remove any remaining backslashes
+
+        console.log('Sanitized full response:', fullResponse);
+
+        // Step 5: Parse JSON objects from the sanitized response
+        let result = {};
+        try {
+            const jsonRegex = /{[^{}]*}/g; // Matches everything inside curly braces
+            const matches = fullResponse.match(jsonRegex); // Extract JSON-like objects
+
+            if (matches) {
+                matches.forEach(match => {
+                    try {
+                        const jsonResponse = JSON.parse(match); // Parse valid JSON object
+                        const { certificatename, issuer } = jsonResponse;
+
+                        if (certificatename || issuer) {
+                            result = { certificatename, issuer }; // Update result if data exists
+                        }
+                    } catch (error) {
+                        console.error('Error parsing individual JSON object:', match, error);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error parsing JSON:', fullResponse, error);
+        }
+
+        // Step 6: Return the extracted information
+        const { certificatename, issuer } = result;
+        return res.status(200).json({
+            message: 'Extraction successful.',
+            certificatename: certificatename || "",
+            issuer: issuer || ""
+        });
 
     } catch (error) {
-        logMessage(`Error communicating with Flask server: ${error}`);
-        return res.status(500).json({ message: 'Failed to extract hashtags' });
+        console.error(`Error: ${error.message}`);
+        return res.status(500).json({ message: 'An error occurred during the process.', error: error.message });
     }
-});
+});*/
 
 
 server.post("/postpermission", checkToken, async (req, res) => {
@@ -1067,9 +1097,15 @@ server.get("/profile", async (req, res) => {
 
 server.post("/psychometrictest",psychometrictestLogicRoute);
 
+server.get("/psychometrictestpage", psyychometrictestpageRoute);
+
+server.get("/alltest", maintestpageRoute);
+
 server.get('/feed',feedLogicRoute);
 
 server.use('/experience',skillexpeduRoute);
+
+server.use('/postsmanage', postsLogicRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 

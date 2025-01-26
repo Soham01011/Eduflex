@@ -164,7 +164,8 @@ function formatCertificateData(data) {
         return {
             postId : cert.postID,
             pdfLink: cert.file, 
-            postDesc: cert.post_desc, 
+            post_name: cert.post_name, 
+            createdAt: cert.createdAt,
             hashtags: cert.hashtags || [], // Ensure hashtags is an array
             status: cert.mentor_approved === null ? 'Pending' : // If mentor approval is still pending
                     (cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Rejected') // Logic for approved status

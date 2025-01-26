@@ -233,9 +233,13 @@ def extract_hashtags():
         else:
             return jsonify({"error": "Invalid mode"}), 400
         
+<<<<<<< HEAD
         hashtags = create_hashtags_from_lines(lines)       
         print(hashtags)
         return jsonify({"hashtags": hashtags})
+=======
+        return jsonify({"lines": lines})
+>>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
     
     except Exception as e:
         print(f"Error processing file: {e}")
@@ -354,6 +358,7 @@ def checkcertlevel():
         "sports", "athletics", "tournament", "match", 
         "competition", "winner", "runner", "medal"
     ]
+<<<<<<< HEAD
     
     # Determine the type of certificate
     if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_sports):
@@ -365,6 +370,23 @@ def checkcertlevel():
         if not level:
             level = "global" if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_global) else ""
 
+=======
+
+    keywords_intern_job_enterprenuer = [
+        "intern" , "internship" , "trainee"
+    ]
+    
+    # Determine the type of certificate
+    if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_sports):
+        cert_type = "sports"
+        level = ""  # Sports certificates might not have levels
+    else:
+        cert_type = "academic"
+        level = "local" if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_local) else ""
+        if not level:
+            level = "global" if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_global) else ""
+
+>>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
     return jsonify({
         "sutype": level,
         "type": cert_type,

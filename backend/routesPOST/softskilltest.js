@@ -6,17 +6,30 @@ const {checkToken} = require("../middleware/checkToken")
 const {fetchUser} = require("../utils/fetchUser")
 const {logMessage} = require("../utils/logger")
 const {psychometricOllama} = require('../utils/ollama')
+const {interfaceFetch} = require("../utils/interface");
 
 const Users = require("../models/users")
 const testsession = require("../models/psychometric")
 
+MAX_QUESTIONS =20
+
 psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+    const interface = await interfaceFetch(req,res);
     const { test_id, question, answer } = req.body;
 
     try {
         // New test: when no test_id is provided
         if (!test_id) {
-            const test_id =  uuidv4();
+            const userId = await fetchUser(req,res);
+            const test_id =  `${userId}-${uuidv4()}`;
+            
             const session = new testsession({
                 test_id: test_id,
                 questions: [{ question, answer }],
@@ -24,17 +37,17 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
                 feedback: "",
             });
             await session.save();
-            const userId = await fetchUser(req,res);
 
             const user = await Users.findOne({ username: userId });
-            if (!user) {
+            if (user) {
                 // First-time user - initiate a new test
-                const result = await psychometricOllama([], "NEW Regular test", null);
-                return res.json(result,test_id);
+                const result = await psychometricOllama([], "NEW Regular test", '');
+                return res.status(200).json({ result, test_id });
+
             } else {
                 // Existing user - continue from previous session
                 const result = await psychometricOllama([], "CONTINUE Regular test", user.mbit);
-                return res.json(result,test_id);
+                return res.status(200).json({result,test_id});
             }
         } else {
             // If test_id is provided, continue the test session
@@ -66,7 +79,7 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
                 const mbit = user ? user.mbit : null;
 
                 const result = await psychometricOllama(questionsAndAnswers, "Feedback", mbit);
-                return res.json(result);
+                return res.json({result});
             }
 
             // Continue the test by generating the next question
@@ -74,10 +87,11 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
             const mbit = user ? user.mbit : null;
 
             const result = await psychometricOllama(questionsAndAnswers, "CONTINUE Regular test", mbit);
-            return res.json(result, test_id);
+            return res.json({result, test_id});
         }
     } catch (error) {
         console.error("Error in psychometrictest route:", error);
+        logMessage(`${interface} ${userIP} : [*] Internal server error : ${error}`)
         return res.status(500).json({ error: "Failed to process the request" });
     }
 });
