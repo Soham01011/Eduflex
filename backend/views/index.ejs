@@ -17,22 +17,22 @@
 
   <script>
     // Safely inject pointsData from server-side
-    const pointsData = <%- JSON.stringify(pointsData) %>;
-  
+    const pointsData = <% - JSON.stringify(pointsData) %>;
+
     // Define categories with initial point totals
     const categories = {
       academic: 0,
       extracurricular: 0,
       experience: 0,
     };
-  
+
     // Aggregate points by category
     pointsData.forEach((entry) => {
       if (entry.post_type in categories) {
         categories[entry.post_type] += entry.points;
       }
     });
-  
+
     // Create the doughnut chart
     const createDoughnutChart = () => {
       const ctx = document.getElementById('doughnutChart').getContext('2d');
@@ -64,7 +64,7 @@
         }
       });
     };
-  
+
     // Update card values dynamically
     const updateCardValues = () => {
       Object.entries(categories).forEach(([postType, points]) => {
@@ -73,15 +73,15 @@
           cardElement.textContent = points;
         }
       });
-  
+
       // Create or update the doughnut chart after DOM is fully loaded
       createDoughnutChart();
     };
-  
+
     // Trigger updates after DOM is fully loaded
     document.addEventListener('DOMContentLoaded', updateCardValues);
   </script>
-  
+
 </head>
 
 <body>
@@ -486,8 +486,9 @@
             <li class="relative">
               <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
                 @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" aria-haspopup="true">
-                <img class="object-cover w-8 h-8 rounded-full" src="/uploads/<%= username %>/profile/profile.jpg" alt=""
-                  aria-hidden="true" />
+                <img class="object-cover w-8 h-8 rounded-full"
+                  src="<%= username ? '/uploads/' + username + '/profile/profile.jpg' : 'https://cdn-icons-png.freepik.com/512/8742/8742495.png' %>"
+                  alt="" aria-hidden="true" />
               </button>
               <template x-if="isProfileMenuOpen">
                 <ul x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
@@ -557,7 +558,7 @@
           </a>
           <!-- Cards -->
           <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-            Personal Rank <%- pointsData %>
+            Personal Rank
           </h4>
 
           <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
@@ -617,7 +618,7 @@
 
             <br>
 
-          
+
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
 
 
@@ -625,11 +626,11 @@
 
 
               <div class="w-full overflow-hidden rounded-lg shadow-xs">
-             
 
-                
+
+
                 <div class="w-full overflow-hidden rounded-lg shadow-xs">
-                  
+
 
                   <!-- Charts -->
                   <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -649,7 +650,7 @@
                         Personal
                       </h4>
                       <canvas id="doughnutChart" width="400" height="200"></canvas>
-                      
+
                     </div>
                     <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                       <div class="chartjs-size-monitor">

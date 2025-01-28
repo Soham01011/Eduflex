@@ -57,9 +57,11 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         // Fetch the username from the token
         const username = await fetchUser(req, res);
         console.log(username);
+
+        let userProfile;
     
         // Check if user profile exists
-        let userProfile = await User.findOne({ username: username });
+        userProfile = await User.findOne({ username: username });
         if (!userProfile) {
             console.log("Creating new profile for first-time user:", username);
             
@@ -76,12 +78,11 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
                 semester: '',
                 cgpa: '',
                 hobby: '',
+                department: '',
             });
             await userProfile.save();
         }
     
-        // Fetch bio data and profile
-        const user_bio_data = await User.findOne({ username: username });
         const user_profile = await Profiles.findOne({ username: username });
     
         // Fetch certificate data
@@ -136,7 +137,6 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
             userProfile,
-            user_bio_data,
             user_profile,
             missingFields,
             link,

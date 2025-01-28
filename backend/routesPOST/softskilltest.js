@@ -11,7 +11,7 @@ const {interfaceFetch} = require("../utils/interface");
 const Users = require("../models/users")
 const testsession = require("../models/psychometric")
 
-MAX_QUESTIONS =20
+MAX_QUESTIONS = 20
 
 psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -46,7 +46,7 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
 
             } else {
                 // Existing user - continue from previous session
-                const result = await psychometricOllama([], "CONTINUE Regular test", user.mbit);
+                const result = await psychometricOllama([], "CONTINUE Regular test", user.mbti);
                 return res.status(200).json({result,test_id});
             }
         } else {
@@ -55,7 +55,7 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
             if (!session) {
                 return res.status(404).json({ error: "Session not found" });
             }
-
+            
             // Check if the test is completed
             if (session.questions.length >= MAX_QUESTIONS) {
                 return res.status(400).json({ error: "Test already completed. Feedback will be provided." });
@@ -76,17 +76,21 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
                 await session.save();
 
                 const user = await Users.findOne({ username: (await fetchUser(req, res)) });
-                const mbit = user ? user.mbit : null;
+                const mbti = user ? user.mbti : null;
 
-                const result = await psychometricOllama(questionsAndAnswers, "Feedback", mbit);
-                return res.json({result});
+                const result = await psychometricOllama(questionsAndAnswers, "Feedback", mbti);
+                session.feedback = result.feedback;
+                session.dimension = result.mbti;
+                session.counselor = result.counselor;
+                await session.save();
+                return res.status(200).json({result});
             }
 
             // Continue the test by generating the next question
             const user = await Users.findOne({ username: (await fetchUser(req, res)) });
-            const mbit = user ? user.mbit : null;
+            const mbti = user ? user.mbti : null;
 
-            const result = await psychometricOllama(questionsAndAnswers, "CONTINUE Regular test", mbit);
+            const result = await psychometricOllama(questionsAndAnswers, "CONTINUE Regular test", mbti);
             return res.json({result, test_id});
         }
     } catch (error) {

@@ -1,7 +1,6 @@
 const express = require('express')
 const explorepageRoute = express.Router();
 
-const {fetchUser} = require('../utils/fetchUser');
  /**
   * This is a basic feed page where user can see recently uploaded posts as feed
   */
@@ -11,7 +10,6 @@ const Likes = require("../models/likes")
 
 explorepageRoute.get("/explore", async (req, res) => {
     try {
-        const username = await fetchUser(req, res);
 
         const page = 1; // First page
         const range = 5; // Number of posts per page
@@ -42,7 +40,7 @@ explorepageRoute.get("/explore", async (req, res) => {
         }));
 
         // Render the page with the updated cards
-        res.status(200).render('explore', { cards: updatedCards, username });
+        res.status(200).render('explore', { cards: updatedCards });
     } catch (error) {
         console.error("Error fetching explore data:", error);
         res.status(500).send("An error occurred while fetching data.");
