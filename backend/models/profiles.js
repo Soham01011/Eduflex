@@ -23,13 +23,10 @@ const profileSchema = new mongoose.Schema({
     real: { type: Boolean, required: false },
     edited_by: { type: String, required: false },
     createdAt: { type: Date, default: Date.now },
-<<<<<<< HEAD
     start_time : { type: Date, required: false },
     end_time : { type: Date, required: false },
-=======
     start_time : { type: String, required: false },
     end_time : { type: String, required: false },
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
 });
 
 module.exports = mongoose.model('Profiles', profileSchema);

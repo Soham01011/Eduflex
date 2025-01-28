@@ -459,11 +459,8 @@
                 <span class="text-gray-700 dark:text-gray-400">Credential ID</span>
                 <input name="post_desc" id="post_cred_id"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-<<<<<<< HEAD
                   placeholder="Enter Description"  />
-=======
-                  placeholder="Enter Description" />
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
+
               </label>
               <br>
 
@@ -471,11 +468,8 @@
                 <span class="text-gray-700 dark:text-gray-400">Credential URL</span>
                 <input name="post_desc" id="post_cred_url"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-<<<<<<< HEAD
                   placeholder="Enter Description"  />
-=======
-                  placeholder="Enter Description" />
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
+
               </label>
               <br>
 
@@ -528,7 +522,6 @@
 
             <!-- JavaScript to handle file selection and hashtag extraction -->
             <script>
-<<<<<<< HEAD
               // Listen for file input change
               document.getElementById('file').addEventListener('change', async function (event) {
                 const fileInput = event.target;
@@ -571,8 +564,7 @@
                   tagElement.classList.add('tag');
                   tagElement.textContent = tag;
                   container.appendChild(tagElement);
-            
-=======
+          
               // Populate tags based on selected certificate type
               document.getElementById('cert_type').addEventListener('change', function (event) {
                 const selectedType = event.target.value; // Get the selected cert type
@@ -595,7 +587,6 @@
                   tagElement.textContent = tag;
                   tagContainer.appendChild(tagElement);
 
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
                   // Add click functionality to select/deselect the tag
                   tagElement.addEventListener('click', () => {
                     // Deselect other tags when one is selected
@@ -605,18 +596,6 @@
                     tagElement.classList.toggle('selected');
                   });
                 });
-<<<<<<< HEAD
-              }
-            
-              // Handle form submission
-              document.getElementById('upload-form').addEventListener('submit', async function (event) {
-                event.preventDefault(); // Prevent default form submission
-            
-                // Collect selected hashtags
-                const selectedTags = Array.from(document.querySelectorAll('.tag.selected'))
-                  .map(tag => tag.textContent);
-            
-=======
               });
 
               // Handle form submission
@@ -631,7 +610,6 @@
                 }
                 const selection = selectedTag.textContent; // Get the selected tag value
 
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
                 // Collect form values
                 const description = document.getElementById('post_name').value;
                 const organization = document.getElementById('post_org').value;
@@ -639,16 +617,12 @@
                 const credentialUrl = document.getElementById('post_cred_url').value;
                 const startTime = document.getElementById('startTime').value;
                 const endTime = document.getElementById('endTime').value;
-<<<<<<< HEAD
                 const fileInput = document.getElementById('file');
                 const file = fileInput.files[0];
             
-=======
                 const cert_type = document.getElementById('cert_type').value;
-                const fileInput = document.getElementById('file');
-                const file = fileInput.files[0];
 
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
+
                 // Ensure required fields are filled
                 if (!description || !organization || !file) {
                   alert("Please fill in all required fields and select a file.");
@@ -664,12 +638,9 @@
                 formData.append('post_cred_url', credentialUrl); // Add credential URL
                 formData.append('start_time', startTime); // Add start time
                 formData.append('end_time', endTime); // Add end time
-<<<<<<< HEAD
                 formData.append('hashtags', selectedTags.join(',')); // Join tags into a comma-separated string
                 formData.append('post_type', 'post'); // Add post type
                 formData.append('interface', 'Webapp'); // Add interface type
-            
-=======
                 formData.append('hashtags', selectedTag.textContent); // Send the selected tag as a hashtag
                 formData.append('cert_type', cert_type); // Add certificate type
                 formData.append('selection', selection); // Add the selected tag name as 'selection'
@@ -677,7 +648,6 @@
                 console.log("CERT TYPE:", cert_type);
                 console.log("SELECTION:", selection);
 
->>>>>>> 3dc0331f433be0261463b230c21f19153ba9177a
                 try {
                   const response = await fetch('/postsmanage/post/webapp', {
                     method: 'POST',
@@ -697,11 +667,6 @@
                 }
               });
             </script>
-            
-
-
-
-
       </main>
     </div>
   </div>

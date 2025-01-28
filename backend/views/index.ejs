@@ -284,7 +284,7 @@
                 <path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
                 <path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
               </svg>
-              <span class="ml-4">Charts</span>academi
+              <span class="ml-4">Charts</span>
             </a>
           </li>
           <li class="relative px-6 py-3">
@@ -613,77 +613,56 @@
 
 
           <!-- New Table -->
-          <div class="container grid px-6 mx-auto">
-
-            <br>
-
-          
-            <div class="w-full overflow-hidden rounded-lg shadow-xs">
-
-
-              <br>
-
-
-              <div class="w-full overflow-hidden rounded-lg shadow-xs">
-             
-
+          <div class="container grid px-6 mx-auto">               
+            <!-- Charts -->
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              Charts
+            </h2>
+            <div class="grid gap-6 mb-8 md:grid-cols-2">
+              <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                <div class="chartjs-size-monitor">
+                  <div class="chartjs-size-monitor-expand">
+                    <div class=""></div>
+                  </div>
+                  <div class="chartjs-size-monitor-shrink">
+                    <div class=""></div>
+                  </div>
+                </div>
+                <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                  Personal
+                </h4>
+                <canvas id="doughnutChart" width="400" height="200"></canvas>
                 
-                <div class="w-full overflow-hidden rounded-lg shadow-xs">
-                  
-
-                  <!-- Charts -->
-                  <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    Charts
-                  </h2>
-                  <div class="grid gap-6 mb-8 md:grid-cols-2">
-                    <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                      <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                          <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                          <div class=""></div>
-                        </div>
-                      </div>
-                      <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                        Personal
-                      </h4>
-                      <canvas id="doughnutChart" width="400" height="200"></canvas>
-                      
-                    </div>
-                    <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                      <div class="chartjs-size-monitor">
-                        <div class="chartjs-size-monitor-expand">
-                          <div class=""></div>
-                        </div>
-                        <div class="chartjs-size-monitor-shrink">
-                          <div class=""></div>
-                        </div>
-                      </div>
-                      <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                        Overall Growth
-                      </h4>
-                      <canvas id="line" width="415" height="207" style="display: block; width: 415px; height: 207px;"
-                        class="chartjs-render-monitor"></canvas>
-                      <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                        <div class="flex items-center">
-                          <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-                          <span>Academics</span>
-                        </div>
-
-                        <div class="flex items-center">
-                          <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
-                          <span>Extracurricular</span>
-                        </div>
-
-                        <div class="flex items-center">
-                          <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-                          <span>Communication</span>
-                        </div>
-                      </div>
-                    </div>
+              </div>
+              <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                <div class="chartjs-size-monitor">
+                  <div class="chartjs-size-monitor-expand">
+                    <div class=""></div>
+                  </div>
+                  <div class="chartjs-size-monitor-shrink">
+                    <div class=""></div>
+                  </div>
+                </div>
+                <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                  Overall Growth
+                </h4>
+                <canvas id="line" width="415" height="207" style="display: block; width: 415px; height: 207px;"
+                  class="chartjs-render-monitor"></canvas>
+                <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                  <div class="flex items-center">
+                    <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
+                    <span>Academics</span>
                   </div>
 
+                  <div class="flex items-center">
+                    <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
+                    <span>Extracurricular</span>
+                  </div>
+
+                  <div class="flex items-center">
+                    <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
+                    <span>Communication</span>
+                  </div>
                 </div>
               </div>
             </div>
