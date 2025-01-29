@@ -12,6 +12,7 @@ const testsession = new mongoose.Schema({
     completed: {type: Boolean , default: false},
     dimension: {type: String, required: false},
     feedback: {type: String, required: false},
+    counselor: {type: Boolean , required: false},
     startedAt: {type: Date , default: Date.now}
 })
 

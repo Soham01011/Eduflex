@@ -45,9 +45,15 @@ document.getElementById("answerForm").addEventListener("submit", (event) => {
       return response.json();
     })
     .then((data) => {
+      console.log(data);
       if (data.result) {
-        // Render the next question
-        displayQuestion(data.result.question);
+        if (data.result.feedback) {
+          // If feedback is received, display it
+          displayFeedback(data.result.feedback);
+        } else {
+          // Render the next question
+          displayQuestion(data.result.question);
+        }
       }
     })
     .catch((error) => console.error("Error occurred while submitting the answer:", error));
@@ -72,4 +78,18 @@ function displayQuestion(question) {
   // Clear radio selection for the next question
   const radios = document.querySelectorAll('input[name="answer"]');
   radios.forEach((radio) => (radio.checked = false));
+}
+
+function displayFeedback(feedback) {
+  // Hide the test container
+  document.getElementById("testContainer").style.display = "none";
+
+  // Display the feedback in the UI
+  const feedbackDiv = document.createElement("div");
+  feedbackDiv.className = "feedback";
+  feedbackDiv.innerHTML = `
+    <h3>Test Completed</h3>
+    <p>${feedback}</p>
+  `;
+  document.getElementById("questionsContainer").appendChild(feedbackDiv);
 }

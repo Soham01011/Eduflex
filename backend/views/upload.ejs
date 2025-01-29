@@ -459,8 +459,7 @@
                 <span class="text-gray-700 dark:text-gray-400">Credential ID</span>
                 <input name="post_desc" id="post_cred_id"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="Enter Description"  />
-
+                  placeholder="Enter Description" />
               </label>
               <br>
 
@@ -468,14 +467,13 @@
                 <span class="text-gray-700 dark:text-gray-400">Credential URL</span>
                 <input name="post_desc" id="post_cred_url"
                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                  placeholder="Enter Description"  />
-
+                  placeholder="Enter Description" />
               </label>
               <br>
 
               <div class="flex items-center space-x-4">
                 <label class="block text-sm">
-                  <span class="text-gray-700 dark:text-gray-400">Issue Date :</span>
+                  <span class="text-gray-700 dark:text-gray-400">Issue Date:</span>
                   <input type="date" id="startTime" name="startTime" class="form-input" required>
                 </label>
                 <label class="block text-sm">
@@ -497,7 +495,7 @@
 
               <!-- File input for PDF -->
               <label class="block text-sm">
-                <label for="file" class="text-gray-700 dark:text-gray-200">Choose a PDF file :</label>
+                <label for="file" class="text-gray-700 dark:text-gray-200">Choose a PDF file:</label>
                 <input type="file"
                   class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                   id="file" name="file" accept="application/pdf" required />
@@ -522,49 +520,6 @@
 
             <!-- JavaScript to handle file selection and hashtag extraction -->
             <script>
-              // Listen for file input change
-              document.getElementById('file').addEventListener('change', async function (event) {
-                const fileInput = event.target;
-                if (fileInput.files.length > 0) {
-                  const file = fileInput.files[0];
-                  const formData = new FormData();
-                  formData.append('file', file);
-            
-                  // Disable the file input while uploading
-                  fileInput.disabled = true;
-            
-                  try {
-                    // Send the file to the server for hashtag extraction
-                    const response = await fetch('/extract-hashtags', {
-                      method: 'POST',
-                      body: formData,
-                    });
-            
-                    if (response.ok) {
-                      const hashtags = await response.json(); // Get the extracted hashtags
-                      displayHashtags(hashtags); // Display them in the UI
-                    } else {
-                      console.error('Error extracting hashtags');
-                    }
-                  } catch (error) {
-                    console.error('Error:', error);
-                  } finally {
-                    fileInput.disabled = false;  // Re-enable the file input after the request
-                  }
-                }
-              });
-            
-              // Function to display the extracted hashtags
-              function displayHashtags(hashtags) {
-                const container = document.getElementById('tag-container');
-                container.innerHTML = "";  // Clear any existing hashtags
-            
-                hashtags.forEach(tag => {
-                  const tagElement = document.createElement('div');
-                  tagElement.classList.add('tag');
-                  tagElement.textContent = tag;
-                  container.appendChild(tagElement);
-          
               // Populate tags based on selected certificate type
               document.getElementById('cert_type').addEventListener('change', function (event) {
                 const selectedType = event.target.value; // Get the selected cert type
@@ -617,18 +572,16 @@
                 const credentialUrl = document.getElementById('post_cred_url').value;
                 const startTime = document.getElementById('startTime').value;
                 const endTime = document.getElementById('endTime').value;
+                const cert_type = document.getElementById('cert_type').value;
                 const fileInput = document.getElementById('file');
                 const file = fileInput.files[0];
-            
-                const cert_type = document.getElementById('cert_type').value;
-
 
                 // Ensure required fields are filled
                 if (!description || !organization || !file) {
                   alert("Please fill in all required fields and select a file.");
                   return;
                 }
-            
+
                 // Prepare form data to submit via fetch
                 const formData = new FormData();
                 formData.append('file', file); // Add the file
@@ -638,9 +591,6 @@
                 formData.append('post_cred_url', credentialUrl); // Add credential URL
                 formData.append('start_time', startTime); // Add start time
                 formData.append('end_time', endTime); // Add end time
-                formData.append('hashtags', selectedTags.join(',')); // Join tags into a comma-separated string
-                formData.append('post_type', 'post'); // Add post type
-                formData.append('interface', 'Webapp'); // Add interface type
                 formData.append('hashtags', selectedTag.textContent); // Send the selected tag as a hashtag
                 formData.append('cert_type', cert_type); // Add certificate type
                 formData.append('selection', selection); // Add the selected tag name as 'selection'
@@ -653,7 +603,7 @@
                     method: 'POST',
                     body: formData,
                   });
-            
+
                   if (response.ok) {
                     const result = await response.json();
                     alert(result.message); // Display success message
@@ -667,6 +617,10 @@
                 }
               });
             </script>
+
+
+
+
       </main>
     </div>
   </div>

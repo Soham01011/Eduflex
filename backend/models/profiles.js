@@ -23,8 +23,6 @@ const profileSchema = new mongoose.Schema({
     real: { type: Boolean, required: false },
     edited_by: { type: String, required: false },
     createdAt: { type: Date, default: Date.now },
-    start_time : { type: Date, required: false },
-    end_time : { type: Date, required: false },
     start_time : { type: String, required: false },
     end_time : { type: String, required: false },
 });

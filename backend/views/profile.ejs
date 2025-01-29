@@ -80,8 +80,7 @@
               </li>
               <li class="relative px-6 py-3">
                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="buttons.ejs">
-
+                  href="/alltest">
                   <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -636,10 +635,23 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                              <label for="college" class="form-label">Department</label>
-                              <input type="text" class="form-control" id="department" name="department"
-                                placeholder="Enter your department name" value="<%= userProfile.department || '' %>" />
+                              <label for="department" class="form-label">Department</label>
+                              <select class="form-select" id="department" name="department">
+                                <option value="">Select Department</option>
+                                <option value="Information Technology" <%= userProfile.department === "Information Technology" ? 'selected' : '' %>>Information Technology</option>
+                                <option value="Computer Science" <%= userProfile.department === "Computer Science" ? 'selected' : '' %>>Computer Science</option>
+                                <option value="Data Science" <%= userProfile.department === "Data Science" ? 'selected' : '' %>>Data Science</option>
+                                <option value="AI-ML" <%= userProfile.department === "AI-ML" ? 'selected' : '' %>>AI-ML</option>
+                                <option value="Mechanical" <%= userProfile.department === "Mechanical" ? 'selected' : '' %>>Mechanical</option>
+                                <option value="Civil" <%= userProfile.department === "Civil" ? 'selected' : '' %>>Civil</option>
+                              </select>
                             </div>
+                            
+                            <script>
+                              document.getElementById('department').addEventListener('change', function() {
+                                userProfile.department = this.value;
+                              });
+                            </script>
 
                             <div class="mb-3 col-md-6">
                               <label class="form-label" for="academic_year">Year</label>

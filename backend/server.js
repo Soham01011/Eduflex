@@ -1109,8 +1109,8 @@ server.use('/postsmanage', postsLogicRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
-server.get('/testingroute' , async(req,res) => {
-    res.render('buttons');
+server.get('/testingroute',checkToken , async(req,res) => {
+    res.render('test');
 });
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
