@@ -439,8 +439,7 @@
                 </div>
 
                 <!-- Right: Button -->
-<<<<<<< HEAD
-=======
+
                 <% if(editable) { %>
                 <button @click="openModal"
                   class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
@@ -643,6 +642,7 @@
                 <%= userProfile.firstname %>
                   <%= userProfile.lastname %>
               </h4>
+              <h4>@ <%= userProfile.username %></h4>
               <h5 class="text-gray-100 dark:text-gray-00">
                 <%= userProfile.college || '' %>
               </h5>
