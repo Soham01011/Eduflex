@@ -26,8 +26,6 @@
           Psychometric Test
         </h2>
 
-        <button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" id="startTestBtn">START TEST</button>
-
         <div id="testContainer" class="grid gap-6 mb-8 md:grid-cols-2"    style="margin-top: 20px; display: none;">
          
           <form id="answerForm">
@@ -62,6 +60,9 @@
             <br>
 
             <button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">Submit Answer</button>
+            <button id="loadingBtn" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-500 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-purple" style="display: none;" disabled>
+              Loading...
+            </button>
           </form>
 
           <br>
