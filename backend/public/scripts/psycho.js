@@ -1,7 +1,7 @@
 let testId = ""; // Global variable to store the test_id
 const answeredQuestions = []; // Array to store questions and answers
 
-document.getElementById("startTestBtn").addEventListener("click", () => {
+window.onload = () => {
   fetch("/psychometrictest", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -18,7 +18,7 @@ document.getElementById("startTestBtn").addEventListener("click", () => {
       displayQuestion(data.result.question);
     })
     .catch((error) => console.error("Error occurred:", error));
-});
+};
 
 document.getElementById("answerForm").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -37,7 +37,7 @@ document.getElementById("answerForm").addEventListener("submit", (event) => {
       question: currentQuestion,
       answer: selectedAnswer,
     }),
-  })
+  })  
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -67,6 +67,9 @@ function displayQuestion(question) {
     questionDiv.innerHTML = `
       <p><strong>${lastAnswer.question}</strong></p>
       <p>Answer: ${lastAnswer.answer}</p>
+      <br>
+      <hr>
+      <br>
     `;
     document.getElementById("questionsContainer").appendChild(questionDiv);
   }
