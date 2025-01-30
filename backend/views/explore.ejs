@@ -361,12 +361,10 @@
 
       <div class="flex flex-col flex-1 w-full">
         <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
-          <div
-            class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300"
-          >
+          <div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
             <!-- Mobile hamburger -->
             <button
-              class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+              class="p-1 -ml-1 mr-5 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
               @click="toggleSideMenu"
               aria-label="Menu"
             >
@@ -405,13 +403,13 @@
                 <input
                   class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                   type="text"
-                  placeholder="Search for profiles  "
+                  placeholder="Search for projects"
                   aria-label="Search"
-                  id="searchInput"
+                  id="searchInput" 
                 />
                 <script>
                   const searchInput = document.getElementById('searchInput');
-              
+  
                   searchInput.addEventListener('keypress', function (event) {
                     if (event.key === 'Enter') { // Check if the Enter key is pressed
                       event.preventDefault(); // Prevent the default form submission behavior
@@ -463,7 +461,7 @@
                   </template>
                 </button>
               </li>
-              
+             
               <!-- Profile menu -->
               <li class="relative">
                 <button
@@ -475,7 +473,7 @@
                 >
                   <img
                     class="object-cover w-8 h-8 rounded-full"
-                    src=""
+                    src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
                     alt=""
                     aria-hidden="true"
                   />
@@ -493,7 +491,7 @@
                     <li class="flex">
                       <a
                         class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                        href="#"
+                        href="/profile-web-page"
                       >
                         <svg
                           class="w-4 h-4 mr-3"
@@ -540,6 +538,8 @@
             </ul>
           </div>
         </header>
+
+        <!--Main Content-->
         <main class="h-full overflow-y-auto"> 
           <div class="container grid px-6 mx-auto">
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
