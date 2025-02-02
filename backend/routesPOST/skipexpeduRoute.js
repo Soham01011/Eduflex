@@ -9,7 +9,8 @@ const {checkToken} = require('../middleware/checkToken');
 const {logMessage} = require('../utils/logger');
 const {interfaceFetch} = require('../utils/interface');
 
-skillexpeduRoute.use(express.json());
+skillexpeduRoute.use(express.json()); 
+skillexpeduRoute.use(express.urlencoded({ extended: true }));
 
 
 skillexpeduRoute.get('/alldata/:username', async (req, res) => {
@@ -318,6 +319,51 @@ skillexpeduRoute.delete("/project/:id", checkToken, async (req, res) => {
         logMessage(`[*] ${userIP} ${interface} : ${username} error deleting project ${error}`);
         res.status(500).json({ message: "Error deleting project" });
     }
+});
+
+skillexpeduRoute.post("/skills", checkToken , async(req,res)=> {
+    try {
+        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (Array.isArray(userIP)) {
+            userIP = userIP[0];
+        } else if (userIP.includes(',')) {
+            userIP = userIP.split(',')[0].trim();
+        }
+
+        const username = await fetchUser(req, res);
+        const interface = await interfaceFetch(req, res);
+        const data = req.body;
+
+        if (!data.skills_input || !data.skill_type) {
+            return res.status(400).json({ error: "Missing required skill data." });
+        }   
+        console.log(data)
+
+        // Generate new skill object
+        const newSkill = {
+            id: data.id || `${username}-${uuidv4()}`, // Use provided id or generate new one
+            skill_type: data.skill_type,
+            name: data.skills_input,
+            linked: !!data.id, // true if id is provided, false otherwise
+        };
+
+        // Update user skills array using $push
+        const updatedUser = await Allskills.findOneAndUpdate(
+            { username }, // Find user by username
+            { $push: { skills: newSkill } }, // Push new skill into skills array
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        logMessage(`${userIP} ${interface} : ${username} added new skill`)
+        return res.status(200).redirect('/profile-web-page');
+    } catch (error) {
+        logMessage(`[*] Internal Server Error : ${error}`);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+
 });
 
 module.exports = skillexpeduRoute;

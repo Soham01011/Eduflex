@@ -25,11 +25,18 @@ const projectSchema = new mongoose.Schema({
     url: {type: String, required: false}
 });
 
+const skillSchema = new mongoose.Schema({
+    id: {type: String, required: false},
+    skill_type: {type: String , required: false},
+    name: {type: String,  required: false},
+    linked: {type:Boolean, required: false},
+});
+
 const allskillsSchema = new mongoose.Schema({
     username: { type: String, required: false },
     experience: { type: [experienceSchema], required: false, default: [] },
     education: { type: [educationSchema], required: false, default: [] },
-    skills: { type: [String], required: false, default: [] },
+    skills: { type: [skillSchema], required: false, default: [] },
     projects: {type: [projectSchema] , required: false, default: []}
 });
 

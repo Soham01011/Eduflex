@@ -90,6 +90,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
     
         // Format certificate data for display
         const formattedCertificateData = formatCertificateData(certificateData);
+        console.log(formattedCertificateData)
 
         // Check for missing mandatory fields
         const mandatoryFields = [
