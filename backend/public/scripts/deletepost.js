@@ -146,5 +146,44 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
+        document.querySelectorAll(".delete-skill-bt").forEach(button => {
+            button.addEventListener("click", function () {
+                const skillId = this.getAttribute("data-id");
+    
+                if (!skillId) {
+                    console.error("No skill ID found.");
+                    return;
+                }
+    
+                // Confirm before deleting
+                if (!confirm("Are you sure you want to delete this skill?")) {
+                    return;
+                }
+    
+                // Send POST request to delete skill
+                fetch(`/experience/skills/${skillId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include"
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();  // Parse JSON response if needed
+                    }
+                    throw new Error("Failed to delete skill.");
+                })
+                .then(data => {
+                    console.log("Skill deleted successfully:", data);
+                    // Remove skill element from the DOM
+                    this.closest("label").remove();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            });
+        });
+
 
 });

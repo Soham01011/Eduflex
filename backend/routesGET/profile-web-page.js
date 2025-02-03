@@ -43,7 +43,6 @@ const Allskills = require('../models/expeduskill');
  *      - Render all of the data to the webpage
  */
 profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
-    console.log("here is profile page")
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     // Normalize userIP
@@ -56,14 +55,12 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
     try {
         // Fetch the username from the token
         const username = await fetchUser(req, res);
-        console.log(username);
 
         let userProfile;
     
         // Check if user profile exists
         userProfile = await User.findOne({ username: username });
         if (!userProfile) {
-            console.log("Creating new profile for first-time user:", username);
             
             // Create a new profile with default values
             userProfile = new User({
@@ -90,7 +87,6 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
     
         // Format certificate data for display
         const formattedCertificateData = formatCertificateData(certificateData);
-        console.log(formattedCertificateData)
 
         // Check for missing mandatory fields
         const mandatoryFields = [
@@ -131,9 +127,7 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             return dateB - dateA; // Sort in descending order
         });
 
-        const userproj = userskillsdata?.projects || [];
-        console.log(userproj)
-    
+        const userproj = userskillsdata?.projects || [];    
 
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {

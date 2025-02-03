@@ -366,4 +366,39 @@ skillexpeduRoute.post("/skills", checkToken , async(req,res)=> {
 
 });
 
+skillexpeduRoute.post("/skills/:id",checkToken, async(req,res) => {
+    try{
+        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (Array.isArray(userIP)) {
+            userIP = userIP[0];
+        } else if (userIP.includes(',')) {
+            userIP = userIP.split(',')[0].trim();
+        }
+        const username = await fetchUser(req,res);
+        const interface = await interfaceFetch(req,res);
+        const id = req.params.id;
+
+        if(!id){
+            return res.status(400).json({meesage : "No id provided"})
+        }
+
+        const updatedUser = await Allskills.findOneAndUpdate(
+            { username },
+            { $pull: { skills: { id } } },
+            { new: true }
+        );
+        if (!updatedUser) {
+            logMessage(`[-] ${userIP} ${interface} : ${username} tried to delete a Skill, but user not found`);
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        logMessage(`[=] ${userIP} ${interface} : ${username} deleted skill with ID ${id}`);
+        res.status(200).redirect('/profile-web-page');
+    }
+    catch(err){
+        logMessage(`[*] Internal Server Error : ${err}`);
+        res.status(500).json({message: "Internal Server ERROR "});
+    }
+});
+
 module.exports = skillexpeduRoute;
