@@ -67,6 +67,8 @@ const leaderboardroute = require('./routesGET/leaderboardpage');
 const searchuserprofileRoute = require('./routesGET/searchuser');
 const maintestpageRoute = require("./routesGET/maintestpage");
 const psyychometrictestpageRoute = require("./routesGET/pyschometrictestpage");
+const forgetpasswordRoute = require("./routesGET/forogtpassword");
+const checkforgotpwdtokenRoute = require("./routesGET/checkpwdtoken");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -84,6 +86,8 @@ const mybatchesLogicRoute = require('./routesPOST/mybatches');
 const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
 const likesRoute = require('./routesPOST/likesRoute');
 const postsLogicRoute = require("./routesPOST/postsRoute");
+const sendforgetmailRoute = require("./routesPOST/sendforgotmail");
+const changepasswordRoute = require("./routesPOST/changepassword");
 
 
 /* 
@@ -291,6 +295,8 @@ server.get("/explore", explorepageRoute);
 server.get('/leaderboard', leaderboardroute);
 
 server.get('/search-profile/:search_query', searchuserprofileRoute);
+
+server.get("/forgotpassword",forgetpasswordRoute);
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
@@ -1106,6 +1112,12 @@ server.get('/feed',feedLogicRoute);
 server.use('/experience',skillexpeduRoute);
 
 server.use('/postsmanage', postsLogicRoute);
+
+server.post('/checkforgetmail', sendforgetmailRoute);
+
+server.get('/forgotpwdverify', checkforgotpwdtokenRoute);
+
+server.post("/changepassword" , changepasswordRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
