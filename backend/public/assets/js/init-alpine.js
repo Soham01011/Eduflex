@@ -131,5 +131,41 @@ function data() {
       this.trapCleanup()
     },
 
+    // Modal8
+    isModal8Open: false,
+    trapCleanup: null,
+    openModal8() {
+      this.isModal8Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal8'))
+    },
+    closeModal8() {
+      this.isModal8Open = false
+      this.trapCleanup()
+    },
+
+    // Modal9
+    isModal9Open: false,
+    trapCleanup: null,
+    openModal9() {
+      this.isModal9Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal9'))
+    },
+    closeModal9() {
+      this.isModal9Open = false
+      this.trapCleanup()
+    },
+
+    // Modal10
+    isModal10Open: false,
+    trapCleanup: null,
+    openModal10() {
+      this.isModal10Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal10'))
+    },
+    closeModal10() {
+      this.isModal10Open = false
+      this.trapCleanup()
+    },
+
   }
 }
