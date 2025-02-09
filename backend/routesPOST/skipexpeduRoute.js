@@ -9,7 +9,8 @@ const {checkToken} = require('../middleware/checkToken');
 const {logMessage} = require('../utils/logger');
 const {interfaceFetch} = require('../utils/interface');
 
-skillexpeduRoute.use(express.json());
+skillexpeduRoute.use(express.json()); 
+skillexpeduRoute.use(express.urlencoded({ extended: true }));
 
 
 skillexpeduRoute.get('/alldata/:username', async (req, res) => {
@@ -232,6 +233,172 @@ skillexpeduRoute.delete('/education/:id' , checkToken , async(req,res)=> {
         res.status(500).json({ message: "Error deleting experience", error: error.message });
     }
 
+});
+
+skillexpeduRoute.post("/project", checkToken, async (req, res) => {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+
+    const username = await fetchUser(req, res);
+    const interface = await interfaceFetch(req,res);
+
+    try {
+        const {  title, description, url } = req.body;
+        console.log(url)
+        const id = uuidv4()
+        if ( !title || !description ) {
+            return res.status(400).json({ message: "Fields: title, description are required" });
+        }
+
+        // Check if the user exists, if not create a new entry
+        const user = await Allskills.findOne({ username });
+        if (!user) {
+            const newUser = new Allskills({
+                username,
+                projects: [{ id, title, description, url }]
+            });
+            await newUser.save();
+            logMessage(`[*] ${userIP} ${interface} : ${username} created a new profile and added a project with ID ${id}`);
+            return res.status(201).json({ message: "User and project created successfully", user: newUser });
+        }
+
+        // Update the existing user's projects array
+        const updatedUser = await Allskills.findOneAndUpdate(
+            { username },
+            { $push: { projects: { id, title, description, url } } },
+            { new: true }
+        );
+
+        logMessage(`[*] ${userIP} ${interface} : ${username} added a new project with ID ${id}`);
+        res.redirect('/profile-web-page');
+    } catch (error) {
+        logMessage(`[*] ${userIP} ${interface} : ${username} error adding project ${error}`);
+        res.status(500).json({ message: "Error adding project" });
+    }
+});
+
+// DELETE route to remove a project by ID
+skillexpeduRoute.delete("/project/:id", checkToken, async (req, res) => {
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+
+    const username = await fetchUser(req, res);
+    const { id } = req.params;
+    const interface = await interfaceFetch(req,res);
+
+    try {
+        if (!id) {
+            return res.status(400).json({ message: "Project ID is required" });
+        }
+
+        // Find the user by username and remove the project with the given ID
+        const updatedUser = await Allskills.findOneAndUpdate(
+            { username },
+            { $pull: { projects: { id } } },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            logMessage(`[*] ${userIP} ${interface} : ${username} tried to delete a project, but user not found`);
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        logMessage(`[*] ${userIP} ${interface} : ${username} deleted project with ID ${id}`);
+        res.status(200).json({ message: "Project deleted successfully"});
+    } catch (error) {
+        logMessage(`[*] ${userIP} ${interface} : ${username} error deleting project ${error}`);
+        res.status(500).json({ message: "Error deleting project" });
+    }
+});
+
+skillexpeduRoute.post("/skills", checkToken , async(req,res)=> {
+    try {
+        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (Array.isArray(userIP)) {
+            userIP = userIP[0];
+        } else if (userIP.includes(',')) {
+            userIP = userIP.split(',')[0].trim();
+        }
+
+        const username = await fetchUser(req, res);
+        const interface = await interfaceFetch(req, res);
+        const data = req.body;
+
+        if (!data.skills_input || !data.skill_type) {
+            return res.status(400).json({ error: "Missing required skill data." });
+        }   
+        console.log(data)
+
+        // Generate new skill object
+        const newSkill = {
+            id: data.id || `${username}-${uuidv4()}`, // Use provided id or generate new one
+            skill_type: data.skill_type,
+            name: data.skills_input,
+            linked: !!data.id, // true if id is provided, false otherwise
+        };
+
+        // Update user skills array using $push
+        const updatedUser = await Allskills.findOneAndUpdate(
+            { username }, // Find user by username
+            { $push: { skills: newSkill } }, // Push new skill into skills array
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found." });
+        }
+        logMessage(`${userIP} ${interface} : ${username} added new skill`)
+        return res.status(200).redirect('/profile-web-page');
+    } catch (error) {
+        logMessage(`[*] Internal Server Error : ${error}`);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+});
+
+skillexpeduRoute.post("/skills/:id",checkToken, async(req,res) => {
+    try{
+        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (Array.isArray(userIP)) {
+            userIP = userIP[0];
+        } else if (userIP.includes(',')) {
+            userIP = userIP.split(',')[0].trim();
+        }
+        const username = await fetchUser(req,res);
+        const interface = await interfaceFetch(req,res);
+        const id = req.params.id;
+
+        if(!id){
+            return res.status(400).json({meesage : "No id provided"})
+        }
+
+        const updatedUser = await Allskills.findOneAndUpdate(
+            { username },
+            { $pull: { skills: { id } } },
+            { new: true }
+        );
+        if (!updatedUser) {
+            logMessage(`[-] ${userIP} ${interface} : ${username} tried to delete a Skill, but user not found`);
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        logMessage(`[=] ${userIP} ${interface} : ${username} deleted skill with ID ${id}`);
+        res.status(200).redirect('/profile-web-page');
+    }
+    catch(err){
+        logMessage(`[*] Internal Server Error : ${err}`);
+        res.status(500).json({message: "Internal Server ERROR "});
+    }
 });
 
 module.exports = skillexpeduRoute;

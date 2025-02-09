@@ -18,7 +18,7 @@ const logMessage = (message) => {
     const logFile = getLogFileName();
     const timestamp = new Date().toISOString();
     const logEntry = `[${timestamp}] ${message}\n`;
-
+    console.error(message)
     fs.open(logFile, 'a', (err, fd) => {
         if (err) {
             throw err;

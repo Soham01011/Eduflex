@@ -57,6 +57,7 @@ myprofileRoute.get("/myprofile",checkToken, async(req,res)=> {
 
     try{
         const user_profile_data = await Profiles.find({username : token_username}); //pulling thier the posts
+        console.log("PROFILES" , user_profile_data)
         const user_Data = await User.findOne({username : token_username});          //pulling their profile data
         logMessage(`[=] ${userIP} Mobileapp : pulled user data of ${token_username}`);
         res.render("profile",{certificateData : user_profile_data, userBio: user_Data, profilePic: "/uploads/${tokencheck.username}/profile.jpg",base_url :BASE_URL  });

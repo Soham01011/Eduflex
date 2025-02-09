@@ -26,7 +26,7 @@ const User = require("../models/users")
  */
 searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
     const searchQuery = req.params.search_query;
-    console.log(searchQuery);
+    const searchQueryLower = searchQuery.toLowerCase();
     
     if (!searchQuery) {
         return res.status(400).json({ error: 'Search query is required' });
@@ -38,20 +38,27 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
         
         if (!user) {
             // If not found by username, check if the query contains a space
-            if (searchQuery.includes(' ')) {
-                // Split the query into firstname and lastname
-                const [firstname, lastname] = searchQuery.split(' ', 2);
-                user = await User.findOne({ firstname, lastname });
+            if (searchQueryLower.includes(' ')) {
+                // Split the query into firstname and lastname and convert to lowercase
+                const [firstname, lastname] = searchQueryLower.split(' ', 2);
+                user = await User.findOne({
+                    firstname: { $regex: new RegExp(`^${firstname}$`, 'i') },
+                    lastname: { $regex: new RegExp(`^${lastname}$`, 'i') }
+                });
             } 
         
             if (!user) {
-                // If no space or still not found, try searching by firstname
-                user = await User.findOne({ firstname: searchQuery });
+                // If no space or still not found, try searching by firstname (in lowercase)
+                user = await User.findOne({
+                    firstname: { $regex: new RegExp(`^${searchQueryLower}$`, 'i') }
+                });
             } 
-            
+        
             if (!user) {
-                // If still not found, try searching by lastname
-                user = await User.findOne({ lastname: searchQuery });
+                // If still not found, try searching by lastname (in lowercase)
+                user = await User.findOne({
+                    lastname: { $regex: new RegExp(`^${searchQueryLower}$`, 'i') }
+                });
             }
         }
 

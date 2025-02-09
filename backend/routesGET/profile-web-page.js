@@ -56,22 +56,38 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
         // Fetch the username from the token
         const username = await fetchUser(req, res);
 
-        // Fetch user data
-        const userProfile = await User.findOne({ username: username });
+        let userProfile;
+    
+        // Check if user profile exists
+        userProfile = await User.findOne({ username: username });
         if (!userProfile) {
-            console.log("no user profile for ", username);
-            return res.redirect('/loginpage'); // Redirect if user not found
+            
+            // Create a new profile with default values
+            userProfile = new User({
+                username: username,
+                firstname: '',
+                lastname: '',
+                phone_number: '',
+                dob: '',
+                bio: '',
+                college: '',
+                academic_year: '',
+                semester: '',
+                cgpa: '',
+                hobby: '',
+                department: '',
+            });
+            await userProfile.save();
         }
-
-        // Fetch bio data and profile
-        const user_bio_data = await User.findOne({ username: username });
+    
         const user_profile = await Profiles.findOne({ username: username });
-
+    
         // Fetch certificate data
-        const certificateData = await Profiles.find({ username: username }); // Adjust this query as per your database structure
-
+        const certificateData = await Profiles.find({ username: username });
+    
         // Format certificate data for display
         const formattedCertificateData = formatCertificateData(certificateData);
+
         // Check for missing mandatory fields
         const mandatoryFields = [
             'firstname',
@@ -85,35 +101,37 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             'cgpa',
             'hobby',
         ];
-
+    
         const missingFields = mandatoryFields.filter(field => !userProfile[field]);
+    
         const Credly_there = await Credly.findOne({ username: username });
         let link;
         if (Credly_there) {
             link = Credly_there.link;
         }
-        const cert = await Credly.find({username : username})
 
-        const userskillsdata = await Allskills.findOne({ username : username});
-        const userskills = userskillsdata.skills;
-
-        const userexp = userskillsdata.experience.sort((a, b) => {
-            const dateA = new Date(a.endTime || a.startTime); 
+        const cert = await Credly.find({ username: username });
+    
+        const userskillsdata = await Allskills.findOne({ username: username });
+        const userskills = userskillsdata?.skills || [];
+    
+        const userexp = (userskillsdata?.experience || []).sort((a, b) => {
+            const dateA = new Date(a.endTime || a.startTime);
             const dateB = new Date(b.endTime || b.startTime);
             return dateB - dateA; // Sort in descending order
         });
-        
-        const useredu = userskillsdata.education.sort((a, b) => {
-            const dateA = new Date(a.endTime || a.startTime); 
+    
+        const useredu = (userskillsdata?.education || []).sort((a, b) => {
+            const dateA = new Date(a.endTime || a.startTime);
             const dateB = new Date(b.endTime || b.startTime);
             return dateB - dateA; // Sort in descending order
         });
-        
+
+        const userproj = userskillsdata?.projects || [];    
 
         // Render the profile page with user data, certificate data, and missing fields
         return res.render('profile', {
             userProfile,
-            user_bio_data,
             user_profile,
             missingFields,
             link,
@@ -121,10 +139,13 @@ profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
             certificateData: formattedCertificateData,
             userexp,
             useredu,
-            userskills
+            userskills,
+            userproj
         });
-        
-    } catch (error) {
+ 
+    }
+     catch (error) {
+
         logMessage("[*] Webapp : ", userIP, " : Error fetching profile =", error.message);
         return res.redirect('/loginpage'); // Redirect on error
     }
@@ -138,7 +159,8 @@ function formatCertificateData(data) {
         return {
             postId : cert.postID,
             pdfLink: cert.file, 
-            postDesc: cert.post_desc, 
+            post_name: cert.post_name, 
+            createdAt: cert.createdAt,
             hashtags: cert.hashtags || [], // Ensure hashtags is an array
             status: cert.mentor_approved === null ? 'Pending' : // If mentor approval is still pending
                     (cert.approved ? (cert.real ? 'Approved' : 'Rejected') : 'Rejected') // Logic for approved status

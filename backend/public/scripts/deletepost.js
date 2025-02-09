@@ -111,6 +111,79 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         });
-        
+
+        const deleteProjectButtons = document.querySelectorAll('.delete-proj-bt');
+
+        deleteProjectButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const projectId = event.target.getAttribute('data-id');
+                if (projectId) {
+                    const confirmation = confirm("Are you sure you want to remove this project?");
+                    if (!confirmation) return;
+                
+                    try {
+                        const response = await fetch(`/experience/project/${projectId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                    
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message || "Project deleted successfully");
+                        
+                            // Remove the project from the DOM after successful deletion
+                            event.target.closest('.project-item').remove();
+                        } else {
+                            alert(result.message || "Failed to delete project");
+                        }
+                    } catch (error) {
+                        console.error("ERROR:", error);
+                        alert("An error occurred while deleting the project");
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll(".delete-skill-bt").forEach(button => {
+            button.addEventListener("click", function () {
+                const skillId = this.getAttribute("data-id");
+    
+                if (!skillId) {
+                    console.error("No skill ID found.");
+                    return;
+                }
+    
+                // Confirm before deleting
+                if (!confirm("Are you sure you want to delete this skill?")) {
+                    return;
+                }
+    
+                // Send POST request to delete skill
+                fetch(`/experience/skills/${skillId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include"
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();  // Parse JSON response if needed
+                    }
+                    throw new Error("Failed to delete skill.");
+                })
+                .then(data => {
+                    console.log("Skill deleted successfully:", data);
+                    // Remove skill element from the DOM
+                    this.closest("label").remove();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            });
+        });
+
 
 });

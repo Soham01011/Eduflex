@@ -4,11 +4,12 @@ const fs = require('fs');
 
 const CSRFToken = require('../models/csrfttoken');
 const Profiles = require('../models/profiles');
+const pointshistory = require("../models/pointshistory");
 
 
 const {checkToken} = require('../middleware/checkToken');
-const {logMessage} = require('../utils/logger')
-const {fetchUser} = require('../utils/fetchUser')
+const {logMessage} = require('../utils/logger');
+const {fetchUser} = require('../utils/fetchUser');
 
 deletepostLogicRoute.post('/deletePost', checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -38,6 +39,7 @@ deletepostLogicRoute.post('/deletePost', checkToken, async (req, res) => {
     {
         try {
             await Profiles.deleteOne({ postID: postID });
+            await pointshistory.deleteOne({ postID : postID });
             logMessage(`[=] ${interface} ${userIP} : Deleted post ${postID}`);
 
             res.status(200).json({"message": "Deleted post successfully"});

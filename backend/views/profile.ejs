@@ -31,1109 +31,1450 @@
 </head>
 
 <body>
-  <% if (missingFields.length> 0) { %>
-    <div class="alert alert-warning">
-      <p>Please fill in the following missing fields:</p>
-      <ul>
-        <% missingFields.forEach(field=> { %>
-          <li>
-            <%= field %>
+  <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
+    <!-- Desktop sidebar -->
+    <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
+      <div class="py-4 text-gray-500 dark:text-gray-400">
+        <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+          EduFlex
+        </a>
+
+        <ul class="mt-6">
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/dashboard">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                </path>
+              </svg>
+              <span class="ml-4">Dashboard</span>
+            </a>
           </li>
-          <% }) %>
-      </ul>
-    </div>
-    <% } %>
-      <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
-        <!-- Desktop sidebar -->
-        <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
-          <div class="py-4 text-gray-500 dark:text-gray-400">
-            <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-              EduFlex
+        </ul>
+
+        <ul>
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/explore">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z">
+                </path>
+              </svg>
+              <span class="ml-4">Explore</span>
             </a>
-            <ul class="mt-6">
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                  href="/dashboard">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Dashboard</span>
-                </a>
-              </li>
-            </ul>
-            <ul>
+          </li>
 
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/explore">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Explore</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/leaderboard">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Leaderboard</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="buttons.html">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Buttons</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/upload-certificate">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Upload Certificates</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                  aria-hidden="true"></span>
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="certificates.html">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Profile</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <button
-                  class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  @click="togglePagesMenu" aria-haspopup="true">
-                  <span class="inline-flex items-center">
-                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
-                      </path>
-                    </svg>
-                    <span class="ml-4">Pages</span>
-                  </span>
-                  <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"></path>
-                  </svg>
-                </button>
-                <template x-if="isPagesMenuOpen">
-                  <ul x-transition:enter="transition-all ease-in-out duration-300"
-                    x-transition:enter-start="opacity-25 max-h-0" x-transition:enter-end="opacity-100 max-h-xl"
-                    x-transition:leave="transition-all ease-in-out duration-300"
-                    x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0"
-                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                    aria-label="submenu">
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/login.html">Login</a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/create-account.html">
-                        Create account
-                      </a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/forgot-password.html">
-                        Forgot password
-                      </a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/404.html">404</a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/blank.html">Blank</a>
-                    </li>
-                  </ul>
-                </template>
-              </li>
-            </ul>
-            <div class="px-6 my-6">
-              <button
-                class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                Create account
-                <span class="ml-2" aria-hidden="true">+</span>
-              </button>
-            </div>
-          </div>
-        </aside>
-        <!-- Mobile sidebar -->
-        <!-- Backdrop -->
-        <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
-          x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-          x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
-          x-transition:leave-end="opacity-0"
-          class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
-        <aside class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
-          x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
-          x-transition:enter-start="opacity-0 transform -translate-x-20" x-transition:enter-end="opacity-100"
-          x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
-          x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
-          @keydown.escape="closeSideMenu">
-          <div class="py-4 text-gray-500 dark:text-gray-400">
-            <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-              Windmill
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/leaderboard">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
+                </path>
+              </svg>
+              <span class="ml-4">Leaderboard</span>
             </a>
-            <ul class="mt-6">
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/dashboard">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Dashboard</span>
-                </a>
-              </li>
-            </ul>
-            <ul>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/upload-certificate">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Upload</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="cards.html">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Cards</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/leaderboard">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-                    <path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
-                  </svg>
-                  <span class="ml-4">Charts</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="buttons.html">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Buttons</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="modals.html">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Modals</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                  aria-hidden="true"></span>
-                <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                  href="certificates.html">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                  </svg>
-                  <span class="ml-4">Certificates</span>
-                </a>
-              </li>
-              <li class="relative px-6 py-3">
-                <button
-                  class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  @click="togglePagesMenu" aria-haspopup="true">
-                  <span class="inline-flex items-center">
-                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
-                      </path>
-                    </svg>
-                    <span class="ml-4">Pages</span>
-                  </span>
-                  <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"></path>
-                  </svg>
-                </button>
-                <template x-if="isPagesMenuOpen">
-                  <ul x-transition:enter="transition-all ease-in-out duration-300"
-                    x-transition:enter-start="opacity-25 max-h-0" x-transition:enter-end="opacity-100 max-h-xl"
-                    x-transition:leave="transition-all ease-in-out duration-300"
-                    x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0"
-                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                    aria-label="submenu">
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/login.html">Login</a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/create-account.html">
-                        Create account
-                      </a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/forgot-password.html">
-                        Forgot password
-                      </a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/404.html">404</a>
-                    </li>
-                    <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                      <a class="w-full" href="pages/blank.html">Blank</a>
-                    </li>
-                  </ul>
-                </template>
-              </li>
-            </ul>
-            <div class="px-6 my-6">
-              <button
-                class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                Create account
-                <span class="ml-2" aria-hidden="true">+</span>
-              </button>
-            </div>
-          </div>
-        </aside>
-        <div class="flex flex-col flex-1 w-full">
-          <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
-            <div
-              class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
-              <!-- Mobile hamburger -->
-              <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
-                @click="toggleSideMenu" aria-label="Menu">
-                <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </button>
-              <!-- Search input -->
-              <div class="flex justify-center flex-1 lg:mr-32">
-                <div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
-                  <div class="absolute inset-y-0 flex items-center pl-2">
-                    <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clip-rule="evenodd"></path>
-                    </svg>
-                  </div>
-                  <input
-                    class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
-                    type="text" placeholder="Search for profiles" aria-label="Search" id="searchInput"/>
-                    <script>
-                      const searchInput = document.getElementById('searchInput');
-                  
-                      searchInput.addEventListener('keypress', function (event) {
-                        if (event.key === 'Enter') { // Check if the Enter key is pressed
-                          event.preventDefault(); // Prevent the default form submission behavior
-                          const searchQuery = searchInput.value.trim(); // Get the search query
-                          console.log("search query ", searchQuery)
-                          if (searchQuery) {
-                            window.location.href = `/search-profile/${encodeURIComponent(searchQuery)}`;
-                          } else {
-                            alert('Please enter a search query');
-                          }
-                        }
-                      });
-                    </script>
-                </div>
-              </div>
-              <ul class="flex items-center flex-shrink-0 space-x-6">
-                <!-- Theme toggler -->
-                <li class="flex">
-                  <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme"
-                    aria-label="Toggle color mode">
-                    <template x-if="!dark">
-                      <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                      </svg>
-                    </template>
-                    <template x-if="dark">
-                      <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                          d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                          clip-rule="evenodd"></path>
-                      </svg>
-                    </template>
-                  </button>
-                </li>
-                <!-- Notifications menu -->
-                <li class="relative">
-                  <button class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
-                    @click="toggleNotificationsMenu" @keydown.escape="closeNotificationsMenu" aria-label="Notifications"
-                    aria-haspopup="true">
-                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
-                      </path>
-                    </svg>
-                    <!-- Notification badge -->
-                    <span aria-hidden="true"
-                      class="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1 -translate-y-1 bg-red-600 border-2 border-white rounded-full dark:border-gray-800"></span>
-                  </button>
+          </li>
 
-                </li>
-                <!-- Profile menu -->
-                <li class="relative">
-                  <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
-                    @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account"
-                    aria-haspopup="true">
-                    <img class="object-cover w-8 h-8 rounded-full"
-                      src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="" aria-hidden="true" />
-                  </button>
-                  <template x-if="isProfileMenuOpen">
-                    <ul x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                      x-transition:leave-end="opacity-0" @click.away="closeProfileMenu"
-                      @keydown.escape="closeProfileMenu"
-                      class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
-                      aria-label="submenu">
-                      <li class="flex">
-                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                          href="#">
-                          <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                          </svg>
-                          <span>Profile</span>
-                        </a>
-                      </li>
-                      <li class="flex">
-                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                          href="#">
-                          <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                            </path>
-                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                          </svg>
-                          <span>Settings</span>
-                        </a>
-                      </li>
-                      <li class="flex">
-                        <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                          href="#">
-                          <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
-                            </path>
-                          </svg>
-                          <span>Log out</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </template>
-                </li>
-              </ul>
-            </div>
-          </header>
-          <!-- Content wrapper -->
-          <main class="h-full pb-16 overflow-y-auto">
-            <div class="container grid px-6 mx-auto">
-              <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Profile
-              </h2>
-              <div class="content-wrapper">
-                <div class="container-xxl flex-grow-1 container-p-y">
-                  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="card mb-4">
-                          <div class="card-body">
-                            <form id="formAccountSettings" method="post" enctype="multipart/form-data">
-                              <button type="submit"
-                                class="px-6 py-2 text-sm font-medium leading-2 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                Submit Profile
-                              </button>
-                              <br>
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/alltest">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                </path>
+              </svg>
+              <span class="ml-4">Test</span>
+            </a>
+          </li>
 
-                              <input type="file" name="file" class="form-control mt-3" accept="image/*" />
-                              <br><br>
-
-                            </form>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="content-backdrop fade"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-              <div class="card-body flex items-center justify-between">
-                <!-- Left: Profile Image -->
-                <div class="flex items-center gap-4">
-                  <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar" class="rounded"
-                    height="100" width="100" id="uploadedAvatar" />
-                </div>
-
-                <!-- Right: Button -->
-                <button @click="openModal"
-                  class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                  aria-label="Edit">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
-                    </path>
-                  </svg>
-                </button>
-
-                <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
-                  x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                  x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                  x-transition:leave-end="opacity-0"
-                  class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
-                  <!-- Modal -->
-                  <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
-                    x-transition:enter-start="opacity-0 transform translate-y-1/2" x-transition:enter-end="opacity-100"
-                    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0  transform translate-y-1/2" @click.away="closeModal"
-                    @keydown.escape="closeModal"
-                    class="w-full max-h-screen px-6 py-4 overflow-y-auto bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
-                    role="dialog" id="modal" style="max-height: 90vh; overflow-y: auto;">
-                    <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
-                    <header class="flex justify-end">
-                      <button
-                        class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700"
-                        aria-label="close" @click="closeModal1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
-                          <path
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                        </svg>
-                      </button>
-                    </header>
-
-                    <!-- Modal body -->
-                    <div class="mt-4 mb-6 overflow-y-auto max-h-[70vh">
-                      <!-- Modal title -->
-                      <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                        Profile
-                      </p>
-                      <br>
-                      <form id="formAccountSettings" method="post" enctype="multipart/form-data">
-                        <div class="flex items-center gap-4">
-                          <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar"
-                            class="rounded" height="100" width="100" id="uploadedAvatar" />
-                        </div>
-                        <input type="file" name="file" class="form-control mt-3" accept="image/*" />
-                        <br>
-                        <br>
-                        <div class="card-body">
-                          <div class="row">
-                            <div class="mb-3 col-md-6">
-                              <label for="firstName" class="form-label">First Name</label>
-                              <input class="form-control" type="text" id="firstName" name="firstName"
-                                placeholder="Enter First Name" value="<%= userProfile.firstname || '' %>" autofocus />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="lastName" class="form-label">Last Name</label>
-                              <input class="form-control" type="text" name="lastName" id="lastName"
-                                placeholder="Enter Last Name" value="<%= userProfile.lastname || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="email" class="form-label">E-mail</label>
-                              <input class="form-control" type="text" id="email" name="changeemail"
-                                placeholder="Enter Your Email" value="<%= userProfile.email || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="email" class="form-label">Password</label>
-                              <input class="form-control" type="password" id="changepwd" name="changepwd"
-                                placeholder="Enter your new password" value="<%= userProfile.password || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="organization" class="form-label">Website Link</label>
-                              <input type="text" class="form-control" id="organization" name="website"
-                                placeholder="Add a link that will appear at the top of your profile"
-                                value="<%= userProfile.website || '' %>" />
-                            </div>
-
-
-                            <div class="mb-3 col-md-6">
-                              <label for="phoneNumber" class="form-label">Phone Number</label>
-                              <input type="text" id="phoneNumber" name="changephoneno" class="form-control"
-                                placeholder="+91 1234567890" value="<%= userProfile.phone_number || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="dob" class="form-label">Date of Birth</label>
-                              <input type="date" class="form-control" id="dob" name="dob"
-                                value="<%= userProfile.dob ? userProfile.dob.toISOString().split('T')[0] : '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="bio" class="form-label">Bio</label>
-                              <input class="form-control" type="text" id="bio" name="bio" placeholder="Bio"
-                                value="<%= userProfile.bio || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="hobby" class="form-label">Hobby</label>
-                              <input type="text" class="form-control" id="hobby" name="hobby" placeholder="Hobby"
-                                value="<%= userProfile.hobby || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="cgpa" class="form-label">Cumulative CGPA</label>
-                              <input type="text" class="form-control" id="cgpa" name="cgpa"
-                                placeholder="Cumulative CGPA" value="<%= userProfile.cgpa || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="college" class="form-label">College Name</label>
-                              <input type="text" class="form-control" id="college" name="college"
-                                placeholder="Enter your College Name" value="<%= userProfile.college || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="academic_year">Year</label>
-                              <select id="academic_year" name="academicyear" class="select2 form-select">
-                                <option value="">Select</option>
-                                <option value="First Year" <%=userProfile.academic_year==='First Year' ? 'selected' : ''
-                                  %>>First Year</option>
-                                <option value="Second Year" <%=userProfile.academic_year==='Second Year' ? 'selected'
-                                  : '' %>>Second Year</option>
-                                <option value="Third Year" <%=userProfile.academic_year==='Third Year' ? 'selected' : ''
-                                  %>>Third Year</option>
-                                <option value="Final Year" <%=userProfile.academic_year==='Final Year' ? 'selected' : ''
-                                  %>>Fourth Year</option>
-                                <option value="Alumni" <%=userProfile.academic_year==='Alumni' ? 'selected' : '' %>
-                                  >Alumni</option>
-                              </select>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label class="form-label" for="semester">Semester</label>
-                              <select id="semester" name="semester" class="select2 form-select">
-                                <option value="">Select</option>
-                                <option value="Sem 1" <%=userProfile.semester==='Sem 1' ? 'selected' : '' %>
-                                  >Semester I</option>
-                                <option value="Sem 2" <%=userProfile.semester==='Sem 2' ? 'selected' : '' %>
-                                  >Semester II</option>
-                                <option value="Sem 3" <%=userProfile.semester==='Sem 3' ? 'selected' : '' %>
-                                  >Semester III</option>
-                                <option value="Sem 4" <%=userProfile.semester==='Sem 4' ? 'selected' : '' %>
-                                  >Semester IV</option>
-                                <option value="Sem 5" <%=userProfile.semester==='Sem 5' ? 'selected' : '' %>
-                                  >Semester V</option>
-                                <option value="Sem 6" <%=userProfile.semester==='Sem 6' ? 'selected' : '' %>
-                                  >Semester VI</option>
-                                <option value="Sem 7" <%=userProfile.semester==='Sem 7' ? 'selected' : '' %>
-                                  >Semester VII</option>
-                                <option value="Sem 8" <%=userProfile.semester==='Sem 8' ? 'selected' : '' %>
-                                  >Semester VIII</option>
-                                <option value="Alumni" <%=userProfile.semester==='Alumni' ? 'selected' : '' %>
-                                  >Alumni</option>
-                              </select>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="github" class="form-label">GitHub</label>
-                              <input type="text" class="form-control" id="github" name="github"
-                                placeholder="Enter Your GitHub Link" value="<%= userProfile.github || '' %>" />
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                              <label for="credly" class="form-label">Credly</label>
-                              <input type="text" class="form-control" id="credly" name="credly"
-                                placeholder="Enter Your Credly Link" value="<%= link || '' %>" />
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-
-                    <footer
-                      class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
-                      <button @click="closeModal"
-                        class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
-                        Cancel
-                      </button>
-                      <button type="submit"
-                        class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Save
-                      </button>
-                    </footer>
-                    </form>
-                  </div>
-                </div>
-
-              </div>
-              <br>
-              <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-                <%= userProfile.firstname %>
-                  <%= userProfile.lastname %>
-              </h4>
-              <h5 class="text-gray-100 dark:text-gray-00">
-                <%= userProfile.college || '' %>
-              </h5>
-              <br>
-
-              <button
-                class="px-10 py-4 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                Open to Work
-              </button>
-            </div>
-
-            <div class="layout-overlay layout-menu-toggle"></div>
-            <!-- Content wrapper -->
-
-
-
-            <a class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
               href="/upload-certificate">
-              <div class="flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-                <span>Upload more Certificates </span>
-              </div>
-              <span>View more &RightArrow;</span>
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
+                </path>
+              </svg>
+              <span class="ml-4">Upload Certificates</span>
             </a>
+          </li>
 
-            <!-- With actions -->
-            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-              Certificates
-            </h4>
-            <div class="w-full overflow-hidden rounded-lg shadow-xs">
-              <div class="w-full overflow-x-auto">
-                <!-- Display the certificates -->
-                <table class="w-full whitespace-no-wrap">
-                  <thead>
-                    <tr
-                      class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                      <th class="px-4 py-3" style="width: 50%;">Uploaded PDF</th> <!-- Increased size for PDF column -->
-                      <th class="px-4 py-3">Description</th>
-                      <th class="px-4 py-3">Date</th>
-                      <th class="px-4 py-3" style="width: 15%;">Status</th> <!-- Shrink approval status -->
-                      <th class="px-4 py-3" style="width: 15%;">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    <% if (Array.isArray(certificateData) && certificateData.length> 0) { %>
-                      <% certificateData.forEach(cert=> { %>
-                        <tr class="text-gray-700 dark:text-gray-400">
-                          <td class="px-4 py-3">
-                            <iframe src="<%= cert.pdfLink %>" width="100%" height="200px"
-                              style="border: none;"></iframe> <!-- PDF viewer -->
-                          </td>
-                          <td class="px-4 py-3 text-sm">
-                            <%= cert.postDesc %> <!-- Display the post description -->
-                          </td>
-                          <td class="px-4 py-3 text-sm">
-                            <%= new Date(cert.createdAt).toDateString() %> <!-- Format the date as needed -->
-                          </td>
-                          <td class="px-4 py-3 text-xs">
-                            <span class="px-2 py-1 font-semibold leading-tight
-                                          <%= cert.status === 'Approved' ? 'text-green-700 bg-green-100 dark:bg-green-600' :
-                                              cert.status === 'Rejected' ? 'text-red-700 bg-red-100 dark:bg-red-600' :
-                                              'text-orange-700 bg-orange-100 dark:bg-orange-600' %>
-                                          rounded-full dark:text-white">
-                              <%= cert.status %> <!-- Show Approved, Rejected, or Pending -->
-                            </span>
-                          </td>
-                          <td class="px-4 py-3">
-                            <div class="flex items-center space-x-4 text-sm">
-                              <button
-                                class="delete-button flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                                aria-label="Delete" data-post-id="<%= cert.postId %>" data-action="delete">
-                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fill-rule="evenodd"
-                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                    clip-rule="evenodd"></path>
-                                </svg>
-                              </button>
+          <li class="relative px-6 py-3">
+            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+              aria-hidden="true"></span>
+            <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+              href="/profile-web-page">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
+                </path>
+              </svg>
+              <span class="ml-4">Profile</span>
+            </a>
+          </li>
+        </ul>
 
-                            </div>
-                          </td>
-                        </tr>
-                        <% }) %>
-                          <% } else { %>
-                            <tr>
-                              <td colspan="5" class="px-4 py-3 text-center text-gray-500">
-                                No certificates available.
-                              </td>
-                            </tr>
-                            <% } %>
-                  </tbody>
-                </table>
-                <br><br>
-
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                      Experience
-                    </h4>
-                    <div class="flex space-x-3">
-
-                      <button @click="openModal3"
-                        class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                        aria-label="Add">
-                        +
-                      </button>
-
-                      <div x-show="isModal3Open" x-transition:enter="transition ease-out duration-150"
-                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                        x-transition:leave-end="opacity-0"
-                        class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
-                        <!-- Modal1 -->
-                        <div x-show="isModal3Open" x-transition:enter="transition ease-out duration-150"
-                          x-transition:enter-start="opacity-0 transform translate-y-1/2"
-                          x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
-                          x-transition:leave-start="opacity-100"
-                          x-transition:leave-end="opacity-0  transform translate-y-1/2" @click.away="closeModal3"
-                          @keydown.escape="closeModal3"
-                          class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
-                          role="dialog" id="modal3" style="max-height: 90vh; overflow-y: auto;">
-                          <!-- Modal body -->
-                          <div class="mt-4 mb-6">
-                            <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add Experience </p>
-
-                            <br>
-
-                            <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                              <form id="experinceform">
-                                <label class="block text-sm">
-
-                                  <span class="text-gray-700 dark:text-gray-400">Title</span>
-                                  <input id="title" name="title"
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Ex: Sales Manager" />
-                                </label>
-                                <br>
-                                <label class="block text-sm">
-                                  <span class="text-gray-700 dark:text-gray-400">Company or Organization</span>
-                                  <input id="companyName" name="companyName"
-                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                    placeholder="Ex: Bachelors" />
-                                </label>
-                                <br>
-                                <label class="">
-                                  <span class="text-gray-700 dark:text-gray-400">Employment Type :</span>
-                                  <select id="employmentType" name="employmentType" class="">
-                                    <option value="">Select</option>
-                                    <option value="Internship">Internship</option>
-                                    <option value="Full-time">Full-time</option>
-                                    <option value="Part-time">Part-time</option>
-                                    <option value="Freelance">Freelance</option>
-                                    <option value="Self-employed">Self-employed</option>
-                                    <option value="Trainee">Trainee</option>
-                                  </select>
-                                </label>
-
-                                <br><br>
-                                <div class="flex items-center space-x-4">
-                                  <label class="form-label">
-                                    <span class="form-label-text">Start Date:</span>
-                                    <input type="date" id="start_date" name="start_date" class="form-control">
-                                  </label>
-
-                                  <label class="form-label">
-                                    <span class="form-label-text">End Date:</span>
-                                    <input type="date" id="end_date" name="end_date" class="form-control">
-                                  </label>
-                                </div>
-                                <button type="submit"
-                                  class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                  Add
-                                </button>
-                            </div>
-                            </form>
-
-                            <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                              Edit Experience
-                            </h4>
-
-                            <br>
-
-                            <% userexp.forEach(exp=> { %>
-                              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 relative">
-                                <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                  <%= exp.title %> <!-- Display Job Title -->
-                                </p>
-                                <p class="mb-2 font-mediumx text-gray-700 dark:text-gray-300">
-                                  <%= exp.companyName %> - <%= exp.employmentType %>
-                                      <!-- Display Company Name and Employment Type -->
-                                </p>
-                                <p class="text-xs text-gray-700 dark:text-gray-400">
-                                  <%= new Date(exp.startTime).toLocaleDateString() %> - <%= new
-                                      Date(exp.endTime).toLocaleDateString() %> <!-- Display Start and End Dates -->
-                                </p>
-                                <br>
-                                <button
-                                  class="delete-exp-btn flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                                  aria-label="Delete" data-exp-id="<%= exp.id %>""
-                                  >
-                                      Delete
-                                  </button>
-                              </div>
-                          <% }); %>
-                          
-  
-                          </div>
-  
-                          <footer class=" flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4
-                                  sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
-                                  <button @click="closeModal1"
-                                    class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
-                                    Cancel
-                                  </button>
-                                  <button
-                                    class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                    Save
-                                  </button>
-
-                                  </footer>
-                                  </footer>
-                              </div>
-                          </div>
-                          <br>
-                        </div>
-                      </div>
-
-                      <% userexp.forEach(exp=> { %>
-                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                            <%= exp.title %> <!-- Display Job Title -->
-                          </p>
-                          <p class="mb-2 font-mediumx text-gray-700 dark:text-gray-300">
-                            <%= exp.companyName %> - <%= exp.employmentType %>
-                                <!-- Display Company Name and Employment Type -->
-                          </p>
-                          <p class="text-xs text-gray-700 dark:text-gray-400">
-                            <%= new Date(exp.startTime).toLocaleDateString() %> - <%= new
-                                Date(exp.endTime).toLocaleDateString() %> <!-- Display Start and End Dates -->
-                          </p>
-                        </div>
-                        <% }); %>
-
-
-                    </div>
-
-                    <br><br>
-
-                    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                      <div class="flex items-center justify-between">
-                        <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                          Education
-                        </h4>
-                        <div class="flex space-x-3">
-                          <button @click="openModal1"
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                            aria-label="Add">
-                            +
-                          </button>
-
-                          <div x-show="isModal1Open" x-transition:enter="transition ease-out duration-150"
-                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
-                            class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
-                            <!-- Modal -->
-                            <div x-show="isModal1Open" x-transition:enter="transition ease-out duration-150"
-                              x-transition:enter-start="opacity-0 transform translate-y-1/2"
-                              x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
-                              x-transition:leave-start="opacity-100"
-                              x-transition:leave-end="opacity-0 transform translate-y-1/2" @click.away="closeModal1"
-                              @keydown.escape="closeModal1"
-                              class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
-                              role="dialog" id="modal1" style="max-height: 90vh; overflow-y: auto;">
-                              <!-- Modal body -->
-                              <div class="mt-4 mb-6">
-                                <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add Education
-                                </p>
-                                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                                  <form method="post" action="/experience/education">
-                                    <label class="block text-sm">
-                                      <span class="text-gray-700 dark:text-gray-400">School / University</span>
-                                      <input name="institute" id="institute"
-                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                        placeholder="Ex: A. P. Shah Institute of Technology" />
-                                    </label>
-                                    <br>
-                                    <label class="block text-sm">
-                                      <span class="text-gray-700 dark:text-gray-400">Degree</span>
-                                      <input id="degree" name="degree"
-                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                        placeholder="Ex: Bachelors" />
-                                    </label>
-                                    <br>
-                                    <label class="block text-sm">
-                                      <span class="text-gray-700 dark:text-gray-400">Major / Minor</span>
-                                      <input id="major_minor" name="major_minor"
-                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                        placeholder="Ex: Business" />
-                                    </label>
-                                    <br>
-                                    <div class="flex items-center space-x-4">
-                                      <label class="form-label">
-                                        <span class="form-label-text">Start Date:</span>
-                                        <input type="date" id="startTime" name="startTime" class="form-control">
-                                      </label>
-                                      <label class="form-label">
-                                        <span class="form-label-text">End Date:</span>
-                                        <input type="date" id="endTime" name="endTime" class="form-control">
-                                      </label>
-                                    </div>
-                                    <button type="submit"
-                                      class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                      Add
-                                    </button>
-                                  </form>
-                                </div>
-
-                                <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-                                  Edit Education
-                                </h4>
-                                <br>
-
-                                <% useredu.forEach((edu)=> { %>
-                                  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 relative">
-                                    <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                      <%= edu.institute %>
-                                    </p>
-                                    <p class="text-xs text-gray-700 dark:text-gray-400">
-                                      <%= new Date(edu.startTime).getFullYear() %> -
-                                        <%= edu.endTime ? new Date(edu.endTime).getFullYear() : 'Present' %>
-                                    </p>
-                                    <br>
-                                    <button
-                                      class="delete-edu-btn flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                                      aria-label="Delete" data-id="<%= edu.id %>">
-                                      Delete
-                                    </button>
-
-                                  </div>
-                                  <% }) %>
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <% useredu.forEach((edu)=> { %>
-                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                            <%= edu.institute %>
-                          </p>
-                          <p class="text-xs text-gray-700 dark:text-gray-400">
-                            <%= new Date(edu.startTime).getFullYear() %> -
-                              <%= edu.endTime ? new Date(edu.endTime).getFullYear() : 'Present' %>
-                          </p>
-                        </div>
-                        <% }) %>
-
-                    </div>
-
-
-                    <table class="w-full whitespace-no-wrap">
-                      <thead>
-                        <tr
-                          class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                          <th class="px-4 py-3" style="width: 50%;">Certificate</th> <!-- Certificate Name -->
-                          <th class="px-4 py-3">Issuer</th> <!-- Issuer Name -->
-                          <th class="px-4 py-3">Issue Date</th> <!-- Issue Date -->
-                        </tr>
-                      </thead>
-                      <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                        <% if (Array.isArray(cert) && cert.length> 0) { %>
-                          <% cert.forEach(certificate=> { %>
-                            <tr class="text-gray-700 dark:text-gray-400">
-                              <td class="px-4 py-3">
-                                <a href="<%= certificate.link %>" target="_blank" class="text-blue-500 hover:underline">
-                                  <%= certificate.cert_name %> <!-- Certificate Name with link -->
-                                </a>
-                              </td>
-                              <td class="px-4 py-3 text-sm">
-                                <%= certificate.issuer_name %> <!-- Issuer Name -->
-                              </td>
-                              <td class="px-4 py-3 text-sm">
-                                <%= new Date(certificate.issue_date).toDateString() %> <!-- Formatted Issue Date -->
-                              </td>
-                            </tr>
-                            <% }) %>
-                              <% } else { %>
-                                <tr>
-                                  <td colspan="3" class="px-4 py-3 text-center text-gray-500">
-                                    No Credly certificates.
-                                  </td>
-                                </tr>
-                                <% } %>
-                      </tbody>
-                    </table>
-
-
-                  </div>
-
-                </div>
-              </div>
-          </main>
+        <div class="px-6 my-6">
+          <button
+            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+            Create account
+            <span class="ml-2" aria-hidden="true">+</span>
+          </button>
         </div>
       </div>
+    </aside>
+
+    <!-- Mobile sidebar -->
+    <!-- Backdrop -->
+    <div x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+      x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"></div>
+    <aside class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
+      x-show="isSideMenuOpen" x-transition:enter="transition ease-in-out duration-150"
+      x-transition:enter-start="opacity-0 transform -translate-x-20" x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in-out duration-150" x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0 transform -translate-x-20" @click.away="closeSideMenu"
+      @keydown.escape="closeSideMenu">
+      <div class="py-4 text-gray-500 dark:text-gray-400">
+        <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+          EduFlex
+        </a>
+
+        <ul class="mt-6">
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/dashboard">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                </path>
+              </svg>
+              <span class="ml-4">Dashboard</span>
+            </a>
+          </li>
+        </ul>
+
+        <ul>
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/explore">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z">
+                </path>
+              </svg>
+              <span class="ml-4">Explore</span>
+            </a>
+          </li>
+
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/leaderboard">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
+                </path>
+              </svg>
+              <span class="ml-4">Leaderboard</span>
+            </a>
+          </li>
+
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/alltest">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                </path>
+              </svg>
+              <span class="ml-4">Test</span>
+            </a>
+          </li>
+
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/upload-certificate">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
+                </path>
+              </svg>
+              <span class="ml-4">Upload Certificates</span>
+            </a>
+          </li>
+
+          <li class="relative px-6 py-3">
+            <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+              aria-hidden="true"></span>
+            <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+              href="/profile-web-page">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
+                </path>
+              </svg>
+              <span class="ml-4">Profile</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="px-6 my-6">
+          <button
+            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+            Create account
+            <span class="ml-2" aria-hidden="true">+</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex flex-col flex-1 w-full">
+      <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+        <div
+          class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+          <!-- Mobile hamburger -->
+          <button class="p-1 -ml-1 mr-5 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+            @click="toggleSideMenu" aria-label="Menu">
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <!-- Search input -->
+          <div class="flex justify-center flex-1 lg:mr-32">
+            <div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
+              <div class="absolute inset-y-0 flex items-center pl-2">
+                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <input
+                class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+                type="text" placeholder="Search for projects" aria-label="Search" id="searchInput" />
+              <script>
+                const searchInput = document.getElementById('searchInput');
+
+                searchInput.addEventListener('keypress', function (event) {
+                  if (event.key === 'Enter') { // Check if the Enter key is pressed
+                    event.preventDefault(); // Prevent the default form submission behavior
+                    const searchQuery = searchInput.value.trim(); // Get the search query
+                    console.log("search query ", searchQuery)
+                    if (searchQuery) {
+                      window.location.href = `/search-profile/${encodeURIComponent(searchQuery)}`;
+                    } else {
+                      alert('Please enter a search query');
+                    }
+                  }
+                });
+              </script>
+            </div>
+          </div>
+          <ul class="flex items-center flex-shrink-0 space-x-6">
+            <!-- Theme toggler -->
+            <li class="flex">
+              <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme"
+                aria-label="Toggle color mode">
+                <template x-if="!dark">
+                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                  </svg>
+                </template>
+                <template x-if="dark">
+                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                </template>
+              </button>
+            </li>
+
+            <!-- Profile menu -->
+            <li class="relative">
+              <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
+                @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" aria-haspopup="true">
+                <img class="object-cover w-8 h-8 rounded-full"
+                  src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                  alt="" aria-hidden="true" />
+              </button>
+              <template x-if="isProfileMenuOpen">
+                <ul x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0" @click.away="closeProfileMenu" @keydown.escape="closeProfileMenu"
+                  class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
+                  aria-label="submenu">
+                  <li class="flex">
+                    <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                      href="/profile-web-page">
+                      <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                      </svg>
+                      <span>Profile</span>
+                    </a>
+                  </li>
+                  <li class="flex">
+                    <a class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                      href="#">
+                      <svg class="w-4 h-4 mr-3" aria-hidden="true" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                        </path>
+                      </svg>
+                      <span>Log out</span>
+                    </a>
+                  </li>
+                </ul>
+              </template>
+            </li>
+          </ul>
+        </div>
+      </header>
+
+      <!--Main Content-->
+      <main class="h-full pb-16 overflow-y-auto">
+        <div class="container grid px-6 mx-auto">
+
+          <br>
+
+          <div class=" justify-center ">
+            <div class="w-full max-w-lg px-4">
+              <div class="min-w-0 p-4 text-white bg-purple-600 rounded-lg shadow-xs">
+                <% if (missingFields.length> 0) { %>
+                  <div class="alert alert-warning">
+                    <p class="font-semibold">
+                      Enter missing fields : <span>
+                        <%= missingFields.join(", ") %></span>
+                    </p>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          
+
+          <br>
+
+          <h2 class=" my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                          Profile
+                          </h2>
+                          <div class="content-wrapper">
+
+
+                            <div class="p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                              <div class="card-body flex items-center justify-between">
+                                <!-- Left: Profile Image -->
+                                <div class="flex items-center gap-4">
+                                  <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg" alt="user-avatar"
+                                    class="rounded" height="100" width="100" id="uploadedAvatar" />
+                                </div>
+
+                                <!-- Right: Button -->
+                                <button @click="openModal"
+                                  class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                  aria-label="Edit">
+                                  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                      d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                    </path>
+                                  </svg>
+                                </button>
+
+                                <!-- Modal -->
+                                <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
+                                  x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                  x-transition:leave="transition ease-in duration-150"
+                                  x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                  class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                                  <!-- Modal -->
+                                  <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
+                                    x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                    x-transition:enter-end="opacity-100"
+                                    x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100"
+                                    x-transition:leave-end="opacity-0  transform translate-y-1/2"
+                                    @click.away="closeModal" @keydown.escape="closeModal"
+                                    class="w-full max-h-screen px-6 py-4 overflow-y-auto bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+                                    role="dialog" id="modal" style="max-height: 90vh; overflow-y: auto;">
+                                    <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
+                                    <header class="flex justify-end">
+                                      <button
+                                        class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700"
+                                        aria-label="close" @click="closeModal1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img"
+                                          aria-hidden="true">
+                                          <path
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" fill-rule="evenodd"></path>
+                                        </svg>
+                                      </button>
+                                    </header>
+
+                                    <!-- Modal body -->
+                                    <div class="mt-4 mb-6 overflow-y-auto max-h-[70vh">
+                                      <!-- Modal title -->
+                                      <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                        Profile
+                                      </p>
+                                      <br>
+                                      <form id="formAccountSettings" method="post" enctype="multipart/form-data">
+                                        <div class="flex items-center gap-4">
+                                          <img src="/uploads/<%= userProfile.username %>/profile/profile.jpg"
+                                            alt="user-avatar" class="rounded" height="100" width="100"
+                                            id="uploadedAvatar" />
+                                        </div>
+                                        <input type="file" name="file" class="form-control mt-3" accept="image/*" />
+                                        <br>
+                                        <br>
+                                        <div class="card-body">
+                                          <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                              <label for="firstName" class="form-label">First Name</label>
+                                              <input class="form-control" type="text" id="firstName" name="firstName"
+                                                placeholder="Enter First Name"
+                                                value="<%= userProfile.firstname || '' %>" autofocus />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="lastName" class="form-label">Last Name</label>
+                                              <input class="form-control" type="text" name="lastName" id="lastName"
+                                                placeholder="Enter Last Name"
+                                                value="<%= userProfile.lastname || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="email" class="form-label">E-mail</label>
+                                              <input class="form-control" type="text" id="email" name="changeemail"
+                                                placeholder="Enter Your Email" value="<%= userProfile.email || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="email" class="form-label">Password</label>
+                                              <input class="form-control" type="password" id="changepwd"
+                                                name="changepwd" placeholder="Enter your new password"
+                                                value="<%= userProfile.password || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="organization" class="form-label">Website Link</label>
+                                              <input type="text" class="form-control" id="organization" name="website"
+                                                placeholder="Add a link that will appear at the top of your profile"
+                                                value="<%= userProfile.website || '' %>" />
+                                            </div>
+
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="phoneNumber" class="form-label">Phone Number</label>
+                                              <input type="text" id="phoneNumber" name="changephoneno"
+                                                class="form-control" placeholder="+91 1234567890"
+                                                value="<%= userProfile.phone_number || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="dob" class="form-label">Date of Birth</label>
+                                              <input type="date" class="form-control" id="dob" name="dob"
+                                                value="<%= userProfile.dob ? userProfile.dob.toISOString().split('T')[0] : '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="bio" class="form-label">Bio</label>
+                                              <input class="form-control" type="text" id="bio" name="bio"
+                                                placeholder="Bio" value="<%= userProfile.bio || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="hobby" class="form-label">Hobby</label>
+                                              <input type="text" class="form-control" id="hobby" name="hobby"
+                                                placeholder="Hobby" value="<%= userProfile.hobby || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="cgpa" class="form-label">Cumulative CGPA</label>
+                                              <input type="text" class="form-control" id="cgpa" name="cgpa"
+                                                placeholder="Cumulative CGPA" value="<%= userProfile.cgpa || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="college" class="form-label">College Name</label>
+                                              <input type="text" class="form-control" id="college" name="college"
+                                                placeholder="Enter your College Name"
+                                                value="<%= userProfile.college || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="department" class="form-label">Department</label>
+                                              <select class="form-select" id="department" name="department">
+                                                <option value="">Select Department</option>
+                                                <option value="Information Technology"
+                                                  <%=userProfile.department==="Information Technology" ? 'selected' : ''
+                                                  %>>Information Technology</option>
+                                                <option value="Computer Science"
+                                                  <%=userProfile.department==="Computer Science" ? 'selected' : '' %>
+                                                  >Computer Science</option>
+                                                <option value="Data Science" <%=userProfile.department==="Data Science"
+                                                  ? 'selected' : '' %>>Data Science</option>
+                                                <option value="AI-ML" <%=userProfile.department==="AI-ML" ? 'selected'
+                                                  : '' %>>AI-ML</option>
+                                                <option value="Mechanical" <%=userProfile.department==="Mechanical"
+                                                  ? 'selected' : '' %>>Mechanical</option>
+                                                <option value="Civil" <%=userProfile.department==="Civil" ? 'selected'
+                                                  : '' %>>Civil</option>
+                                              </select>
+                                            </div>
+
+                                            <script>
+                                              document.getElementById('department').addEventListener('change', function () {
+                                                userProfile.department = this.value;
+                                              });
+                                            </script>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label class="form-label" for="academic_year">Year</label>
+                                              <select id="academic_year" name="academicyear"
+                                                class="select2 form-select">
+                                                <option value="">Select</option>
+                                                <option value="First Year" <%=userProfile.academic_year==='First Year'
+                                                  ? 'selected' : '' %>>First Year</option>
+                                                <option value="Second Year" <%=userProfile.academic_year==='Second Year'
+                                                  ? 'selected' : '' %>>Second Year</option>
+                                                <option value="Third Year" <%=userProfile.academic_year==='Third Year'
+                                                  ? 'selected' : '' %>>Third Year</option>
+                                                <option value="Final Year" <%=userProfile.academic_year==='Final Year'
+                                                  ? 'selected' : '' %>>Fourth Year</option>
+                                                <option value="Alumni" <%=userProfile.academic_year==='Alumni'
+                                                  ? 'selected' : '' %>
+                                                  >Alumni</option>
+                                              </select>
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label class="form-label" for="semester">Semester</label>
+                                              <select id="semester" name="semester" class="select2 form-select">
+                                                <option value="">Select</option>
+                                                <option value="Sem 1" <%=userProfile.semester==='Sem 1' ? 'selected'
+                                                  : '' %>
+                                                  >Semester I</option>
+                                                <option value="Sem 2" <%=userProfile.semester==='Sem 2' ? 'selected'
+                                                  : '' %>
+                                                  >Semester II</option>
+                                                <option value="Sem 3" <%=userProfile.semester==='Sem 3' ? 'selected'
+                                                  : '' %>
+                                                  >Semester III</option>
+                                                <option value="Sem 4" <%=userProfile.semester==='Sem 4' ? 'selected'
+                                                  : '' %>
+                                                  >Semester IV</option>
+                                                <option value="Sem 5" <%=userProfile.semester==='Sem 5' ? 'selected'
+                                                  : '' %>
+                                                  >Semester V</option>
+                                                <option value="Sem 6" <%=userProfile.semester==='Sem 6' ? 'selected'
+                                                  : '' %>
+                                                  >Semester VI</option>
+                                                <option value="Sem 7" <%=userProfile.semester==='Sem 7' ? 'selected'
+                                                  : '' %>
+                                                  >Semester VII</option>
+                                                <option value="Sem 8" <%=userProfile.semester==='Sem 8' ? 'selected'
+                                                  : '' %>
+                                                  >Semester VIII</option>
+                                                <option value="Alumni" <%=userProfile.semester==='Alumni' ? 'selected'
+                                                  : '' %>
+                                                  >Alumni</option>
+                                              </select>
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="github" class="form-label">GitHub</label>
+                                              <input type="text" class="form-control" id="github" name="github"
+                                                placeholder="Enter Your GitHub Link"
+                                                value="<%= userProfile.github || '' %>" />
+                                            </div>
+
+                                            <div class="mb-3 col-md-6">
+                                              <label for="credly" class="form-label">Credly</label>
+                                              <input type="text" class="form-control" id="credly" name="credly"
+                                                placeholder="Enter Your Credly Link" value="<%= link || '' %>" />
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div>
+
+                                    <footer
+                                      class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
+                                      <button @click="closeModal"
+                                        class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+                                        Cancel
+                                      </button>
+                                      <button type="submit"
+                                        class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                        Save
+                                      </button>
+                                    </footer>
+                                    </form>
+                                  </div>
+                                </div>
+
+                              </div>
+                              <br>
+                              <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
+                                <%= userProfile.firstname %>
+                                  <%= userProfile.lastname %>
+                              </h4>
+                              <h5 class="text-gray-100 dark:text-gray-00">
+                                <%= userProfile.college || '' %>
+                              </h5>
+                              <br>
+
+                              <button @click="openModal5"
+                                class="px-10 py-4 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                Open to Work
+                              </button>
+
+
+                              <!-- Modal2 -->
+                              <div x-show="isModal5Open" x-transition:enter="transition ease-out duration-150"
+                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                                <div x-show="isModal5Open" x-transition:enter="transition ease-out duration-150"
+                                  x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                  x-transition:enter-end="opacity-100"
+                                  x-transition:leave="transition ease-in duration-150"
+                                  x-transition:leave-start="opacity-100"
+                                  x-transition:leave-end="opacity-0 transform translate-y-1/2" @click.away="closeModal2"
+                                  @keydown.escape="closeModal5"
+                                  class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+                                  role="dialog" id="modal5">
+                                  <!-- Modal body -->
+                                  <div class="mt-4 mb-6">
+                                    <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add
+                                      Description </p>
+
+                                    <br>
+
+                                    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                      <label class="block text-sm">
+                                        <span class="text-gray-700 dark:text-gray-400">Description</span>
+                                        <input id="skills-input"
+                                          class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                          placeholder="Ex: Engineering" />
+                                      </label>
+
+                                      <br>
+
+                                      <label class="block text-sm">
+                                        <span class="text-gray-700 dark:text-gray-400 mr-2"> Suggestions: </span>
+                                        <br><br>
+                                        <div class="tag-container" id="tag-container">
+                                          <div class="tag1" data-value="Engineering">Software Developer</div>
+                                          <div class="tag1" data-value="Project Management">Project Management</div>
+                                          <div class="tag1" data-value="Marketing">Web Developer</div>
+                                          <div class="tag1" data-value="Finance">UI Designer</div>
+                                          <div class="tag1" data-value="Marketing">Frontend Developer</div>
+                                          <div class="tag1" data-value="Finance">Backend Developer</div>
+                                          <div class="tag1" data-value="Engineering">IEEE Member</div>
+                                          <div class="tag1" data-value="Project Management">GDSC Member</div>
+                                          <div class="tag1" data-value="Marketing">ITSA Member</div>
+                                        </div>
+
+                                        <script>
+                                          const tagss = document.querySelectorAll('.tag1');
+                                          const inputBoxs = document.getElementById('skills-input');
+                                          const selectedTagssContainer = document.getElementById('selected-tags-container');
+
+                                          // Keep track of selected tags
+                                          let selectedTagss = [];
+
+                                          tags.forEach(tag => {
+                                            tag.addEventListener('click', () => {
+                                              const tagValue = tag.getAttribute('data-value');
+                                              const inputValues = inputBox.value.split(',').map(value => value.trim());
+
+                                              if (inputValues.includes(tagValue)) {
+                                                // If tag is already in input, remove it
+                                                inputBox.value = inputValues.filter(value => value !== tagValue).join(', ');
+                                                tag.classList.remove('selected');
+                                                selectedTags = selectedTags.filter(t => t !== tagValue); // Remove from selectedTags
+                                              } else {
+                                                // Otherwise, add the tag
+                                                inputBox.value = inputValues.filter(value => value !== '').concat(tagValue).join(', ');
+                                                tag.classList.add('selected');
+                                                selectedTags.push(tagValue); // Add to selectedTags
+                                              }
+                                            });
+                                          });
+
+                                          // Save button functionality
+                                          document.querySelector('.save-button').addEventListener('click', () => {
+                                            // Display selected tags as "selected tag 1", "selected tag 2", etc.
+                                            selectedTagsContainer.innerHTML = ''; // Clear previous selected tags
+                                            selectedTags.forEach((tag, index) => {
+                                              const tagElement = document.createElement('div');
+                                              tagElement.classList.add('selected-tag');
+                                              tagElement.textContent = `selected tag ${index + 1}: ${tag}`; // Display as selected tag 1, selected tag 2, etc.
+                                              selectedTagsContainer.appendChild(tagElement);
+                                            });
+
+                                            // Close the modal after saving
+                                            closeModal2();
+                                          });
+
+                                          // Close modal function
+                                          function closeModal2() {
+                                            document.querySelector('#modal5').style.display = 'none';
+                                          }
+                                        </script>
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  <footer
+                                    class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
+                                    <button @click="closeModal5"
+                                      class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+                                      Cancel
+                                    </button>
+                                    <button
+                                      class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save-button">
+                                      Save
+                                    </button>
+                                  </footer>
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <!-- Content wrapper -->
+
+                            <br>
+
+                            <!-- Activity -->
+                            <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                              Activity
+                            </h3>
+
+                            <a class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+                              href="/upload-certificate">
+                              <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                  <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                  </path>
+                                </svg>
+                                <span>Upload more Certificates </span>
+                              </div>
+                              <span>View more &RightArrow;</span>
+                            </a>
+
+                            <!-- With actions -->
+                            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                              Certificates
+                            </h4>
+                            <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                              <div class="w-full overflow-x-auto">
+                                <!-- Display the certificates -->
+                                <table class="w-full whitespace-no-wrap">
+                                  <thead>
+                                    <tr
+                                      class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                      <th class="px-4 py-3" style="width: 50%;">Uploaded PDF</th>
+                                      <!-- Increased size for PDF column -->
+                                      <th class="px-4 py-3">Description</th>
+                                      <th class="px-4 py-3">Date</th>
+                                      <th class="px-4 py-3" style="width: 15%;">Status</th>
+                                      <!-- Shrink approval status -->
+                                      <th class="px-4 py-3" style="width: 15%;">Actions</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                    <% if (Array.isArray(certificateData) && certificateData.length> 0) { %>
+                                      <% certificateData.forEach(cert=> { %>
+                                        <tr class="text-gray-700 dark:text-gray-400">
+                                          <td class="px-4 py-3">
+                                            <iframe src="<%= cert.pdfLink %>" width="100%" height="200px"
+                                              style="border: none;"></iframe> <!-- PDF viewer -->
+                                          </td>
+                                          <td class="px-4 py-3 text-sm">
+                                            <%= cert.post_name %> <!-- Display the post description -->
+                                          </td>
+                                          <td class="px-4 py-3 text-sm">
+                                            <%= cert.createdAt %> <!-- Format the date as needed -->
+                                          </td>
+                                          <td class="px-4 py-3 text-xs">
+                                            <span class="px-2 py-1 font-semibold leading-tight
+                                        <%= cert.status === 'Approved' ? 'text-green-700 bg-green-100 dark:bg-green-600' :
+                                            cert.status === 'Rejected' ? 'text-red-700 bg-red-100 dark:bg-red-600' :
+                                            'text-orange-700 bg-orange-100 dark:bg-orange-600' %>
+                                        rounded-full dark:text-white">
+                                              <%= cert.status %> <!-- Show Approved, Rejected, or Pending -->
+                                            </span>
+                                          </td>
+                                          <td class="px-4 py-3">
+                                            <div class="flex items-center space-x-4 text-sm">
+                                              <button
+                                                class="delete-button flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                                aria-label="Delete" data-post-id="<%= cert.postId %>"
+                                                data-action="delete">
+                                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
+                                                  viewBox="0 0 20 20">
+                                                  <path fill-rule="evenodd"
+                                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                    clip-rule="evenodd"></path>
+                                                </svg>
+                                              </button>
+
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <% }) %>
+                                          <% } else { %>
+                                            <tr>
+                                              <td colspan="5" class="px-4 py-3 text-center text-gray-500">
+                                                No certificates available.
+                                              </td>
+                                            </tr>
+                                            <% } %>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+
+                            <br><br>
+
+                            <main class="h-full pb-16 overflow-y-auto">
+                              <div class="container px-6 mx-auto grid">
+
+                                <!-- Experience -->
+                                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                  <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-bold text-gray-600 dark:text-gray-300">
+                                      Experience
+                                    </h4>
+                                    <div class="flex space-x-3">
+
+                                      <button @click="openModal3"
+                                        class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                        aria-label="Add">
+                                        +
+                                      </button>
+
+                                      <div x-show="isModal3Open" x-transition:enter="transition ease-out duration-150"
+                                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                        class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                                        <!-- Modal1 -->
+                                        <div x-show="isModal3Open" x-transition:enter="transition ease-out duration-150"
+                                          x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                          x-transition:enter-end="opacity-100"
+                                          x-transition:leave="transition ease-in duration-150"
+                                          x-transition:leave-start="opacity-100"
+                                          x-transition:leave-end="opacity-0  transform translate-y-1/2"
+                                          @click.away="closeModal3" @keydown.escape="closeModal3"
+                                          class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+                                          role="dialog" id="modal3" style="max-height: 90vh; overflow-y: auto;">
+                                          <!-- Modal body -->
+                                          <div class="mt-4 mb-6">
+                                            <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add
+                                              Experience </p>
+
+                                            <br>
+                                            <form id="experinceform">
+                                              <div
+                                                class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+
+                                                <label class="block text-sm">
+                                                  <span class="text-gray-700 dark:text-gray-400">Title</span>
+                                                  <input
+                                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    placeholder="Ex: Sales Manager" id="title" name="title" />
+                                                </label>
+                                                <br>
+                                                <label class="block text-sm">
+                                                  <span class="text-gray-700 dark:text-gray-400">Company or
+                                                    Organization</span>
+                                                  <input
+                                                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                    placeholder="Ex: Bachelors" id="companyName" name="companyName" />
+                                                </label>
+                                                <br>
+                                                <label class="">
+                                                  <span class="text-gray-700 dark:text-gray-400">Employment Type
+                                                    :</span>
+                                                  <select id="employmentType" name="employmentType" class="">
+                                                    <option value="">Select</option>
+                                                    <option value="Internship">Internship</option>
+                                                    <option value="Full-time">Full-time</option>
+                                                    <option value="Part-time">Part-time</option>
+                                                    <option value="Freelance">Freelance</option>
+                                                    <option value="Self-employed">Self-employed</option>
+                                                    <option value="Trainee">Trainee</option>
+                                                  </select>
+                                                </label>
+
+                                                <br><br>
+                                                <div class="flex items-center space-x-4">
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">Start Date:</span>
+                                                    <select id="start_date" name="start_date"
+                                                      class="select2 form-select">
+                                                      <option value="">Select</option>
+                                                      <option value="2018">2018</option>
+                                                      <option value="2019">2019</option>
+                                                      <option value="2020">2020</option>
+                                                      <option value="2021">2021</option>
+                                                      <option value="2022">2022</option>
+                                                      <option value="2023">2023</option>
+                                                    </select>
+                                                  </label>
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">End Date:</span>
+                                                    <select id="end_date" name="end_date" class="select2 form-select">
+                                                      <option value="">Select</option>
+                                                      <option value="2024">2024</option>
+                                                      <option value="2025">2025</option>
+                                                      <option value="2026">2026</option>
+                                                      <option value="2027">2027</option>
+                                                      <option value="2028">2028</option>
+                                                      <option value="2029">2029</option>
+                                                    </select>
+                                                  </label>
+                                                </div>
+
+                                              </div>
+
+                                              <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                                                Edit Experience
+                                              </h4>
+
+                                              <br>
+                                              <% userexp.forEach(exp=> { %>
+                                                <div
+                                                  class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 relative">
+                                                  <p
+                                                    class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                    <%= exp.title %> <!-- Display Job Title -->
+                                                  </p>
+                                                  <p class="mb-2 font-mediumx text-gray-700 dark:text-gray-300">
+                                                    <%= exp.companyName %> - <%= exp.employmentType %>
+                                                        <!-- Display Company Name and Employment Type -->
+                                                  </p>
+                                                  <p class="text-xs text-gray-700 dark:text-gray-400">
+                                                    <%= new Date(exp.startTime).toLocaleDateString() %> - <%= new
+                                                        Date(exp.endTime).toLocaleDateString() %>
+                                                        <!-- Display Start and End Dates -->
+                                                  </p>
+                                                  <br>
+                                                  <button
+                                                    class="delete-exp-btn flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                    aria-label="Delete" data-exp-id="<%= exp.id %>""
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                          <% }); %>
+                        </div>
+
+                        <footer class=" flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4
+                                                    sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
+                                                    <button @click="closeModal1"
+                                                      class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+                                                      Cancel
+                                                    </button>
+                                                    <button type="submit"
+                                                      class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                                      Save
+                                                    </button>
+                                                    </footer>
+                                            </form>
+                                          </div>
+                                        </div>
+                                        <br>
+                                      </div>
+                                    </div>
+
+                                    <% userexp.forEach(exp=> { %>
+                                      <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                        <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                          <%= exp.title %> <!-- Display Job Title -->
+                                        </p>
+                                        <p class="mb-2 font-mediumx text-gray-700 dark:text-gray-300">
+                                          <%= exp.companyName %> - <%= exp.employmentType %>
+                                              <!-- Display Company Name and Employment Type -->
+                                        </p>
+                                        <p class="text-xs text-gray-700 dark:text-gray-400">
+                                          <%= new Date(exp.startTime).toLocaleDateString() %> - <%= new
+                                              Date(exp.endTime).toLocaleDateString() %>
+                                              <!-- Display Start and End Dates -->
+                                        </p>
+                                      </div>
+                                      <% }); %>
+                                  </div>
+                                  <!--End EXperience-->
+
+                                  <!-- Education -->
+                                  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                    <div class="flex items-center justify-between">
+                                      <h4 class="text-lg font-bold text-gray-600 dark:text-gray-300">
+                                        Education
+                                      </h4>
+                                      <div class="flex space-x-3">
+
+                                        <button @click="openModal1"
+                                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                          aria-label="Add">
+                                          +
+                                        </button>
+
+                                        <div x-show="isModal1Open" x-transition:enter="transition ease-out duration-150"
+                                          x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                          x-transition:leave="transition ease-in duration-150"
+                                          x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                          class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                                          <!-- Modal1 -->
+                                          <div x-show="isModal1Open"
+                                            x-transition:enter="transition ease-out duration-150"
+                                            x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                            x-transition:enter-end="opacity-100"
+                                            x-transition:leave="transition ease-in duration-150"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0  transform translate-y-1/2"
+                                            @click.away="closeModal1" @keydown.escape="closeModal1"
+                                            class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+                                            role="dialog" id="modal1" style="max-height: 90vh; overflow-y: auto;">
+                                            <!-- Modal body -->
+                                            <div class="mt-4 mb-6">
+                                              <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                Add Education</p>
+
+                                              <br>
+
+                                              <div
+                                                class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                                <form method="post" action="/experience/education">
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">School /
+                                                      University</span>
+                                                    <input
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: A. P. Shah Institute of Technology"
+                                                      id="institute" name="institute" />
+                                                  </label>
+                                                  <br>
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">Degree</span>
+                                                    <input
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: Bachelors" id="degree" name="degree" />
+                                                  </label>
+                                                  <br>
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">Major / Minor</span>
+                                                    <input id="major_minor" name="major_minor"
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: Business" id="major_minor" name="major_minor" />
+                                                  </label>
+                                                  <br>
+                                                  <div class="flex items-center space-x-4">
+                                                    <label class="block text-sm">
+                                                      <span class="text-gray-700 dark:text-gray-400">Start Date:</span>
+                                                      <select id="startTime" name="startTime"
+                                                        class="select2 form-select">
+                                                        <option value="">Select</option>
+                                                        <option value="2018">2018</option>
+                                                        <option value="2019">2019</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2021">2021</option>
+                                                        <option value="2022">2022</option>
+                                                        <option value="2023">2023</option>
+
+                                                      </select>
+                                                    </label>
+                                                    <label class="block text-sm">
+                                                      <span class="text-gray-700 dark:text-gray-400">End Date:</span>
+                                                      <select id="endTime" name="endTime" class="select2 form-select">
+                                                        <option value="">Select</option>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2025">2025</option>
+                                                        <option value="2026">2026</option>
+                                                        <option value="2027">2027</option>
+                                                        <option value="2028">2028</option>
+                                                        <option value="2029">2029</option>
+                                                      </select>
+                                                    </label>
+                                                  </div>
+                                                  <br>
+                                                  <button type="submit"
+                                                    class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                                    Add
+                                                  </button>
+                                                </form>
+                                              </div>
+
+                                              <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                                                Edit Education
+                                              </h4>
+
+                                              <br>
+
+                                              <% useredu.forEach((edu)=> { %>
+                                                <div
+                                                  class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 relative">
+                                                  <p
+                                                    class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                    <%= edu.institute %>
+                                                  </p>
+                                                  <p class="text-xs text-gray-700 dark:text-gray-400">
+                                                    <%= new Date(edu.startTime).getFullYear() %> -
+                                                      <%= edu.endTime ? new Date(edu.endTime).getFullYear() : 'Present'
+                                                        %>
+                                                  </p>
+                                                  <br>
+                                                  <button
+                                                    class="delete-edu-btn flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                    aria-label="Delete" data-id="<%= edu.id %>">
+                                                    Delete
+                                                  </button>
+                                                </div>
+                                                <% }) %>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <br>
+                                      </div>
+                                    </div>
+
+                                    <% useredu.forEach((edu)=> { %>
+                                      <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                        <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                          <%= edu.institute %>
+                                        </p>
+                                        <p class="text-xs text-gray-700 dark:text-gray-400">
+                                          <%= new Date(edu.startTime).getFullYear() %> -
+                                            <%= edu.endTime ? new Date(edu.endTime).getFullYear() : 'Present' %>
+                                        </p>
+                                      </div>
+                                      <% }) %>
+                                  </div>
+                                  <!--End Education-->
+
+                                  <!-- Skills -->
+                                  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                    <div class="flex items-center justify-between">
+                                      <h4 class="text-lg font-bold text-gray-600 dark:text-gray-300">
+                                        Skills
+                                      </h4>
+                                      <div class="flex space-x-3">
+                                        <!-- Open Modal Button -->
+                                        <button @click="openModal2"
+                                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                          aria-label="Add">
+                                          +
+                                        </button>
+
+                                        <!-- Modal Section -->
+                                        <div x-show="isModal2Open" x-transition:enter="transition ease-out duration-150"
+                                          x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                          x-transition:leave="transition ease-in duration-150"
+                                          x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                          class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                                          <!-- Modal2 -->
+                                          <div x-show="isModal2Open"
+                                            x-transition:enter="transition ease-out duration-150"
+                                            x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                            x-transition:enter-end="opacity-100"
+                                            x-transition:leave="transition ease-in duration-150"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0 transform translate-y-1/2"
+                                            @click.away="closeModal2" @keydown.escape="closeModal2"
+                                            class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+                                            role="dialog" id="modal2" style="max-height: 90vh; overflow-y: auto;">
+                                            <!-- Modal body -->
+                                            <div class="mt-4 mb-6">
+                                              <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                Add Skills </p>
+
+                                              <br>
+
+                                              <div
+                                                class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                                <label class="block text-sm">
+                                                  <span class="text-gray-700 dark:text-gray-400">Skills</span>
+                                                  <form action="/experience/skills" method="post">
+                                                    <input id="skills_input" name="skills_input"
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: Engineering" />
+                                                </label>
+
+                                                <br>
+                                                <label class="block text-sm">
+                                                  <span class="text-gray-700 dark:text-gray-400">Certificate
+                                                    Type:</span>
+                                                  <select id="skill_type" name="skill_type" class="select2 form-select">
+                                                    <option value="">Select</option>
+                                                    <option value="academic">Academic</option>
+                                                    <option value="experience">Experince</option>
+                                                    <option value="extra">Extra Curricular</option>
+                                                  </select>
+                                                </label><br>
+                                                <button type="submit"
+                                                  class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save-button">
+                                                  Save
+                                                </button>
+                                              </div>
+
+                                              <div id="select-section"
+                                                class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                                <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                  Show us where you used this skill
+                                                </p>
+                                                Projects :
+                                                <% userproj.forEach((proj)=> { %>
+                                                  <label
+                                                    class="block px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 cursor-pointer flex items-center">
+                                                    <input type="radio" id="id" name="id" value="<%= proj.id %>"
+                                                      class="mr-2">
+                                                    <div>
+                                                      <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                        <%= proj.title %>
+                                                      </p>
+                                                    </div>
+                                                  </label>
+                                                  <% }) %>
+                                                    Certificates :
+                                                    <% certificateData.forEach((cert)=> { %>
+                                                      <label
+                                                        class="block px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 cursor-pointer flex items-center">
+                                                        <input type="radio" id="id" name="id" value="<%= cert.postId %>"
+                                                          class="mr-2">
+                                                        <div>
+                                                          <p
+                                                            class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                            <%= cert.post_name %>
+                                                          </p>
+                                                        </div>
+                                                      </label>
+                                                      <% }) %>
+
+                                              </div>
+                                              </form>
+                                              <div id="skills-section"
+                                                class="display-skill-block px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                                <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                  Your skills
+                                                </p>
+                                                <% userskills.forEach((skill)=> { %>
+                                                  <label
+                                                    class="block px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 cursor-pointer flex items-center">
+                                                    <div>
+                                                      <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                        <%= skill.name %>
+                                                      </p>
+                                                      <% if(!skill.linked) { %>
+                                                        <button aria-label="Delete Skill" data-id="<%= skill.id %>"
+                                                          class="delete-skill-bt w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
+                                                          Delete
+                                                        </button>
+                                                        <% } %>
+                                                    </div>
+                                                  </label>
+                                                  <% }) %>
+
+                                              </div>
+
+
+
+                                            </div>
+                                            <footer
+                                              class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
+                                              <button @click="closeModal2"
+                                                class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+                                                Cancel
+                                              </button>
+                                              <button type="submit"
+                                                class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save-button">
+                                                Save
+                                              </button></from>
+                                            </footer>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <% userskills.forEach((skill)=> { %>
+                                      <label
+                                        class="block px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 cursor-pointer flex items-center">
+                                        <div>
+                                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                            <%= skill.name %>
+                                          </p>
+                                        </div>
+                                      </label>
+                                      <% }) %>
+                                  </div>
+                                  <!-- End Skills-->
+
+                                  <!-- Projects -->
+                                  <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                    <div class="flex items-center justify-between">
+                                      <h4 class="text-lg font-bold text-gray-600 dark:text-gray-300">
+                                        Projects
+                                      </h4>
+                                      <div class="flex space-x-3">
+                                        <!-- Open Modal Button -->
+                                        <button @click="openModal6"
+                                          class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                          aria-label="Add">
+                                          +
+                                        </button>
+
+                                        <!-- Modal Section -->
+                                        <div x-show="isModal6Open" x-transition:enter="transition ease-out duration-150"
+                                          x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                          x-transition:leave="transition ease-in duration-150"
+                                          x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                          class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
+                                          <!-- Modal2 -->
+                                          <div x-show="isModal6Open"
+                                            x-transition:enter="transition ease-out duration-150"
+                                            x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                            x-transition:enter-end="opacity-100"
+                                            x-transition:leave="transition ease-in duration-150"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0 transform translate-y-1/2"
+                                            @click.away="closeModal6" @keydown.escape="closeModal6"
+                                            class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
+                                            role="dialog" id="modal6">
+                                            <!-- Modal body -->
+                                            <div class="mt-4 mb-6">
+                                              <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                Add Projects </p>
+
+                                              <br>
+
+                                              <div
+                                                class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                                <form method="post" action="/experience/project">
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">Title</span>
+                                                    <input
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: Project Name" id="title" name="title" />
+                                                  </label>
+                                                  <br>
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">Desciption</span>
+                                                    <input
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: Project Description" id="description"
+                                                      name="description" />
+                                                  </label>
+                                                  <br>
+                                                  <label class="block text-sm">
+                                                    <span class="text-gray-700 dark:text-gray-400">GitHub URL</span>
+                                                    <input
+                                                      class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                      placeholder="Ex: Project Reference URL" id="url" name="url" />
+                                                  </label>
+                                                  <br>
+
+                                              </div>
+
+                                            </div>
+
+                                            <% userproj.forEach((proj)=> { %>
+                                              <div
+                                                class="project-item px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                                <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                                  <%= proj.title %>
+                                                </p>
+                                                <p class="text-xs text-gray-700 dark:text-gray-400">
+                                                  <a href="<%= proj.url %>" target="_blank" rel="noopener noreferrer">
+                                                    <%= proj.description %>
+                                                  </a>
+                                                </p><br>
+                                                <button aria-label="Delete Project" data-id="<%= proj.id %>"
+                                                  class="delete-proj-bt w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
+                                                  Delete <%= proj.id %>
+                                                </button>
+                                              </div>
+                                              <% }) %>
+
+
+                                                <footer
+                                                  class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
+                                                  <button @click="closeModal2"
+                                                    class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+                                                    Cancel
+                                                  </button>
+                                                  <button type="submit"
+                                                    class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save-button">
+                                                    Save
+                                                  </button></form>
+                                                </footer>
+                                          </div>
+                                        </div>
+
+                                      </div>
+                                    </div>
+                                    <% userproj.forEach((proj)=> { %>
+                                      <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                        <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                                          <%= proj.title %>
+                                        </p>
+                                        <p class="text-xs text-gray-700 dark:text-gray-400">
+                                          <a src="<%= proj.url %>">
+                                            <%= proj.description %>
+                                          </a>
+                                        </p>
+                                      </div>
+                                      <% }) %>
+                                  </div>
+                                  <!--End Projects-->
+
+                                </div>
+                            </main>
+      </main>
+    </div>
+  </div>
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const skillsInput = document.getElementById("skills_input");
+    const projectsSection = document.getElementById("select-section");
+    const skillsSection = document.getElementById("skills-section");
+
+    function toggleSections() {
+      if (skillsInput.value.trim() !== "") {
+        projectsSection.style.display = "block";
+        skillsSection.style.display = "none";
+      } else {
+        projectsSection.style.display = "none";
+        skillsSection.style.display = "block";
+      }
+    }
+
+    skillsInput.addEventListener("input", toggleSections);
+    toggleSections(); // Initialize the state on page load
+  });
+</script>
 
 </html>

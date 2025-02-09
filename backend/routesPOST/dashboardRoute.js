@@ -13,25 +13,20 @@ const {fetchUser} = require('../utils/fetchUser')
 const {checkToken} = require('../middleware/checkToken')
 
 const Profiles = require('../models/profiles');
+const Pointshistory = require("../models/pointshistory");
 const { logMessage } = require('../utils/logger');
 
 
 dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken will be exeuted first then the next request
     const username = await fetchUser(req,res); //returning the username
+    console.log("DASH")
     try {
-        const page = 1; // First page
-        const range = 5; // Number of posts per page
-    
-        // Fetch the latest 5 records by sorting in descending order based on 'createdAt'
-        const cards = await Profiles.find()
-            .select('firstname lastname username post_desc file hashtags')
-            .sort({ createdAt: -1 }) // Sort by 'createdAt' field in descending order
-            .skip(0) // Skip 0 records for the first page
-            .limit(range); // Limit to 'range' posts
+        const pointsData = await Pointshistory.find({"username": username}).select("post_type post_subtype points time")
+        console.log(pointsData)
     
         res.status(200).render('index', {
-            username: username, 
-            cards
+            username, 
+            pointsData
         });
     } catch (error) {
         logMessage(`[*] Error fetching dashboard : ${error}`);

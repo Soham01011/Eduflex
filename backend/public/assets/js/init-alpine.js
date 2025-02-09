@@ -70,7 +70,7 @@ function data() {
       this.isModal1Open = false
       this.trapCleanup()
     },
-    
+
     // Modal2
     isModal2Open: false,
     trapCleanup: null,
@@ -82,7 +82,7 @@ function data() {
       this.isModal2Open = false
       this.trapCleanup()
     },
-    
+
     // Modal3
     isModal3Open: false,
     trapCleanup: null,
@@ -94,5 +94,42 @@ function data() {
       this.isModal3Open = false
       this.trapCleanup()
     },
+
+    // Modal5
+    isModal5Open: false,
+    trapCleanup: null,
+    openModal5() {
+      this.isModal5Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal5'))
+    },
+    closeModal5() {
+      this.isModal5Open = false
+      this.trapCleanup()
+    },
+
+    // Modal6
+    isModal6Open: false,
+    trapCleanup: null,
+    openModal6() {
+      this.isModal6Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal6'))
+    },
+    closeModal6() {
+      this.isModal6Open = false
+      this.trapCleanup()
+    },
+
+    // Modal7
+    isModal7Open: false,
+    trapCleanup: null,
+    openModal7() {
+      this.isModal7Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal7'))
+    },
+    closeModal7() {
+      this.isModal7Open = false
+      this.trapCleanup()
+    },
+
   }
 }

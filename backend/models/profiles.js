@@ -8,7 +8,11 @@ const profileSchema = new mongoose.Schema({
     file: { type: String, required: false },
     imagePaths: { type: [String], required: false },
     post_type: { type: String, required: false },
-    post_desc: { type: String, required: false },
+    post_subtype: { type: String, required: false },
+    post_name: { type: String, required: false },
+    post_org:{ type: String, required: false},
+    post_cred_id: { type: String, required: false},
+    post_url: { type: String, required: false},
     post_likes: { type: Number, required: false },
     hashtags: { type: [String], required: false },
     broken_tags: { type: [String], required: false },
@@ -19,6 +23,8 @@ const profileSchema = new mongoose.Schema({
     real: { type: Boolean, required: false },
     edited_by: { type: String, required: false },
     createdAt: { type: Date, default: Date.now },
+    start_time : { type: String, required: false },
+    end_time : { type: String, required: false },
 });
 
 module.exports = mongoose.model('Profiles', profileSchema);

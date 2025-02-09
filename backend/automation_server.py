@@ -233,13 +233,12 @@ def extract_hashtags():
         else:
             return jsonify({"error": "Invalid mode"}), 400
         
-        hashtags = create_hashtags_from_lines(lines)
-        print(hashtags)
-        return jsonify({"hashtags": hashtags})
+        return jsonify({"lines": lines})
     
     except Exception as e:
         print(f"Error processing file: {e}")
         return jsonify({"error": "Failed to extract hashtags"}), 500
+
 
     
 
@@ -286,7 +285,7 @@ def validate_certificate_two():
         if not username or not filename:
             return jsonify({'error': 'Username and filename are required'}), 400
         
-        base_dir = 'C:\\Eduflex\\backend\\uploads'  # Update this path to the actual base directory
+        base_dir = 'uploads'  # Update this path to the actual base directory
         file_path = os.path.join(base_dir, username, secure_filename(filename))
         print("The original file path:", file_path)
         
@@ -327,6 +326,52 @@ def validate_certificate_two():
         # Log the exception for debugging
         print("Exception occurred:", traceback.format_exc())
         return jsonify({'error': str(e)}), 500
+
+############################################################################################################## EXTRACT LINES    
+
+@app.route("/checkcertlevel",methods=['POST'])
+def checkcertlevel():
+    data = request.json
+    temp = data.get('filePath')
+    file_path = os.path.abspath(temp)
+    if not os.path.isfile(file_path):
+        print('File not found:', file_path)
+        return jsonify({"error": "File not found"}), 404
+    
+    lines = extract_text_from_pdf(file_path)
+    keywords_local = [
+        "essentials", "introduction", "fundamentals", 
+        "training", "student level", "attended", "attendance"
+    ]
+    
+    keywords_global = [
+        "earned", "cpe"
+    ]
+    
+    keywords_sports = [
+        "sports", "athletics", "tournament", "match", 
+        "competition", "winner", "runner", "medal"
+    ]
+
+    keywords_intern_job_enterprenuer = [
+        "intern" , "internship" , "trainee"
+    ]
+    
+    # Determine the type of certificate
+    if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_sports):
+        cert_type = "sports"
+        level = ""  # Sports certificates might not have levels
+    else:
+        cert_type = "academic"
+        level = "local" if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_local) else ""
+        if not level:
+            level = "global" if any(keyword.lower() in ' '.join(lines).lower() for keyword in keywords_global) else ""
+
+    return jsonify({
+        "sutype": level,
+        "type": cert_type,
+        "lines": lines
+    })
 
 
 if __name__ == '__main__':
