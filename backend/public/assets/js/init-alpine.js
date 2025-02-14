@@ -9,10 +9,9 @@ function data() {
     return (
       !!window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
-    )
-  }
+    )₹₹ṣ₹₹
 
-  function setThemeToLocalStorage(value) {
+  function setThemeToLocalStorage(value) { 
     window.localStorage.setItem('dark', value)
   }
 
@@ -166,6 +165,5 @@ function data() {
       this.isModal10Open = false
       this.trapCleanup()
     },
-
   }
-}
+}     
