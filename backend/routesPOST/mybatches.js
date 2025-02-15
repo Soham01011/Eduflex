@@ -7,6 +7,8 @@ const {logMessage} = require('../utils/logger');
 const CSRFToken  = require('../models/csrfttoken')
 const Mentor     = require('../models/mentees')
 
+const {fetchUser} = require('../utils/fetchUser');
+
 mybatchesLogicRoute.post("/mybatches",checkToken , async(req,res) =>{
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
@@ -41,6 +43,10 @@ mybatchesLogicRoute.post("/mybatches",checkToken , async(req,res) =>{
             logMessage(`${interface} ${userIP} : Internal server error : ${e}`);
             res.status(500);
         }
+    }
+    else{
+        const batches = await Mentor.find({ mentor : await fetchUser(req,res)});
+        res.status(200).json({ data: batches });
     }
     
 

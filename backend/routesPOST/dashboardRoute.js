@@ -19,10 +19,8 @@ const { logMessage } = require('../utils/logger');
 
 dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken will be exeuted first then the next request
     const username = await fetchUser(req,res); //returning the username
-    console.log("DASH")
     try {
         const pointsData = await Pointshistory.find({"username": username}).select("post_type post_subtype points time")
-        console.log(pointsData)
     
         res.status(200).render('index', {
             username, 
