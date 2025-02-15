@@ -686,25 +686,15 @@
                         <div class="card-body">
                           <div class="row">
                             <div class="mb-3 col-md-6">
-                              <label for="firstName" class="form-label">First Name</label>
+                              <label for="firstName" class="form-label">Name</label>
                               <input
                                 class="form-control"
                                 type="text"
                                 id="firstName"
                                 name="firstName"
-                                placeholder="Enter First Name"
+                                placeholder="Your name"
+                                value="<%= user.username %>"
                                 autofocus 
-                              />
-                            </div>
-                  
-                            <div class="mb-3 col-md-6">
-                              <label for="lastName" class="form-label">Last Name</label>
-                              <input
-                                class="form-control"
-                                type="text"
-                                name="lastName"
-                                id="lastName"
-                                placeholder="Enter Last Name"
                               />
                             </div>
                 
@@ -716,6 +706,7 @@
                                 id="email"
                                 name="changeemail"
                                 placeholder="Enter Your Email"
+                                value="<%= user.email %>"
                               />
                             </div>
 
@@ -727,6 +718,7 @@
                                 id="changepwd"
                                 name="changepwd"
                                 placeholder="Enter your new password"
+                                value="<%= user.password %>"
                               />
                             </div>       
                 
@@ -738,6 +730,7 @@
                                 id="bio"
                                 name="bio"
                                 placeholder="Bio"
+                                value="<% user.bio %>"
                               />
                             </div>
 
@@ -749,6 +742,7 @@
                                 id="organization"
                                 name="website"
                                 placeholder="Add a link that will appear at the top of your profile"
+                                value="<% user.website %>"
                               />
                             </div> 
                             
@@ -773,6 +767,7 @@
                                 id="college"
                                 name="college"
                                 placeholder="Enter your College Name"
+                                value="<%= user.college %>"
                               />
                             </div>                             
                           </div>
@@ -942,7 +937,7 @@
 
               <!-- Activity -->
               <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Add Batches
+                Your Batches
               </h3> 
 
               <!-- Projects -->
@@ -1060,6 +1055,7 @@
 
                 <div class="w-full overflow-hidden rounded-lg shadow-xs">
                   <div class="w-full overflow-x-auto">
+                    <% if (mentees) { %>
                     <table class="w-full whitespace-no-wrap">
 
                       <thead>
@@ -1072,7 +1068,8 @@
                           <th class="px-4 py-3">Actions</th>
                         </tr>
                       </thead>
-
+                      <% if(Array.isArray(mentees) && mentees.length> 0) { %>
+                      <% mentees.forEach(group => { %> 
                       <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         <tr class="text-gray-700 dark:text-gray-400">
                           <td class="px-4 py-3">
@@ -1084,10 +1081,10 @@
                             </div>
                           </td>
                           <td class="px-4 py-3 text-sm">
-                            BE - A - A1
+                            <%= group.batch %>
                           </td>
                           <td class="px-4 py-3 text-sm">
-                            Friday - 10:50
+                            <%= group.timings %>
                           </td>
                           <td class="px-4 py-3">
                             <div class="flex items-center space-x-4 text-sm">
@@ -1143,35 +1140,23 @@
                                                 <th class="px-4 py-3">Moodle ID</th>
                                               </tr>
                                             </thead>
-                      
                                             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                              <tr class="text-gray-700 dark:text-gray-400">
-                                                <td class="px-4 py-3">
-                                                  <div class="flex items-center text-sm">
-                                                    <!-- Avatar with inset shadow -->
-                                                    <div>
-                                                      <p class="font-semibold">Siddharth Devare</p>
+                                              <% group.students.forEach((stud, index) => { %>
+                                                <tr class="text-gray-700 dark:text-gray-400">
+                                                  <td class="px-4 py-3">
+                                                    <div class="flex items-center text-sm">
+                                                      <div>
+                                                        <p class="font-semibold"><%= stud %></p>
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                </td>
-                                                <td class="px-4 py-3 text-sm">
-                                                  21104136
-                                                </td>
-                                              </tr>
-                                              <tr class="text-gray-700 dark:text-gray-400">
-                                                <td class="px-4 py-3">
-                                                  <div class="flex items-center text-sm">
-                                                    <!-- Avatar with inset shadow -->
-                                                    <div>
-                                                      <p class="font-semibold">Soham Dalvi</p>
-                                                    </div>
-                                                  </div>
-                                                </td>
-                                                <td class="px-4 py-3 text-sm">
-                                                  21104010
-                                                </td>
-                                              </tr>
-                                            </tbody>                      
+                                                  </td>
+                                                  <td class="px-4 py-3 text-sm">
+                                                    <%= group.username[index] %>
+                                                  </td>
+                                                </tr>
+                                              <% }) %>
+                                            </tbody>
+                                                               
                                           </table>
                                         </div>
                                       </div>
@@ -1199,8 +1184,10 @@
                           </td>
                         </tr>
                       </tbody>
-
+                      <% }) %>
+                      <% } %>
                     </table>
+                    <% } %>
                   </div>
                 </div>
               </div>
@@ -1250,7 +1237,7 @@
                       >
                         <!-- Modal body -->
                         <div class="mt-4 mb-6">
-                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add Batches </p>
+                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Your Batches </p>
               
                           <br>
 

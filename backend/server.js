@@ -544,7 +544,7 @@ server.post("/addbatch", extract_hashtag_folder.single('file'), async (req, res)
         addMentees(userUsername, file, post_desc, selection, interface, userIP, timeslot);
     }
 
-    res.status(200).json({ message: "Batch added successfully", file });
+    res.status(200).redirect("/profile-web-page-mentor");
 });
 
 

@@ -7,7 +7,7 @@ const { logMessage } = require('./logger');
 
 async function addMentees(userUsername, filename, batchname, selection, interface, userIP,timeslot) {
     const form = new FormData();
-    const filePath = `/home/sohamdalvi/Projects/Eduflex/backend/hashtag_extractions/${filename}`;
+    const filePath = `/home/soham-dalvi/Projects/Eduflex/backend/hashtag_extractions/${filename}`;
 
     // Check if the file exists before attempting to process it
     if (!fs.existsSync(filePath)) {
