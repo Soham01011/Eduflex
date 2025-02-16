@@ -9,7 +9,7 @@ function data() {
     return (
       !!window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
-    )₹₹ṣ₹₹
+    )}
 
   function setThemeToLocalStorage(value) { 
     window.localStorage.setItem('dark', value)
