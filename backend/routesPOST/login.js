@@ -64,6 +64,7 @@ loginLogicRouter.post("/login", async (req, res) => {
         if (interfaceType === "Webapp") {
 
             const user = await User.findOne({ username: userUsername });
+            console.log(user)
 
             if (!user || user.password !== userPwd) {
                 logMessage(`[-] ${interfaceType} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);
@@ -145,6 +146,7 @@ loginLogicRouter.post("/login", async (req, res) => {
                 });
                 await token_Data.save();
                 const mandatoryFields = [
+                    'username',
                     'firstname',
                     'lastname',
                     'bio','email',
@@ -162,10 +164,10 @@ loginLogicRouter.post("/login", async (req, res) => {
                 const missingFields = mandatoryFields.filter(field => !user[field]);
                 if (missingFields.length > 0) {
                     console.log("Going to profile page")
-                    return res.redirect('/profile-web-page-mentor');
+                    return res.redirect('/profile-web-page');
                 } else {
                     console.log("Going to dash page")
-                    return res.redirect('/dashboard-mentor');
+                    return res.redirect('/dashboard');
                 }
             }
 

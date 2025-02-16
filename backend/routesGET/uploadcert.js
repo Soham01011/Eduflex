@@ -11,14 +11,14 @@ const uploadcretRouter = express.Router();
  *              loginpage (To understand working open middleware,checkToken)
  */
 const {fetchUser} = require('../utils/fetchUser')
-const {checkToken} = require('../middleware/checkToken')
+const { checkTokenAndUserType } = require('../middleware/checkTokenandUsertype');
 /**
  * Steps:
  *      - Checks the token of the user
  *      - fetchs the username of the user
  *      - renders by passing the username for profile pic
  */
-uploadcretRouter.get("/upload-certificate",checkToken,async(req,res)=>{
+uploadcretRouter.get("/upload-certificate",checkTokenAndUserType,async(req,res)=>{
     username = await fetchUser(req,res);
     res.render("upload",{username : username});
 });

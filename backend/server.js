@@ -71,7 +71,8 @@ const maintestpageRoute = require("./routesGET/maintestpage");
 const psyychometrictestpageRoute = require("./routesGET/pyschometrictestpage");
 const forgetpasswordRoute = require("./routesGET/forogtpassword");
 const checkforgotpwdtokenRoute = require("./routesGET/checkpwdtoken");
-const profilementorRoute = require("./routesGET/profilepagementor")
+const profilementorRoute = require("./routesGET/profilepagementor");
+const dashboardmentorRoute = require("./routesGET/dashboardmentor");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -286,7 +287,9 @@ server.get('/search-profile/:search_query', searchuserprofileRoute);
 
 server.get("/forgotpassword",forgetpasswordRoute);
 
-server.get("/profile-web-page-mentor", profilementorRoute)
+server.get("/profile-web-page-mentor", profilementorRoute);
+
+server.get("/dashboard-mentor", dashboardmentorRoute);
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 

@@ -16,8 +16,8 @@ const profilepageRoute = express.Router();
  */
 
 const {fetchUser} = require('../utils/fetchUser')
-const {checkToken} = require('../middleware/checkToken')
 const {logMessage} = require('../utils/logger')
+const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype");
 
 /**
  * User     : Models of users to fetch their data.
@@ -42,7 +42,8 @@ const Allskills = require('../models/expeduskill');
  *      - If the user have not enter all the user bio details then it will prompted to fill it
  *      - Render all of the data to the webpage
  */
-profilepageRoute.get("/profile-web-page", checkToken, async (req, res) => {
+profilepageRoute.get("/profile-web-page", checkTokenAndUserType, async (req, res) => {
+
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     // Normalize userIP

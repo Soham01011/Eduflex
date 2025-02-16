@@ -1,7 +1,7 @@
 const express = require("express")
 const maintestpageRoute = express.Router();
 
-const { checkToken } = require("../middleware/checkToken")
+const { checkToken } = require('../middleware/checkToken');
 const { logMessage } = require("../utils/logger");
 const { fetchUser } = require("../utils/fetchUser");
 
