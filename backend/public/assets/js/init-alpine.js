@@ -165,5 +165,42 @@ function data() {
       this.isModal10Open = false
       this.trapCleanup()
     },
+
+    // Modal11
+    isModal11Open: false,
+    trapCleanup: null,
+    openModal11() {
+      this.isModal11Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal11'))
+    },
+    closeModal11() {
+      this.isModal11Open = false
+      this.trapCleanup()
+    },
+
+    // Modal12
+    isModal12Open: false,
+    trapCleanup: null,
+    openModal12() {
+      this.isModal12Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal12'))
+    },
+    closeModal12() {
+      this.isModal12Open = false
+      this.trapCleanup()
+    },
+
+    // Modal13
+    isModal13Open: false,
+    trapCleanup: null,
+    openModal13() {
+      this.isModal13Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal13'))
+    },
+    closeModal13() {
+      this.isModal13Open = false
+      this.trapCleanup()
+    },
+
   }
 }     

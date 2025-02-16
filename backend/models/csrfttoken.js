@@ -19,6 +19,10 @@ const csrfTokenSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: false,
+  },
+  usertype: {
+    type: String,
+    required: true,
   }
 });
 

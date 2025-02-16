@@ -21,7 +21,7 @@ const fetchUser = async (req, res) => {
             return res.body.username;
         }
         else{
-            return res.redirect('/loginpage');
+            return '';
         }
     } catch (error) {
         logMessage(`[*] Internal server error : ${error}`);

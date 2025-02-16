@@ -20,7 +20,7 @@ require("dotenv").config();
  *              activities. This can be useflu for further studies. 
  */
 
-const {checkToken} = require('../middleware/checkToken');
+const { checkTokenAndUserType } = require('../middleware/checkTokenandUsertype');
 const {logMessage} = require('../utils/logger');
 const {fetchUser} = require('../utils/fetchUser');
 
@@ -44,7 +44,7 @@ const BASE_URL = process.env.BASE_URL;
  *      - User Posts (certifications and credyl badges)
  *      - User profile pic
  */
-myprofileRoute.get("/myprofile",checkToken, async(req,res)=> {
+myprofileRoute.get("/myprofile",checkTokenAndUserType, async(req,res)=> {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     if (Array.isArray(userIP)) {                // This part of code to trace the IP address to log it

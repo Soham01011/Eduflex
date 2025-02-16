@@ -10,19 +10,17 @@ const dashboardrouter = express.Router(); // The router for the dashboard page
  *              loginpage (To understand working open middleware,checkToken)
  */
 const {fetchUser} = require('../utils/fetchUser')
-const {checkToken} = require('../middleware/checkToken')
+const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype");
 
 const Profiles = require('../models/profiles');
 const Pointshistory = require("../models/pointshistory");
 const { logMessage } = require('../utils/logger');
 
 
-dashboardrouter.get("/dashboard",checkToken , async(req,res)=>{ //the checkToken will be exeuted first then the next request
+dashboardrouter.get("/dashboard",checkTokenAndUserType , async(req,res)=>{ //the checkToken will be exeuted first then the next request
     const username = await fetchUser(req,res); //returning the username
-    console.log("DASH")
     try {
         const pointsData = await Pointshistory.find({"username": username}).select("post_type post_subtype points time")
-        console.log(pointsData)
     
         res.status(200).render('index', {
             username, 

@@ -64,6 +64,7 @@ loginLogicRouter.post("/login", async (req, res) => {
         if (interfaceType === "Webapp") {
 
             const user = await User.findOne({ username: userUsername });
+            console.log(user)
 
             if (!user || user.password !== userPwd) {
                 logMessage(`[-] ${interfaceType} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);
@@ -88,52 +89,86 @@ loginLogicRouter.post("/login", async (req, res) => {
             
             logMessage(`[=] ${interfaceType} ${userIP} : Token provided for user ${userUsername}`);
             
-            // Save the token data in the CSRFToken collection
-            const token_Data = new CSRFToken({
-                token: uniqueId,         // Use uniqueId as the token in the database
-                username: userUsername,  // Save the username
-                interface: "Webapp"      // Save the interface type
-            });
-            await token_Data.save();
-            
-            // Send the JWT as a cookie
-            res.cookie("Token", payload, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // Set to true if serving over HTTPS
-                maxAge: 15 * 60 * 1000 // 15 minutes
-            });
-            if(await Credly.findOne({username : userUsername}))
-            {
-                if(fetchAndSaveBadges){
-                    fetchAndSaveBadges(userUsername);
+            if(user.user_type === "Student"){
+                const token_Data = new CSRFToken({
+                    token: uniqueId,         // Use uniqueId as the token in the database
+                    username: userUsername,  // Save the username
+                    interface: "Webapp" ,     // Save the interface type
+                    usertype : "Student"
+                });
+                await token_Data.save();
+                if(await Credly.findOne({username : userUsername}))
+                {
+                    if(fetchAndSaveBadges){
+                        fetchAndSaveBadges(userUsername);
+                    }
+                    else{
+                        console.log('[INFO] * Credly system is disabled , enable it in env file')
+                    }
                 }
-                else{
-                    console.log('[INFO] * Credly system is disabled , enable it in env file')
+                const mandatoryFields = [
+                    'firstname',
+                    'lastname',
+                    'phone_number',
+                    'dob',
+                    'bio',
+                    'college',
+                    'academic_year',
+                    'semester',
+                    'cgpa',
+                    'department',
+                ];
+
+                // Check for missing mandatory fields
+                const missingFields = mandatoryFields.filter(field => !user[field]);
+
+                res.cookie("Token", payload, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production', // Set to true if serving over HTTPS
+                    maxAge: 15 * 60 * 1000 // 15 minutes
+                });
+
+                if (missingFields.length > 0) {
+                    console.log("Going to profile page")
+                    return res.redirect('/profile-web-page');
+                } else {
+                    console.log("Going to dash page")
+                    return res.redirect('/dashboard');
                 }
             }
-            const userProfile = await User.findOne({ username: userUsername });
-            const mandatoryFields = [
-                'firstname',
-                'lastname',
-                'phone_number',
-                'dob',
-                'bio',
-                'college',
-                'academic_year',
-                'semester',
-                'cgpa',
-                'department',
-            ];
+            else if(user.user_type === "Mentor"){
 
-            // Check for missing mandatory fields
-            const missingFields = mandatoryFields.filter(field => !userProfile[field]);
+                const token_Data = new CSRFToken({
+                    token: uniqueId,         // Use uniqueId as the token in the database
+                    username: userUsername,  // Save the username
+                    interface: "Webapp" ,     // Save the interface type
+                    usertype : "Mentor"
+                });
+                await token_Data.save();
+                const mandatoryFields = [
+                    'username',
+                    'firstname',
+                    'lastname',
+                    'bio','email',
+                    'college',
+                    'department',
+                ];
+                
+                res.cookie("Token", payload, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production', // Set to true if serving over HTTPS
+                    maxAge: 15 * 60 * 1000 // 15 minutes
+                });
 
-            if (missingFields.length > 0) {
-                console.log("Going to profile page")
-                return res.redirect('/profile-web-page');
-            } else {
-                console.log("Going to dash page")
-                return res.redirect('/dashboard');
+                // Check for missing mandatory fields
+                const missingFields = mandatoryFields.filter(field => !user[field]);
+                if (missingFields.length > 0) {
+                    console.log("Going to profile page")
+                    return res.redirect('/profile-web-page');
+                } else {
+                    console.log("Going to dash page")
+                    return res.redirect('/dashboard');
+                }
             }
 
         } 

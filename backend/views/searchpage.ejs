@@ -693,7 +693,7 @@
                         <!-- Row for post details -->
                         <tr class="text-gray-700 dark:text-gray-400">
                           <!-- Description -->
-                          <td class="px-4 py-3 text-sm"><%= p.post_desc || 'No description available' %></td>
+                          <td class="px-4 py-3 text-sm"><%= p.post_type +'  '+ p.post_subtype || 'No description available' %></td>
                   
                           <!-- Status -->
                           <td class="px-4 py-3 text-xs">
@@ -713,7 +713,7 @@
                           </td>
                   
                           <!-- Date -->
-                          <td class="px-4 py-3 text-sm"><%= new Date(p.createdAt).toLocaleDateString() %></td>
+                          <td class="px-4 py-3 text-sm"><%= new Date(p.createdAt).toLocaleDateString() +" " +p.file  %></td>
                   
                           <!-- Actions -->
                           <td class="px-4 py-3">

@@ -5,9 +5,9 @@ const User = require('../models/users');
 const Mentor = require('../models/mentees');
 const { logMessage } = require('./logger');
 
-async function addMentees(userUsername, filename, batchname, selection, interface, userIP) {
+async function addMentees(userUsername, filename, batchname, selection, interface, userIP,timeslot) {
     const form = new FormData();
-    const filePath = `C:/Eduflex/backend/uploads/${userUsername}/${filename}`;
+    const filePath = `/home/soham-dalvi/Projects/Eduflex/backend/hashtag_extractions/${filename}`;
 
     // Check if the file exists before attempting to process it
     if (!fs.existsSync(filePath)) {
@@ -80,6 +80,7 @@ async function addMentees(userUsername, filename, batchname, selection, interfac
                     students: mentorStudents,
                     username: mentorStudentsMoodle,
                     batch: batchname,
+                    timings : timeslot
                 });
                 await newMentees.save();
 

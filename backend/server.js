@@ -24,9 +24,11 @@ let {addMentees} = require('./utils/mentees');
 let {fetchBadges} = require('./utils/fetchBadges');
 let {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
+const {checkUserType} = require("./middleware/checkUserType")
 let {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
 let {certificatelevelcheck} = require('./utils/certlevelcheck');
+const {interfaceFetch} = require("./utils/interface")
 
 /**
  * Below is the code to have manual feature enabling and disabling commands to make it scalable 
@@ -67,6 +69,10 @@ const leaderboardroute = require('./routesGET/leaderboardpage');
 const searchuserprofileRoute = require('./routesGET/searchuser');
 const maintestpageRoute = require("./routesGET/maintestpage");
 const psyychometrictestpageRoute = require("./routesGET/pyschometrictestpage");
+const forgetpasswordRoute = require("./routesGET/forogtpassword");
+const checkforgotpwdtokenRoute = require("./routesGET/checkpwdtoken");
+const profilementorRoute = require("./routesGET/profilepagementor");
+const dashboardmentorRoute = require("./routesGET/dashboardmentor");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -84,6 +90,9 @@ const mybatchesLogicRoute = require('./routesPOST/mybatches');
 const skillexpeduRoute = require('./routesPOST/skipexpeduRoute');
 const likesRoute = require('./routesPOST/likesRoute');
 const postsLogicRoute = require("./routesPOST/postsRoute");
+const sendforgetmailRoute = require("./routesPOST/sendforgotmail");
+const changepasswordRoute = require("./routesPOST/changepassword");
+const addbatchRoute = require("./routesPOST/addbatch")
 
 
 /* 
@@ -200,41 +209,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+const hashtagDir = '/home/soham-dalvi/Projects/Eduflex/backend/hashtag_extractions';
 
-const hashtag_storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        const hashtag_file = 'hashtag_extractions/';
-        fs.mkdirSync(hashtag_file, { recursive: true });
-        callback(null, hashtag_file); // Ensure the directory exists or create it
-    },
-    filename: async(req, file, callback) => {
+if (!fs.existsSync(hashtagDir)) {
+    fs.mkdirSync(hashtagDir, { recursive: true });
+}
 
-        const token = req.cookies.Token;
-        var username = '';
-        if (token) {
-            const decoded = jwt.verify(token, serverSK);
-            if (decoded && decoded.userId) {
-              username = decoded.username;
-            } else {
-                logMessage("Decoded data invalid in fetchUser util");
-                return res.redirect('/loginpage'); // Return after sending response
-            }
-            
-        } else if (req.body) {
-            username = res.body.username;
+const extract_hashtag_folder = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, hashtagDir);
+        },
+        filename: (req, file, cb) => {
+            // Replace spaces and special characters
+            const sanitizedFilename = file.originalname.replace(/\s+/g, "_");
+            cb(null, sanitizedFilename);
         }
-                
-        // If username is still undefined, throw an error
-        if (!username) {
-            return callback(new Error('Username not found'), null);
-        }
-
-        // Define the filename with the extracted or provided username
-        callback(null, username + "-" + file.originalname);
-    }
+    })
 });
 
-const extract_hashtag_folder = multer({ storage: hashtag_storage });
 
 
 const user_profilepic = multer.diskStorage({
@@ -291,6 +284,12 @@ server.get("/explore", explorepageRoute);
 server.get('/leaderboard', leaderboardroute);
 
 server.get('/search-profile/:search_query', searchuserprofileRoute);
+
+server.get("/forgotpassword",forgetpasswordRoute);
+
+server.get("/profile-web-page-mentor", profilementorRoute);
+
+server.get("/dashboard-mentor", dashboardmentorRoute);
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
@@ -517,6 +516,40 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
         }
     }
 );
+
+server.post("/addbatch", extract_hashtag_folder.single('file'), async (req, res) => {
+    const { post_desc, timeslot, selection } = req.body;
+    
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
+    }
+    const interface = "Webapp"
+    const userUsername = await fetchUser(req, res);
+
+    // Check if file was uploaded
+    if (!req.file) {
+        return res.status(400).json({ message: "No file received!" });
+    }
+
+    const file = req.file.filename; // Extract the filename
+    const filePath = req.file.path;
+    console.log(post_desc, timeslot, selection,file , filePath);
+    if (!fs.existsSync(filePath)) {
+        console.error("File was not saved:", filePath);
+        return res.status(500).json({ message: "File upload failed!" });
+    }
+
+    if (addMentees) {
+        addMentees(userUsername, file, post_desc, selection, interface, userIP, timeslot);
+    }
+
+    res.status(200).redirect("/profile-web-page-mentor");
+});
+
 
 /* *
 ----------------P.S. => The uploads route is retoured to postsmanage to avoid complexity 
@@ -1106,6 +1139,12 @@ server.get('/feed',feedLogicRoute);
 server.use('/experience',skillexpeduRoute);
 
 server.use('/postsmanage', postsLogicRoute);
+
+server.post('/checkforgetmail', sendforgetmailRoute);
+
+server.get('/forgotpwdverify', checkforgotpwdtokenRoute);
+
+server.post("/changepassword" , changepasswordRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
