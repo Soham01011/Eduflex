@@ -14,7 +14,6 @@
     <script src="./assets/js/charts-pie.js" defer></script>
     <script src="./assets/js/script.js"></script>
     <script src="./assets/js/init-alpine.js"></script>
-    <script src="./scripts/profileup.js"></script>
   </head>
 
   <body>
@@ -31,7 +30,7 @@
           <ul class="mt-6">
             <li class="relative px-6 py-3">
               <a
-                class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="/dashboard"
               >
                 <svg
@@ -52,15 +51,35 @@
               </a>
             </li>
           </ul>
+
           <ul>
-            
+            <li class="relative px-6 py-3">
+              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                href="/alltest"
+              >
+                <svg 
+                  class="w-5 h-5" 
+                  aria-hidden="true" 
+                  fill="none" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                  stroke-width="2" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor">
+                  <path
+                    d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                  </path>
+                </svg>
+                <span class="ml-4">Test</span>
+              </a>
+            </li>
             <li class="relative px-6 py-3">
               <a
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="admin-cards.html"
+                href="/explore"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="w-5 h-5" 
                   aria-hidden="true"
                   fill="none"
                   stroke-linecap="round"
@@ -70,10 +89,10 @@
                   stroke="currentColor"
                 >
                   <path
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"
                   ></path>
                 </svg>
-                <span class="ml-4">Cards</span>
+                <span class="ml-4">Explore</span>
               </a>
             </li>
             <li class="relative px-6 py-3">
@@ -91,8 +110,7 @@
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path
-                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
+                  <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">                   
                   </path>
                 </svg>
                 <span class="ml-4">Leaderboard</span>
@@ -104,28 +122,26 @@
                 aria-hidden="true"
               ></span>
               <a
-                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
                 href="/profile-web-page-mentor"
               >
                 <svg
                   class="w-5 h-5"
                   aria-hidden="true"
                   fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  stroke-linecap="round"                                                                                                                      stroke-linejoin="round"
                   stroke-width="2"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z""
                   ></path>
                 </svg>
                 <span class="ml-4">Profile</span>
               </a>
             </li>
-          </ul>
-
+          </ul>         
           <div class="px-6 my-6">
             <button
               class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
@@ -134,9 +150,9 @@
               <span class="ml-2" aria-hidden="true">+</span>
             </button>
           </div>
-          
         </div>
       </aside>
+
       <!-- Mobile sidebar -->
       <!-- Backdrop -->
       <div
@@ -172,7 +188,7 @@
             <li class="relative px-6 py-3">
               <a
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="index.html"
+                href="/dashboard"
               >
                 <svg
                   class="w-5 h-5"
@@ -605,7 +621,7 @@
 
                   <!-- Right: Button -->
                   <button 
-                    @click="openModal"
+                    @click="openModal16"
                     class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-full active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                     aria-label="Edit"
                   >
@@ -621,28 +637,28 @@
                     </svg>
                   </button>
 
-                  <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150"
+                  <div x-show="isModal16Open" x-transition:enter="transition ease-out duration-150"
                   x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                   x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
                   x-transition:leave-end="opacity-0"
                   class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
                     <!-- Modal -->
-                    <div x-show="isModalOpen" 
+                    <div x-show="isModal16Open" 
                       x-transition:enter="transition ease-out duration-150"
                       x-transition:enter-start="opacity-0 transform translate-y-1/2" 
                       x-transition:enter-end="opacity-100"
                       x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                      x-transition:leave-end="opacity-0  transform translate-y-1/2" @click.away="closeModal"
-                      @keydown.escape="closeModal"
+                      x-transition:leave-end="opacity-0  transform translate-y-1/2" @click.away="closeModal16"
+                      @keydown.escape="closeModal16"
                       class="w-full max-h-screen px-6 py-4 overflow-y-auto bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
                       role="dialog" 
-                      id="modal" 
+                      id="modal16" 
                       style="max-height: 90vh; overflow-y: auto;">
                       <!-- Remove header if you don't want a close icon. Use modal body to place modal tile. -->
                       <header class="flex justify-end">
                         <button
                           class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700"
-                          aria-label="close" @click="closeModal1">
+                          aria-label="close" @click="closeModal16">
                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
                             <path
                               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -650,7 +666,7 @@
                           </svg>
                         </button>
                       </header>
-                      <from id="formAccountSettings">
+    
                       <!-- Modal body -->
                       <div class="mt-4 mb-6 overflow-y-auto max-h-[70vh">
                         <!-- Modal title -->
@@ -670,7 +686,7 @@
                         </div>
                         <br>
                         <button
-                        @click="closeModal"
+                        @click="closeModal16"
                         class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                         >
                           Delete
@@ -686,15 +702,27 @@
                         <div class="card-body">
                           <div class="row">
                             <div class="mb-3 col-md-6">
-                              <label for="firstName" class="form-label">Name</label>
+                              <label for="firstName" class="form-label">First Name</label>
                               <input
                                 class="form-control"
                                 type="text"
                                 id="firstName"
                                 name="firstName"
-                                placeholder="Your name"
-                                value="<%= user.username %>"
+                                placeholder="Enter First Name"
+                                value="<%= user.firstname %>"
                                 autofocus 
+                              />
+                            </div>
+                  
+                            <div class="mb-3 col-md-6">
+                              <label for="lastName" class="form-label">Last Name</label>
+                              <input
+                                class="form-control"
+                                type="text"
+                                name="lastName"
+                                id="lastName"
+                                value="<%= user.lastname %>"
+                                placeholder="Enter Last Name"
                               />
                             </div>
                 
@@ -730,7 +758,7 @@
                                 id="bio"
                                 name="bio"
                                 placeholder="Bio"
-                                value="<% user.bio %>"
+                                value="<%= user.bio %>"
                               />
                             </div>
 
@@ -742,9 +770,21 @@
                                 id="organization"
                                 name="website"
                                 placeholder="Add a link that will appear at the top of your profile"
-                                value="<% user.website %>"
+                                value="<%= user.website %>"
                               />
                             </div> 
+
+                            <div class="mb-3 col-md-6">
+                              <label for="designation" class="form-label">Designation</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="designation"
+                                name="designation"
+                                placeholder="Enter your Designation"
+                                value="<%= user.designation %>"
+                              />
+                            </div>
                             
                             <div class="mb-3 col-md-6">
                               <label for="department" class="form-label">Department : </label>
@@ -776,20 +816,18 @@
                   
                       <footer class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
                         <button
-                          @click="closeModal"
+                          @click="closeModal16"
                           class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                         >
                           Cancel
                         </button>
                         <button
-                        type="submit"
                           class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                         >
                           Save
                         </button>
                       </footer>
                     </div>
-                  </from>
                   </div>
                     
                   </div>
@@ -798,13 +836,11 @@
                       <%= user.username %>
                     </p>
                     <p class="text-gray-300 font-mediumx text-gray-700 dark:text-gray-300">
-                      <% if (user.college) { %>
-                        <%= user.college %>
-                        <% } %>
+                      <%= user.college %>
                     </p>
 
                     <div
-                      x-show="isModal5Open"
+                      x-show="isModal15Open"
                       x-transition:enter="transition ease-out duration-150"
                       x-transition:enter-start="opacity-0"
                       x-transition:enter-end="opacity-100"
@@ -815,18 +851,18 @@
                     >
                       <!-- Modal2 -->
                       <div
-                        x-show="isModal5Open"
+                        x-show="isModal15Open"
                         x-transition:enter="transition ease-out duration-150"
                         x-transition:enter-start="opacity-0 transform translate-y-1/2"
                         x-transition:enter-end="opacity-100"
                         x-transition:leave="transition ease-in duration-150"
                         x-transition:leave-start="opacity-100"
                         x-transition:leave-end="opacity-0 transform translate-y-1/2"
-                        @click.away="closeModal2"
-                        @keydown.escape="closeModal5"
+                        @click.away="closeModal15"
+                        @keydown.escape="closeModal15"
                         class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
                         role="dialog"
-                        id="modal5"
+                        id="modal15"
                       >
                         <!-- Modal body -->
                         <div class="mt-4 mb-6">
@@ -913,7 +949,7 @@
                         </div>
                         <footer class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
                           <button
-                            @click="closeModal5"
+                            @click="closeModal15"
                             class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                           >
                             Cancel
@@ -937,7 +973,7 @@
 
               <!-- Activity -->
               <h3 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Your Batches
+                Add Batches
               </h3> 
 
               <!-- Projects -->
@@ -985,18 +1021,23 @@
                       >
                         <!-- Modal body -->
                         <div class="mt-4 mb-6">
-                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add Batches </p>
+                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Your Batches </p>
               
                           <br>
 
                           <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">                         
-                            <form method="post" action="/addbatch" enctype="multipart/form-data">
-
+                            <form method="post" action="/experience/education">
+                            <label class="block text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">Department</span>
+                              <input
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder="Ex: Information Technology"
+                              />
+                            </label>
                             <br>
                             <label class="block text-sm">
                               <span class="text-gray-700 dark:text-gray-400">Batches</span>
                               <input
-                              name="post_desc"
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                 placeholder="Ex: BE - A - A1"
                               />
@@ -1004,30 +1045,19 @@
                             <br>
                             <label class="block text-sm">
                               <span class="text-gray-700 dark:text-gray-400">Date & Time</span>
-                              <input id="major_minor" name="timeslot"
+                              <input id="major_minor" name="major_minor"
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                 placeholder="Ex: Friday - 10:50" />
                             </label>
                             <br>
-                            <label for="type" class="form-label">Select</label>
-                              <select class="form-select" id="department" name="selection">
-                                <option value="">Select Department</option>
-                                <option value="name">Name</option>
-                                <option value="moodle">Moodle ID</option>
-                              </select>
-                              <label class="block text-sm" for="file">
-                                <span class="text-gray-700 dark:text-gray-200 mb-8">Choose an Excel file:</span>
-                                <input 
-                                  type="file" 
-                                  name="file" 
-                                  id="file" 
-                                  class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" 
-                                  placeholder="Choose a file" 
-                                />
+                            <label class="block text-sm">   
+                              <form action="/upload" method="post" enctype="multipart/form-data">
+                                <label for="file" class="text-gray-700 dark:text-gray-200 mb-8">Choose a CSV file : </label>
+                                <input type="file" class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" id="address" name="" placeholder="Choose a file" />
                                 <br><br>
-                              </label>
-                              
-                            
+                              </form>
+                            </label> 
+                            </form>
                           </div>
                                       
                         </div>
@@ -1039,12 +1069,10 @@
                             Cancel
                           </button>
                           <button
-                          type="submit"
                             class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple save-button"
                           >
                             Save
                           </button>
-                        </form>
                         </footer>
                       </div>
                     </div>              
@@ -1237,7 +1265,7 @@
                       >
                         <!-- Modal body -->
                         <div class="mt-4 mb-6">
-                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Your Batches </p>
+                          <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add Batches </p>
               
                           <br>
 
@@ -1268,7 +1296,7 @@
                             <br>
                             <label class="block text-sm">   
                               <form action="/upload" method="post" enctype="multipart/form-data">
-                                <label for="file" class="text-gray-700 dark:text-gray-200 mb-8">Choose a CSV file:</label>
+                                <label for="file" class="text-gray-700 dark:text-gray-200 mb-8">Choose a CSV file : </label>
                                 <input type="file" class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" id="address" name="" placeholder="Choose a file" />
                                 <br><br>
                               </form>

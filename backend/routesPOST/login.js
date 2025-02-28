@@ -64,7 +64,6 @@ loginLogicRouter.post("/login", async (req, res) => {
         if (interfaceType === "Webapp") {
 
             const user = await User.findOne({ username: userUsername });
-            console.log(user)
 
             if (!user || user.password !== userPwd) {
                 logMessage(`[-] ${interfaceType} ${userIP} : Unsuccessful login attempt for user ${userUsername}`);

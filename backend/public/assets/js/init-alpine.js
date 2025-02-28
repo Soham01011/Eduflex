@@ -9,9 +9,10 @@ function data() {
     return (
       !!window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
-    )}
+    )
+  }
 
-  function setThemeToLocalStorage(value) { 
+  function setThemeToLocalStorage(value) {
     window.localStorage.setItem('dark', value)
   }
 
@@ -202,5 +203,29 @@ function data() {
       this.trapCleanup()
     },
 
+    // Modal15
+    isModal15Open: false,
+    trapCleanup: null,
+    openModal15() {
+      this.isModal15Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal15'))
+    },
+    closeModal15() {
+      this.isModal15Open = false
+      this.trapCleanup()
+    },
+
+    // Modal16
+    isModal16Open: false,
+    trapCleanup: null,
+    openModal16() {
+      this.isModal16Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal16'))
+    },
+    closeModal16() {
+      this.isModal16Open = false
+      this.trapCleanup()
+    },
+
   }
-}     
+}
