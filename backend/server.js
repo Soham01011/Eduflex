@@ -73,6 +73,7 @@ const forgetpasswordRoute = require("./routesGET/forogtpassword");
 const checkforgotpwdtokenRoute = require("./routesGET/checkpwdtoken");
 const profilementorRoute = require("./routesGET/profilepagementor");
 const dashboardmentorRoute = require("./routesGET/dashboardmentor");
+const managementProtalRoute = require("./routesGET/managementportal")
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -290,6 +291,8 @@ server.get("/forgotpassword",forgetpasswordRoute);
 server.get("/profile-web-page-mentor", profilementorRoute);
 
 server.get("/dashboard-mentor", dashboardmentorRoute);
+
+server.get("/management-portal-mentor", managementProtalRoute);
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
