@@ -227,5 +227,29 @@ function data() {
       this.trapCleanup()
     },
 
+    // Modal17
+    isModal17Open: false,
+    trapCleanup: null,
+    openModal17() {
+      this.isModal17Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal17'))
+    },
+    closeModal17() {
+      this.isModal17Open = false
+      this.trapCleanup()
+    },
+  
+     // Modal18
+    isModal18Open: false,
+    trapCleanup: null,
+    openModal18() {
+      this.isModal18Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal18'))
+    },
+    closeModal18() {
+      this.isModal18Open = false
+      this.trapCleanup()
+    },
+
   }
 }
