@@ -93,7 +93,8 @@ const likesRoute = require('./routesPOST/likesRoute');
 const postsLogicRoute = require("./routesPOST/postsRoute");
 const sendforgetmailRoute = require("./routesPOST/sendforgotmail");
 const changepasswordRoute = require("./routesPOST/changepassword");
-const addbatchRoute = require("./routesPOST/addbatch")
+const addbatchRoute = require("./routesPOST/addbatch");
+const createCourseRoute = require("./routesPOST/createcourse");
 
 
 /* 
@@ -1137,6 +1138,8 @@ server.post('/checkforgetmail', sendforgetmailRoute);
 server.get('/forgotpwdverify', checkforgotpwdtokenRoute);
 
 server.post("/changepassword" , changepasswordRoute);
+
+server.post("/createcourse-mentor", createCourseRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 

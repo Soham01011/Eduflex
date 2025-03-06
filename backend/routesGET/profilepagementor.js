@@ -11,7 +11,6 @@ profilementorRoute.get("/profile-web-page-mentor", checkTokenAndUserType , async
     const username = await fetchUser(req,res);
     const user = await User.findOne({"username" : username});
     const mentees = await Mentees.find({"mentor" : username});
-    console.log(user , mentees)
 
     res.render("mentorprofilepage",{user,mentees});
 });
