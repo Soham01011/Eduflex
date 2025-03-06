@@ -93,7 +93,8 @@ const likesRoute = require('./routesPOST/likesRoute');
 const postsLogicRoute = require("./routesPOST/postsRoute");
 const sendforgetmailRoute = require("./routesPOST/sendforgotmail");
 const changepasswordRoute = require("./routesPOST/changepassword");
-const addbatchRoute = require("./routesPOST/addbatch")
+const addbatchRoute = require("./routesPOST/addbatch");
+const createCourseRoute = require("./routesPOST/createcourse");
 
 
 /* 
@@ -416,22 +417,11 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             department
         } = req.body;
 
+        let token = req.cookies.Token;
 
-        if (!Token) {
-            const raw_token = req.cookies.Token;
-
-            if (!raw_token) {
-                return res.status(400).json({ message: 'Token is required.' });
-            }
-
-            try {
-                // Verify and decode the token using serverSK
-                const decodedToken = jwt.verify(raw_token, serverSK);
-                Token = decodedToken.userId; // Extract userId from the decoded token
-            } catch (error) {
-                console.log('Error decoding token:', error.message);
-                return res.status(400).json({ message: 'Invalid or expired token.' });
-            }
+        if(!Token){
+            decodedToken = jwt.verify(token, serverSK); // Decode JWT for Webapp
+            Token = decodedToken.userId;
         }
 
         // Check if the token is provided
@@ -1148,6 +1138,8 @@ server.post('/checkforgetmail', sendforgetmailRoute);
 server.get('/forgotpwdverify', checkforgotpwdtokenRoute);
 
 server.post("/changepassword" , changepasswordRoute);
+
+server.post("/createcourse-mentor", createCourseRoute);
 
 // TESTING ROUTES -------------------------------------------------------------------------------------------------------------
 
