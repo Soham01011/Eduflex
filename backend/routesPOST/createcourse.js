@@ -20,7 +20,7 @@ const extract_hashtag_folder = multer({
             cb(null, hashtagDir);  // Use the absolute path
         },
         filename: (req, file, cb) => {
-            const sanitizedFilename = file.originalname.replace(/\s+/g, "_");
+            const sanitizedFilename = file.originalname;
             cb(null, sanitizedFilename);
         }
     })
@@ -37,7 +37,6 @@ createCourseRoute.post("/createcourse-mentor", checkTokenAndUserType, extract_ha
     }
 
     console.log("Received file:", req.file); // Check if file is received
-    const sanitizedFilename = req.file.originalname.replace(/\s+/g, "_");
 
     console.log(await fetchUser(req,res),sanitizedFilename,course_name,batch_name, department , selection,"Webapp",userIP)
 
