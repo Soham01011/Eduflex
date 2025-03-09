@@ -33,3 +33,5 @@ document.getElementById('formAccountSettings').addEventListener('submit', async 
 });
 
 console.log("upload profile data js is loaded ")
+
+
