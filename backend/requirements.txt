@@ -10,6 +10,6 @@ Pillow
 nltk
 numpy
 pandas
-tensorflow=2.18
+tensorflow==2.18
 scikit-learn
 PyMuPDF
