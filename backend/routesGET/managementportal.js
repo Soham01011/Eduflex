@@ -50,7 +50,6 @@ managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (
         });
     }
 
-    console.log(JSON.stringify(Studentdonecourse));
     res.render("managementprotal", { username, Studentdonecourse, mentees, students_uploads, teachercourses });
 });
 

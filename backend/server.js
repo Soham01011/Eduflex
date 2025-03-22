@@ -97,7 +97,7 @@ const sendforgetmailRoute = require("./routesPOST/sendforgotmail");
 const changepasswordRoute = require("./routesPOST/changepassword");
 const addbatchRoute = require("./routesPOST/addbatch");
 const createCourseRoute = require("./routesPOST/createcourse");
-
+const postpermissionRouter = require("./routesPOST/postpermission");
 
 /* 
     These are the schemas / models which are the collections in the database
@@ -818,6 +818,8 @@ server.post("/mybatches",mybatchesLogicRoute);
 
 server.post('/delete-batch',deletebatchLoginRoute)
 
+server.post("/postpermission-mentor",postpermissionRouter);
+
 
 /*
 ==== > FUTURE PLAN TO AUTO MATE THE CERT METADATA
@@ -936,142 +938,7 @@ server.post("/extract-hashtags", checkToken, extract_hashtag_folder.single('file
 });*/
 
 
-server.post("/postpermission", checkToken, async (req, res) => {
-    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-
-    console.log("POST PERMISSION");
-
-    const { Token, up_username ,interface} = req.body;
-
-    const check_token = await CSRFToken.findOne({ token: Token });
-    console.log("Token:", Token, "username:", check_token?.username);
-
-    if (check_token.username) {
-        const mybatches_data = await Mentor.find({ mentor: check_token.username });
-        console.log("Token true\n", mybatches_data);
-
-        let results = {};
-
-        for (const batchData of mybatches_data) {
-            const batchName = batchData.batch;
-            const studentsNames = batchData.students;
-            const studentsUsernames = batchData.username;
-
-            results[batchName] = {};
-
-            for (let i = 0; i < studentsNames.length; i++) {
-                const studentName = studentsNames[i];
-                const studentUsername = studentsUsernames[i];
-
-                // Fetch unapproved posts for the student
-                const unapprovedPosts = await Profiles.find({
-                    username: studentUsername,
-                    approved: false
-                });
-
-                // Map unapproved posts to include all required fields
-                results[batchName][studentName] = unapprovedPosts.map(post => ({
-                    postId: post.postID,
-                    imagePaths: post.imagePaths, // Ensure this field is included
-                    post_desc: post.post_desc,
-                    post_type: post.post_type,
-                    post_likes: post.post_likes,
-                    file: post.file,
-                    interface: post.interface,
-                    approved: post.approved,
-                    model_approved: post.model_approved,
-                    real : post.real,
-                    ...(post.real === false && { edited_by: post.edited_by })
-                }));
-            }
-        }
-        logMessage(`[=] ${interface} ${userIP} : ${check_token.username} fetched post permissions`);
-
-        res.status(200).json(results);
-
-    } else {
-        logMessage(`[-] ${interface} ${userIP} : ${check_token.username} couldn't fetched post permissions`);
-        res.status(404).send("Token not valid");
-    }
-});
-
-server.post("/status-post", checkToken,async(req,res)=> {
-    const userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-
-    const {Token , postId , up_username , status , interface } = req.body;
-    if (Token)
-    {    
-        const check_token = await CSRFToken.findOne({ token : Token});
-        if (check_token.username == up_username)
-        {
-            if (status == "approved") {
-                try {
-                    const result = await Profiles.findOneAndUpdate(
-                        { postID: postId },
-                        { 
-                            $set: { 
-                                approved: true, 
-                                mentor_approved: "approved" 
-                            } 
-                        },
-                        { new: true }
-                    );
-                
-                    if (!result) {
-                        return res.status(404).json({ message: 'Post not found' });
-                    }
-                    logMessage(`[=] ${interface} ${userIP} : ${up_username} approved post ${postId}`);
-                    return res.status(200).json({ message: 'Post approved successfully' });
-                } catch (error) {
-                    logMessage(`[*] Internal Server error : failed to approve post : ${error}`);
-                    return res.status(500).json({ message: 'Internal Server error' });
-                }
-            } else if (status == 'rejected') {
-                try {
-                    console.log("REJECTED : ", postId);
-                    const result = await Profiles.findOneAndUpdate(
-                        { postID: postId },
-                        { 
-                            $set: { 
-                                approved: true, 
-                                mentor_approved: "rejected" 
-                            } 
-                        },
-                        { new: true }
-                    );
-                
-                    if (!result) {
-                        return res.status(404).json({ message: 'Post not found' });
-                    }
-                
-                    logMessage(`[=] ${interface} ${userIP} : ${up_username} rejected post ${postId}`);
-                    return res.status(200).json({ message: 'Post rejected successfully' });
-                } catch (error) {
-                    logMessage(`[*] Internal Server error : rejected post ${postId}, error ${error}`);
-                    return res.status(500).json({ message: 'Internal Server error' });
-                }
-            }
-
-            
-        }
-        else{
-            logMessage(`[-] ${interface} ${userIP} : Invalid request : ${up_username} ${postId}`);
-            return res.status(404).json({ message: 'invalid request' });
-        }
-}
-});
 
 server.get("/search-user-result",async(req,res)=> {
     try {
