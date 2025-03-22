@@ -127,7 +127,7 @@ server.use(cors({
 }));
 
 
-mongoose.connect("mongodb://127.0.0.1/RMS");
+mongoose.connect(process.env.MONGODB_CONN_URI);
 
 const logDirectory = path.join(__dirname, 'logs');
 

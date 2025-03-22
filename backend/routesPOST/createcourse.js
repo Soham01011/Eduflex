@@ -36,13 +36,13 @@ createCourseRoute.post("/createcourse-mentor", checkTokenAndUserType, extract_ha
         userIP = userIP.split(',')[0].trim();
     }
 
-    console.log("Received file:", req.file); // Check if file is received
+    const sanitizedFilename = req.file.originalname; 
 
     console.log(await fetchUser(req,res),sanitizedFilename,course_name,batch_name, department , selection,"Webapp",userIP)
 
     addstudtoCourse(await fetchUser(req,res),sanitizedFilename,course_name,class_name = batch_name, department , selection,"Webapp",userIP);
 
-    res.json({ message: "File uploaded successfully", file: req.file.originalname });
+    res.redirect("/profile-web-page-mentor");
 });
     
 module.exports = createCourseRoute
