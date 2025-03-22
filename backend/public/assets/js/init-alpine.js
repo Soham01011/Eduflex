@@ -251,5 +251,16 @@ function data() {
       this.trapCleanup()
     },
 
+    // Modal19
+    isModal19Open: false,
+    trapCleanup: null,
+    openModal19() {
+      this.isModal19Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal19'))
+    },
+    closeModal19() {
+      this.isModal19Open = false
+      this.trapCleanup()
+    },
   }
 }
