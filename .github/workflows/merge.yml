@@ -1,0 +1,35 @@
+name: Auto Merge Branches
+
+on:
+  push:
+    branches:
+      - main
+      - dev3
+
+jobs:
+  merge-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Merge main -> dev3
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git checkout dev3
+          git merge main --no-edit
+          git push origin dev3
+
+      - name: Merge dev3 -> main
+        if: github.ref == 'refs/heads/dev3'
+        run: |
+          git checkout main
+          git merge dev3 --no-edit
+          git push origin main
