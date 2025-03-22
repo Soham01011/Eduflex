@@ -971,8 +971,9 @@
 
               <div class="w-full overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto">
+                  <% if (teachercourses) { %>
                   <table class="w-full whitespace-no-wrap">
-
+                    
                     <thead>
                       <tr
                         class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -982,22 +983,23 @@
                         <th class="px-4 py-3">Actions</th>
                       </tr>
                     </thead>
-
+                    <% if(Array.isArray(teachercourses) && teachercourses.length> 0) { %>
+                      <% teachercourses.forEach(course=> { %>
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
                           <div class="flex items-center text-sm">
                             <!-- Avatar with inset shadow -->
                             <div>
-                              <p class="font-semibold">Database Management System</p>
+                              <p class="font-semibold"><%= course.course_name %></p>
                             </div>
                           </div>
                         </td>
                         <td class="px-4 py-3 text-sm">
-                          Information Technology
+                          <%= course.department %>
                         </td>
                         <td class="px-4 py-3 text-sm">
-                          SE - B
+                          <%= course.class_name %>
                         </td>
                         <td class="px-4 py-3">
                           <div class="flex items-center space-x-4 text-sm">
@@ -1025,7 +1027,7 @@
                                 role="dialog" id="modal10">
                                 <!-- Modal body -->
                                 <div class="mt-4 mb-6">
-                                  <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Add Skills
+                                  <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Studnets Enrolled
                                   </p>
 
                                   <br>
@@ -1033,6 +1035,7 @@
                                   <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                     <div class="w-full overflow-hidden rounded-lg shadow-xs">
                                       <div class="w-full overflow-x-auto">
+                                        <% if(course.students && course.username) { %>
                                         <table class="w-full whitespace-no-wrap">
                                           <thead>
                                             <tr
@@ -1041,36 +1044,27 @@
                                               <th class="px-4 py-3">Moodle ID</th>
                                             </tr>
                                           </thead>
-
                                           <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                            <tr class="text-gray-700 dark:text-gray-400">
-                                              <td class="px-4 py-3">
-                                                <div class="flex items-center text-sm">
-                                                  <!-- Avatar with inset shadow -->
-                                                  <div>
-                                                    <p class="font-semibold">Siddharth Devare</p>
+                                            <% course.students.forEach((stud, index)=> { %>
+                                              <tr class="text-gray-700 dark:text-gray-400">
+                                                <td class="px-4 py-3">
+                                                  <div class="flex items-center text-sm">
+                                                    <div>
+                                                      <p class="font-semibold">
+                                                        <%= stud %>
+                                                      </p>
+                                                    </div>
                                                   </div>
-                                                </div>
-                                              </td>
-                                              <td class="px-4 py-3 text-sm">
-                                                21104136
-                                              </td>
-                                            </tr>
-                                            <tr class="text-gray-700 dark:text-gray-400">
-                                              <td class="px-4 py-3">
-                                                <div class="flex items-center text-sm">
-                                                  <!-- Avatar with inset shadow -->
-                                                  <div>
-                                                    <p class="font-semibold">Soham Dalvi</p>
-                                                  </div>
-                                                </div>
-                                              </td>
-                                              <td class="px-4 py-3 text-sm">
-                                                21104010
-                                              </td>
-                                            </tr>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm">
+                                                  <%= course.username[index] %>
+                                                </td>
+                                              </tr>
+                                              <% }) %>
+
                                           </tbody>
                                         </table>
+                                        <% } %>
                                       </div>
                                     </div>
                                   </div>
@@ -1095,8 +1089,9 @@
                         </td>
                       </tr>
                     </tbody>
-
+                    <% }) } %>
                   </table>
+                  <% } %>
                 </div>
               </div>
             </div>
