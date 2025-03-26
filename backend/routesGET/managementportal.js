@@ -7,6 +7,7 @@ const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype")
 const Mentees = require("../models/mentees");
 const Profiles = require("../models/profiles");
 const Courses = require("../models/coursescert");
+const AllSkills = require("../models/expeduskill");
 
 managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (req, res) => {
     const username = await fetchUser(req, res);
@@ -14,6 +15,76 @@ managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (
     const menteesUsername = mentees.flatMap(mentee => mentee.username);
     const students_uploads = await Profiles.find({ username: { $in: menteesUsername } });
     const teachercourses = await Courses.find({ mentor: username });
+    
+    // Fetch unapproved skills for mentees
+    const pendingSkills = await AllSkills.aggregate([
+        { $match: { username: { $in: menteesUsername } } },
+        { $unwind: '$skills' },
+        { $match: { 'skills.approved': false } },
+        {
+            $lookup: {
+                from: 'mentors',
+                let: { student_username: '$username' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $in: ['$$student_username', '$username']
+                            }
+                        }
+                    }
+                ],
+                as: 'menteeInfo'
+            }
+        },
+        {
+            $addFields: {
+                batch: { $arrayElemAt: ['$menteeInfo.batch', 0] }
+            }
+        },
+        {
+            $lookup: {
+                from: 'mentors',
+                let: { batchId: '$batch' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ['$batch', '$$batchId'] }
+                        }
+                    }
+                ],
+                as: 'batchInfo'
+            }
+        },
+        {
+            $addFields: {
+                timings: { $arrayElemAt: ['$batchInfo.timings', 0] }
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    username: '$username',
+                    batch: '$batch',
+                    timings: '$timings'
+                },
+                skills: { $push: '$skills' }
+            }
+        },
+        {
+            $group: {
+                _id: '$_id.batch',
+                timings: { $first: '$_id.timings' },
+                students: {
+                    $push: {
+                        username: '$_id.username',
+                        pendingSkills: '$skills'
+                    }
+                }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
 
     let Studentdonecourse = [];
 
@@ -49,8 +120,15 @@ managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (
             students: studentProfiles
         });
     }
-
-    res.render("managementprotal", { username, Studentdonecourse, mentees, students_uploads, teachercourses });
+    console.log("Pendgin skills approval ",JSON.stringify(pendingSkills));
+    res.render("managementprotal", { 
+        username, 
+        Studentdonecourse, 
+        mentees, 
+        students_uploads, 
+        teachercourses,
+        pendingSkills // Add pending skills to the rendered data
+    });
 });
 
 module.exports = managementProtal;

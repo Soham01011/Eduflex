@@ -30,6 +30,7 @@ const skillSchema = new mongoose.Schema({
     skill_type: {type: String , required: false},
     name: {type: String,  required: false},
     linked: {type:Boolean, required: false},
+    approved: {type: Boolean, required: false, default: false}
 });
 
 const allskillsSchema = new mongoose.Schema({
