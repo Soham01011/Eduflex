@@ -12,3 +12,5 @@ backend/real_cert.csv
 backend/DockerFile
 backend/logs
 backend/todo
+token.txt
+.vercel

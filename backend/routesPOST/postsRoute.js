@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const { checkToken } = require("../middleware/checkToken");
 const { logMessage } = require("../utils/logger");
 const { fetchUser } = require("../utils/fetchUser");
-const { validatecert } = require("../utils/validatecert");
+let { validatecert } = require("../utils/validatecert");
 
 const User = require("../models/users");
 const Pointshistory = require("../models/pointshistory");

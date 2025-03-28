@@ -1,6 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Post approval buttons initialized");
 
+    document.querySelectorAll('.slider').forEach(slider => {
+        const sliderId = slider.id;
+        const sliderValue = document.getElementById(sliderId.replace('markSlider', 'sliderValue'));
+        
+        slider.addEventListener("input", () => {
+            sliderValue.textContent = slider.value;
+            let percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.background = `linear-gradient(to right, #8F00FF ${percentage}%, #ddd ${percentage}%)`;
+        });
+    });
+
+
     document.querySelectorAll(".accept-btn, .reject-btn").forEach(button => {
         button.addEventListener("click", async () => {
             const postId = button.getAttribute("data-postid");
