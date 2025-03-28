@@ -13,3 +13,4 @@ backend/DockerFile
 backend/logs
 backend/todo
 token.txt
+.vercel
