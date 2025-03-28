@@ -497,85 +497,86 @@
                     <h4
                     class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
                     >
-                    Upload
+                    Make Event Announcements
                     </h4>
-                    <div
-                    class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
-                    >
-                    <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Title</span>
-                        <input
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder="Enter the title"
-                        />
-                    </label>
-
-                    <br> 
-
-                    <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Description</span>
-                        <input
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder="Enter Description"
-                        />
-                    </label> 
-
-                    <br>
-
-                    <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Speaker / Host</span>
-                        <input
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder="Enter Speaker's Name"
-                        />
-                    </label> 
-
-                    <br>
-
-                    <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Venue</span>
-                        <input
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder="Enter Venue Details"
-                        />
-                    </label>
-                    
-                    <br>
-
-                    <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Date</span>
-                        <input
+                    <form action="/make-announcement" method="post" enctype="multipart/form-data">
+                        <div
+                        class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+                        >
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Title</span>
+                            <input id="title" name="title"
                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Enter Date"
-                            type="date"
-                            class="form-control"
-                        />
-                    </label>
+                            placeholder="Enter the title"
+                            />
+                        </label>
 
-                    <br>
+                        <br> 
 
-                    <label class="block text-sm">
-                        <span class="text-gray-700 dark:text-gray-400">Time</span>
-                        <input
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder="Enter Time Duration"
-                        />
-                    </label>
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Description</span>
+                            <input id="description" name="description"
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            placeholder="Enter Description"
+                            />
+                        </label> 
+
+                        <br>
+
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Speaker / Host</span>
+                            <input id="speaker" name="speaker"
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            placeholder="Enter Speaker's Name"
+                            />
+                        </label> 
+
+                        <br>
+
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Venue</span>
+                            <input id="venue" name="venue"
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            placeholder="Enter Venue Details"
+                            />
+                        </label>
+
+                        <br>
+
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Date</span>
+                            <input id="date" name="date"
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder="Enter Date"
+                                type="date"
+                                class="form-control"
+                            />
+                        </label>
+
+                        <br>
+
+                        <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Time</span>
+                            <input id="time" name="time"
+                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            placeholder="Enter Time Duration"
+                            />
+                        </label>
+
+                        <br>
+
+                        <label class="block text-sm">   
+                            <label for="file" class="text-gray-700 dark:text-gray-200 mb-8">Choose a file:</label>
+                            <input type="file" id="posterimage" name="posterimage"  class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" id="address" name="" placeholder="Choose a file" />
+                            <br><br>
+                            
+                        </label> 
+
                     
-                    <br>
-
-                    <label class="block text-sm">   
-                        <form action="/upload" method="post" enctype="multipart/form-data">
-                        <label for="file" class="text-gray-700 dark:text-gray-200 mb-8">Choose a file:</label>
-                        <input type="file" class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" id="address" name="" placeholder="Choose a file" />
-                        <br><br>
-                        </form>
-                    </label> 
-
-    
-                    <button class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Upload Post
-                    </button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Upload Post
+                        </button>
+                    </form>
                 </div>
             </main>
         </div>

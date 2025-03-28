@@ -98,7 +98,8 @@ const changepasswordRoute = require("./routesPOST/changepassword");
 const addbatchRoute = require("./routesPOST/addbatch");
 const createCourseRoute = require("./routesPOST/createcourse");
 const postpermissionRouter = require("./routesPOST/postpermission");
-
+const scoreskillsRouter = require("./routesPOST/updateSkills");
+const makeannoucementRouter = require("./routesPOST/makeannouncement");
 /* 
     These are the schemas / models which are the collections in the database
 */
@@ -301,6 +302,10 @@ server.get("/announcements", AnnoucementLogicRoute);
 
 server.get("/makeannoucement", MakeAnnoucementsRoute);
 
+server.post("/update-skill-scores-mentor",scoreskillsRouter);
+
+server.post("/make-announcement", makeannoucementRouter);
+
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
 server.get("/ping", (req, res) => {
@@ -368,25 +373,21 @@ server.post("/mobiletoken", async(req,res) => {
 
 server.post('/login',loginLogicRouter);
 
-server.post("/logout", checkToken, async (req, res) => {
+server.get("/logout", checkToken, async (req, res) => {
     // Extract Token from the request body
-    const { Token } = req.body;
-
-    // Check if the Token exists in the request body
-    if (Token) {
-        console.log("Token logged out:", Token);
-        // Delete the CSRF token associated with this token
-        await CSRFToken.deleteOne({ token: Token });
-        return res.status(200).json({ message: "Logged out" });
-    } 
-    // If no Token in the body, check cookies
-    else if (req.cookies.token) {
-        const username = await fetchUser(req, res);
-        await CSRFToken.deleteOne({ username: username, interface: "Webapp" });
-        return res.status(200).json({ message: "Logged out" });
-    } else {
-        return res.status(400).json({ message: "Token or cookie required for logout." });
+    let username = await fetchUser(req, res);
+    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    if (Array.isArray(userIP)) {
+        userIP = userIP[0];
+    } else if (userIP.includes(',')) {
+        userIP = userIP.split(',')[0].trim();
     }
+    // Delete the token from the database fomr CSFTToken collection by searching the username
+    await CSRFToken.deleteOne({ username: username });
+    logMessage(`[=] ${username} ${userIP} : Logged out successfully`);
+    // Clear the cookie
+    res.clearCookie('Token');
+
 });
 
 server.post('/register', registerLogicRoute);

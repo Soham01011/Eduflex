@@ -11,7 +11,7 @@ import fitz
 import os
 
 # Load the saved Keras model
-model = load_model(r"C:\Users\USER\OneDrive\Desktop\Eduflex\Eduflex\backend\certificate_indentifier.keras")
+model = load_model("./certificate_indentifier.keras")
 
 # Define preprocessing steps
 categorical_features = ['Font Style', 'Producer']
@@ -27,8 +27,8 @@ preprocessor = ColumnTransformer(
     ])
 
 # Load training data to fit the preprocessor
-real_data = pd.read_csv(r"C:\Users\USER\OneDrive\Desktop\Eduflex\Eduflex\backend\real_cert.csv")
-fake_data = pd.read_csv(r"C:\Users\USER\OneDrive\Desktop\Eduflex\Eduflex\backend\fake_cert.csv")
+real_data = pd.read_csv("./real_cert.csv")
+fake_data = pd.read_csv("./fake_cert.csv")
 data = pd.concat([real_data, fake_data], ignore_index=True)
 
 # Rename columns to match expected names
