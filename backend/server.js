@@ -214,7 +214,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const hashtagDir = '/home/soham-dalvi/Projects/Eduflex/backend/hashtag_extractions';
+const hashtagDir = './hashtag_extractions';
 
 if (!fs.existsSync(hashtagDir)) {
     fs.mkdirSync(hashtagDir, { recursive: true });

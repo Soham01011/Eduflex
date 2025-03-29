@@ -8,6 +8,14 @@
   ],
   "routes": [
     {
+      "src": "/uploads/(.*)",
+      "dest": "/backend/uploads/$1"
+    },
+    {
+      "src": "/apiuploads/(.*)",
+      "dest": "/backend/apiuploads/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/backend/server.js"
     }
