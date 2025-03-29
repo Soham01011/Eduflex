@@ -11,9 +11,12 @@ on:
 
 jobs:
   deploy:
-    # Only run if PR is merged to master
     if: github.event.pull_request.merged == true || github.event_name == 'push'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
     steps:
       - uses: actions/checkout@v3
 
@@ -22,24 +25,23 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Install Dependencies
+        run: npm install
+
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Build Project
-        run: |
-          cd backend
-          npm install
-          npm run build
-
       - name: Deploy to Vercel
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd backend
+        run: |
+          vercel deploy --prod \
+            --token=${{ secrets.VERCEL_TOKEN }} \
+            --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           USE_PYTHON_SERVER: ${{ secrets.USE_PYTHON_SERVER }}
           USE_CREDLY_BADGES: ${{ secrets.USE_CREDLY_BADGES }}
           USE_VALIDATE_CERT: ${{ secrets.USE_VALIDATE_CERT }}
