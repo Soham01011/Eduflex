@@ -11,10 +11,5 @@
       "src": "/(.*)",
       "dest": "/backend/server.js"
     }
-  ],
-  "functions": {
-    "backend/server.js": {
-      "runtime": "@vercel/node@2.0.0"
-    }
-  }
+  ]
 }
