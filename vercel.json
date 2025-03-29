@@ -9,12 +9,12 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "backend/server.js"
+      "dest": "/backend/server.js"
     }
   ],
   "functions": {
     "backend/server.js": {
-      "memory": 1024
+      "runtime": "@vercel/node@2.0.0"
     }
   }
 }
