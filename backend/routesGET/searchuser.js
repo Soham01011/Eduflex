@@ -113,8 +113,6 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             });
         };
 
-        console.log(userAllskills.education)
-
         res.render("searchpage",{
             username : userData.username,
             firstname: userData.firstname || null,

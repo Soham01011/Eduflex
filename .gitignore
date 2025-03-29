@@ -1,15 +1,10 @@
 backend/node_modules
 backend/.env
 backend/testing.js
-backend/uploads/*
-backend/apiuploads/*
-backend/hashtag_extractions/*
-!backend/uploads/.gitkeep
-!backend/apiuploads/.gitkeep
-!backend/hashtag_extractions/.gitkeep
+backend/uploads
 backend/node_modules
 tesseract
-apiuploads
+backend/apiuploads
 backend/hashtag_extractions
 backend/certifications
 backend/fake_cert.csv

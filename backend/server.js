@@ -24,11 +24,9 @@ let {addMentees} = require('./utils/mentees');
 let {fetchBadges} = require('./utils/fetchBadges');
 let {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
-const {checkUserType} = require("./middleware/checkUserType")
 let {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
 let {certificatelevelcheck} = require('./utils/certlevelcheck');
-const {interfaceFetch} = require("./utils/interface")
 
 /**
  * Below is the code to have manual feature enabling and disabling commands to make it scalable 
@@ -298,7 +296,7 @@ server.get("/dashboard-mentor", dashboardmentorRoute);
 
 server.get("/management-portal-mentor", managementProtalRoute);
 
-server.get("/announcements", AnnoucementLogicRoute);
+server.use("/announcements", AnnoucementLogicRoute);
 
 server.get("/makeannoucement", MakeAnnoucementsRoute);
 
@@ -387,6 +385,7 @@ server.get("/logout", checkToken, async (req, res) => {
     logMessage(`[=] ${username} ${userIP} : Logged out successfully`);
     // Clear the cookie
     res.clearCookie('Token');
+    res.redirect('/loginpage');
 
 });
 

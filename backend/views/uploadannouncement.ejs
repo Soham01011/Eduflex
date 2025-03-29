@@ -557,11 +557,27 @@
 
                         <label class="block text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Time</span>
-                            <input id="time" name="time"
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Enter Time Duration"
+                            <input 
+                                id="time" 
+                                name="time" 
+                                type="time" 
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                required
                             />
                         </label>
+                        
+                        <!-- Add this script at the bottom of the body tag -->
+                        <script>
+                            // Convert 24hr time to 12hr format
+                            const timeInput = document.getElementById('time');
+                            timeInput.addEventListener('change', function() {
+                                const time24 = this.value;
+                                const [hours24, minutes] = time24.split(':');
+                                const hours12 = ((hours24 % 12) || 12);
+                                const ampm = hours24 < 12 ? 'AM' : 'PM';
+                                this.dataset.time12 = `${hours12}:${minutes} ${ampm}`;
+                            });
+                        </script>
 
                         <br>
 
