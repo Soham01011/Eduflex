@@ -141,7 +141,8 @@ profilepageRoute.get("/profile-web-page", checkTokenAndUserType, async (req, res
             userexp,
             useredu,
             userskills,
-            userproj
+            userproj,
+            credlybadges: Credly_there
         });
  
     }

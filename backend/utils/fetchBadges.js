@@ -1,6 +1,8 @@
 const axios = require("axios");
 const Credly = require("../models/credly");
 
+const {logMessage }= require("./logger")
+
 async function fetchBadges(interface,credly,firstName,lastName,tkusername,userIP){
     if(credly){
         const credlylink_template = 'https://www.credly.com/users/';
@@ -27,7 +29,9 @@ async function fetchBadges(interface,credly,firstName,lastName,tkusername,userIP
                         link: credly,
                         issuer_name: badge.issuer_name,
                         cert_name: badge.certificate_name,
-                        issue_date: badge.issued_date
+                        issue_date: badge.issue_date,
+                        badge_url: badge.badge_url,
+                        image_url: badge.image_url
                     });
 
                     await newBadge.save();

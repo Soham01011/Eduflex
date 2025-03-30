@@ -16,7 +16,7 @@ const {fetchUser} = require("../utils/fetchUser");
 const Profiles = require('../models/profiles');
 const Credly = require('../models/credly');
 const Allskills = require('../models/expeduskill');
-const User = require("../models/users")
+const User = require("../models/users");
 
 
 /**
@@ -68,9 +68,13 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
 
     
         let userData = await User.findOne({"username" : user.username});
-        let userCredly = await Credly.find({"username" : user.username}) || false;
+        let userCredly = await Credly.findOne({"username" : user.username}) || false;
+        // Get all badges for the user
+        let cert = await Credly.find({"username" : user.username}) || [];
         let userProfile = await Profiles.find({"username": user.username}) || false;
         let userAllskills = await Allskills.findOne({"username" : user.username}) || false;
+
+
 
         if(userProfile){
             userProfile.forEach(profile => {
@@ -113,20 +117,22 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             });
         };
 
-        res.render("searchpage",{
-            username : userData.username,
+        res.render("searchpage", {
+            username: userData.username,
             firstname: userData.firstname || null,
-            lastname : userData.lastname || null,
+            lastname: userData.lastname || null,
             workplace: userData.college || null,
             userProfile: user,
-            link : userCredly.link,
+            link: userCredly ? userCredly.link : null,
             bio: userData.bio || null,
-            credlyData: userCredly || false,
-            post : userProfile || false,
-            userexp: userAllskills.experience || false,
-            useredu :userAllskills.education || false,
+            credlybadges: userCredly || false,
+            cert: cert,
+            post: userProfile || false,
+            userexp: userAllskills ? userAllskills.experience || [] : [],
+            useredu: userAllskills ? userAllskills.education || [] : [],
+            userAllskills: userAllskills || { skills: [] },
             editable
-        })
+        });
         
     } catch (error) {
         console.error(error);

@@ -8,6 +8,8 @@ const credlySchema = new mongoose.Schema({
     issuer_name: { type: String, required: false },
     cert_name: { type: String, required: false },
     issue_date: { type: String, required: false },
+    badge_url: { type: String, required: false },
+    image_url: { type: String, required: false }
 });
 
 module.exports = mongoose.model('Credly', credlySchema);
