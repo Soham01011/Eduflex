@@ -21,6 +21,7 @@ dashboardrouter.get("/dashboard",checkTokenAndUserType , async(req,res)=>{ //the
     const username = await fetchUser(req,res); //returning the username
     try {
         const pointsData = await Pointshistory.find({"username": username}).select("post_type post_subtype points time")
+        console.log(pointsData);
     
         res.status(200).render('index', {
             username, 

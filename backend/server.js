@@ -59,7 +59,7 @@ if(process.env.USE_ADD_MENTES === "false"){
 */
 
 const loginRoute = require('./routesGET/loginpage');
-const dashboardRoute = require('./routesPOST/dashboardRoute');
+const dashboardRoute = require('./routesGET/dashboardRoute');
 const uploadcretRouter = require('./routesGET/uploadcert');
 const profilepageRoute = require('./routesGET/profile-web-page');
 const explorepageRoute = require('./routesGET/explorepage');
@@ -106,8 +106,6 @@ const CSRFToken = require("./models/csrfttoken");
 const User = require("./models/users");
 const Profiles = require("./models/profiles");
 const Credly = require("./models/credly");
-const Mentor = require("./models/mentees");
-const Pointshistory = require("./models/pointshistory");
 
 const serverSK = process.env.SERVER_SEC_KEY;
 
@@ -274,6 +272,10 @@ const profile_pic_upload = multer({ storage: user_profilepic });
 
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** START
+server.get("/",(req,res) => {
+    res.render("landing");
+});
+
 server.get("/loginpage", loginRoute);
 
 server.get("/dashboard", dashboardRoute);
