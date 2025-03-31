@@ -3,17 +3,28 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>EduFlex - Upload</title>
+        <title>EduFlex</title>
         <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
         />
         <link rel="stylesheet" href="./assets/css/tailwind.output.css" />
         <script
-        src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-        defer
+          src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+          defer
         ></script>
         <script src="./assets/js/init-alpine.js"></script>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
+        />
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+          defer
+        ></script>
+        <script src="./assets/js/charts-lines.js" defer></script>
+        <script src="./assets/js/charts-pie.js" defer></script>
+        <script src="./scripts/registerevents.js" defer></script>
     </head>
     <body>
         <div
@@ -494,10 +505,8 @@
                     </a>
 
                     <!-- General elements -->
-                    <h4
-                    class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
-                    >
-                    Make Event Announcements
+                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                        Make Event Announcements
                     </h4>
                     <form action="/make-announcement" method="post" enctype="multipart/form-data">
                         <div
@@ -594,6 +603,73 @@
                         </button>
                     </form>
                 </div>
+
+                <br>
+
+                <div class="container px-6 mx-auto grid">
+
+                    <!-- General elements -->
+                    <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                        Uploaded Announcements
+                    </h4>
+                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <div class="container grid px-6 mx-auto">
+                                <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                                  Announcements
+                                </h2>
+                    
+                                <% announcements.forEach(announcement => { %>
+                                  <div class="card">
+                                      <div class="left">
+                                          <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                                              <%= announcement.title %>
+                                          </h2>
+                                          <div class="username">@<%= announcement.speaker %></div>
+                                          <p class="text-gray-600 dark:text-gray-400 mb-4">
+                                              <%= announcement.description %>
+                                          </p>
+                                          <p class="text-gray-600 dark:text-gray-400"><strong>Speaker:</strong> <%= announcement.speaker %></p>
+                                          <p class="text-gray-600 dark:text-gray-400"><strong>Venue:</strong>
+                                            <%= announcement.venue %>
+                                          </p>
+                                          <p class="text-gray-600 dark:text-gray-400"><strong>Time:</strong>
+                                            <%= announcement.time %>
+                                          </p>
+                                          <p class="text-gray-600 dark:text-gray-400"><strong>Date:</strong>
+                                            <%= new Date(announcement.date).toLocaleDateString() %>
+                                          </p>
+                                          <br>
+                                          <div class="flex items-center space-x-4">
+                                            <button data-event-id="<%= announcement.id %>"
+                                              class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 <%= announcement.isRegistered ? 'bg-gray-500' : 'bg-purple-600 hover:bg-purple-700' %> border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple"
+                                              <%= announcement.isRegistered ? 'disabled' : '' %>
+                                              >
+                                              <%= announcement.isRegistered ? 'Registered' : 'Register' %>
+                                            </button>
+                                          
+                                            <button
+                                              class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path
+                                                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z">
+                                                </path>
+                                              </svg>
+                                            </button>
+                                          </div>
+                                          </div>
+                                      <div class="right">
+                                          <div class="image-container">
+                                              <img src="<%= announcement.posterimage %>" alt="<%= announcement.title %>" />
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <br>
+                                <% }); %>
+                            </div>
+                        </div>
+                </div>
+                
             </main>
         </div>
     </body>
