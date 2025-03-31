@@ -140,7 +140,7 @@ postsRouter.post('/post/webapp',checkToken,upload.single('file'), async(req,res)
                 points = 10;
             }
         }
-        if (cert_type === 'extra') {
+        if (cert_type === 'extracurricular') {
             if (selection === 'Sports') {
                 points = 6;
             } else if (selection === 'Creative Arts') {

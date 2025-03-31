@@ -286,7 +286,7 @@ server.get("/upload-certificate",uploadcretRouter);
 
 server.get("/explore", explorepageRoute);
 
-server.get('/leaderboard', leaderboardroute);
+server.use('/leaderboard', leaderboardroute);
 
 server.get('/search-profile/:search_query', searchuserprofileRoute);
 

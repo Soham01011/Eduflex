@@ -290,7 +290,6 @@ def fetch_badges_2():
                     'issue_date': issue_date
                 })
 
-                print("Credly cretificates:", certificates)
 
             return jsonify(certificates), 200
         elif response.status_code != 200:
