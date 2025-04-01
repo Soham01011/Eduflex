@@ -12,7 +12,7 @@ makeannouncements.get("/makeannoucement", checkToken, async(req,res) => {
             .sort({ date: -1 }) // Sort by date descending (newest first)
             .lean(); // Convert to plain JavaScript objects
         console.log(userAnnouncements)
-        res.render("uploadannouncement", { announcements: userAnnouncements,username });
+        res.render("uploadannouncement", { announcements: userAnnouncements });
     } catch (error) {
         console.error("Error fetching announcements:", error);
         res.status(500).send("Error fetching announcements");
