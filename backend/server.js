@@ -294,8 +294,6 @@ server.get("/forgotpassword",forgetpasswordRoute);
 
 server.get("/profile-web-page-mentor", profilementorRoute);
 
-server.get("/dashboard-mentor", dashboardmentorRoute);
-
 server.get("/management-portal-mentor", managementProtalRoute);
 
 server.use("/announcements", AnnoucementLogicRoute);

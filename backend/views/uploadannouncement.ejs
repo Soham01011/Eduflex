@@ -290,14 +290,6 @@
                     </li>
                 </ul>
                 
-                <div class="px-6 my-6">
-                    <button
-                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    >
-                        Create account
-                        <span class="ml-2" aria-hidden="true">+</span>
-                    </button>
-                </div>
             </div>
         </aside>
 
@@ -440,7 +432,7 @@
                         <li class="flex">
                         <a
                             class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                            href="#"
+                            href="/logout"
                         >
                             <svg
                             class="w-4 h-4 mr-3"
@@ -622,25 +614,26 @@
                             <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
-
+                        <% if (announcements && announcements.length > 0) { %>
+                            <% announcements.forEach(announcement => { %>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                             <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3">
                                 <div class="flex items-center text-sm">
                                 <!-- Avatar with inset shadow -->
                                 <div>
-                                    <p class="font-semibold">RESTful API</p>  
+                                    <p class="font-semibold"> <%= announcement.title %> </p>  
                                 </div>
                                 </div>
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                008
+                                <%= announcement.venue %>
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                1/04/2025
+                                <%= announcement.date %>
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                12:15
+                                <%= announcement.time %>
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center space-x-4 text-sm">
@@ -694,7 +687,7 @@
                                                         <span class="text-gray-700 dark:text-gray-400">Title</span>
                                                         <input id="title" name="title"
                                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        placeholder="Enter the title"
+                                                        placeholder="<%= announcement.title %>"
                                                         />
                                                     </label>
                             
@@ -704,7 +697,7 @@
                                                         <span class="text-gray-700 dark:text-gray-400">Description</span>
                                                         <input id="description" name="description"
                                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        placeholder="Enter Description"
+                                                        placeholder="<%= announcement.description %>"
                                                         />
                                                     </label> 
                             
@@ -714,7 +707,7 @@
                                                         <span class="text-gray-700 dark:text-gray-400">Speaker / Host</span>
                                                         <input id="speaker" name="speaker"
                                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        placeholder="Enter Speaker's Name"
+                                                        placeholder="<%= announcement.speaker %>"
                                                         />
                                                     </label> 
                             
@@ -724,7 +717,7 @@
                                                         <span class="text-gray-700 dark:text-gray-400">Venue</span>
                                                         <input id="venue" name="venue"
                                                         class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                        placeholder="Enter Venue Details"
+                                                        placeholder="<%= announcement.venue %>"
                                                         />
                                                     </label>
                             
@@ -734,7 +727,7 @@
                                                         <span class="text-gray-700 dark:text-gray-400">Date</span>
                                                         <input id="date" name="date"
                                                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                                                            placeholder="Enter Date"
+                                                            placeholder="<%= announcement.date %>"
                                                             type="date"
                                                             class="form-control"
                                                         />
@@ -748,6 +741,7 @@
                                                             id="time" 
                                                             name="time" 
                                                             type="time" 
+                                                            placeholder="<%= announcement.time %>"
                                                             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                                                             required
                                                         />
@@ -774,7 +768,8 @@
                                                         <br><br>
                                                         
                                                     </label> 
-                            
+                                                    
+                                                    <input id="announcementId" name="announcementId" type="hidden" value="<%= announcement.id %>">
                                                 
                                                     <button type="submit" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                                                         Upload Edited Post
@@ -867,7 +862,14 @@
                             </td>
                             </tr>
                         </tbody>
-
+                            <% }) %>
+                        <% } else { %>
+                            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm" colspan="5">No announcements found.</td>
+                            </tr>
+                            </tbody>
+                        <% } %>
                         </table>
                     </div>
                     </div>

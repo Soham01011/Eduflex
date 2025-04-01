@@ -13,6 +13,7 @@ const announcementSchema = new mongoose.Schema({
     attendedstudnets : {type : Array , default : []},
     eventratingfromstudnets : {type : Array , default : []},
     feedbackfromstudents : {type : Array , default : []},
+    creator : {type : String , required : false},
 });
 
 module.exports = mongoose.model('Announcements', announcementSchema);

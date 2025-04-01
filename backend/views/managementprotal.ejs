@@ -30,21 +30,6 @@
                   EduFlex
                 </a>
                 
-                <ul class="mt-6">
-                  <li class="relative px-6 py-3">
-                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                      href="/dashboard">
-                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                        <path
-                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                        </path>
-                      </svg>
-                      <span class="ml-4">Dashboard</span>
-                    </a>
-                  </li>
-                </ul>
-        
                 <ul>
                     <li class="relative px-6 py-3">
                         <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
@@ -235,13 +220,7 @@
                     </li>
     
                 </ul>
-                <div class="px-6 my-6">
-                <button
-                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                    Create account
-                    <span class="ml-2" aria-hidden="true">+</span>
-                </button>
-                </div>
+
             </div>
         </aside>
 
@@ -343,8 +322,7 @@
                     >
                     <img
                         class="object-cover w-8 h-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
-                        alt=""
+                        src="/uploads/<%= username %>/profile.jpg"                        alt=""
                         aria-hidden="true"
                     />
                     </button>
@@ -383,7 +361,7 @@
                         <li class="flex">
                         <a
                             class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                            href="#"
+                            href="/logout"
                         >
                             <svg
                             class="w-4 h-4 mr-3"
@@ -553,61 +531,101 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <% if (students_uploads) { %>
-                                                                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                                                        <% if (Array.isArray(students_uploads) && students_uploads.length > 0) { %>
-                                                                        <% students_uploads.forEach(upload => { %>
-                                                                        <tr class="text-gray-700 dark:text-gray-400">
-                                                                            <td class="px-4 py-3">
-                                                                                <div class="mt-4">
-                                                                                    <div id="pdfBox" class="p-4 border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600" style="min-height: 200px;">
-                                                                                        <embed src="<%= upload.file %>" type="application/pdf" width="100%" height="200px" />
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-4 py-3">
-                                                                                <div class="flex items-center text-sm">
-                                                                                    <div>
-                                                                                        <p class="font-semibold"><%= upload.firstname %> <%= upload.lastname %></p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-4 py-3 text-sm"><%= upload.post_name %></td>
-                                                                            <td class="px-4 py-3 text-xs">
-                                                                                <% if (upload.approved === true) { %>
-                                                                                <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Approved</span>
-                                                                                <% } else if (upload.mentor_approved === false) { %>
-                                                                                <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">Rejected</span>
-                                                                                <% } else { %>
-                                                                                <span class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">Pending</span>
-                                                                                <% } %>
-                                                                            </td>
-                                                                            <td class="px-4 py-3 text-sm"><%= new Date(upload.createdAt).toLocaleDateString() %></td>
-                                                                            <td class="px-4 py-3">
-                                                                                <div class="flex items-center justify-center space-x-4">
-                                                                                    <!-- Accept Button -->
-                                                                                    <button class="action-btn accept-btn" data-postid="<%= upload.postID %>" onclick="updatePostApproval(this, true)">
-                                                                                        <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8 14.414l-4.707-4.707a1 1 0 111.414-1.414L8 11.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                    <!-- Reject Button -->
-                                                                                    <button class="action-btn reject-btn" data-postid="<%= upload.postID %>" onclick="updatePostApproval(this, false)">
-                                                                                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                                            <path fill-rule="evenodd" d="M16.293 4.293a1 1 0 00-1.414 0L10 8.586 5.121 3.707a1 1 0 10-1.414 1.414L8.586 10l-4.879 4.879a1 1 0 001.414 1.414L10 11.414l4.879 4.879a1 1 0 001.414-1.414L11.414 10l4.879-4.879a1 1 0 000-1.414z" clip-rule="evenodd"></path>
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="px-4 py-3">
-                                                                                <a class="block p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple" style="max-width: 300px; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; display: block;">
-                                                                                    <span>Model Output: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890</span>
-                                                                                </a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <% }); %>
+                                                                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                                                            <% if (Array.isArray(students_uploads) && students_uploads.length> 0) { %>
+                                                                                <% students_uploads.forEach(upload=> { %>
+                                                                                    <tr class="text-gray-700 dark:text-gray-400">
+                                                                                        <td class="px-4 py-3">
+                                                                                            <div class="mt-4">
+                                                                                                <div id="pdfBox"
+                                                                                                    class="p-4 border border-gray-300 bg-gray-50 rounded-lg dark:bg-gray-700 dark:border-gray-600"
+                                                                                                    style="min-height: 200px;">
+                                                                                                    <embed src="<%= upload.file %>" type="application/pdf" width="100%"
+                                                                                                        height="200px" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td class="px-4 py-3">
+                                                                                            <div class="flex items-center text-sm">
+                                                                                                <div>
+                                                                                                    <p class="font-semibold">
+                                                                                                        <%= upload.firstname %>
+                                                                                                            <%= upload.lastname %>
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td class="px-4 py-3 text-sm">
+                                                                                            <%= upload.post_name %>
+                                                                                        </td>
+                                                                                        <td class="px-4 py-3 text-xs">
+                                                                                            <% if (upload.approved===true) { %>
+                                                                                                <span
+                                                                                                    class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">Approved</span>
+                                                                                                <% } else if (upload.mentor_approved===false) { %>
+                                                                                                    <span
+                                                                                                        class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">Rejected</span>
+                                                                                                    <% } else { %>
+                                                                                                        <span
+                                                                                                            class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">Pending</span>
+                                                                                                        <% } %>
+                                                                                        </td>
+                                                                                        <td class="px-4 py-3 text-sm">
+                                                                                            <%= new Date(upload.createdAt).toLocaleDateString() %>
+                                                                                        </td>
+                                                                                        <td class="px-4 py-3">
+                                                                                            <div class="flex items-center justify-center space-x-4">
+                                                                                                <!-- Accept Button -->
+                                                                                                <button class="action-btn accept-btn" data-postid="<%= upload.postID %>"
+                                                                                                    onclick="updatePostApproval(this, true)">
+                                                                                                    <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20"
+                                                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                                                        <path fill-rule="evenodd"
+                                                                                                            d="M16.707 5.293a1 1 0 010 1.414L8 14.414l-4.707-4.707a1 1 0 111.414-1.414L8 11.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                                                            clip-rule="evenodd"></path>
+                                                                                                    </svg>
+                                                                                                </button>
+                                                                                                <!-- Reject Button -->
+                                                                                                <button class="action-btn reject-btn" data-postid="<%= upload.postID %>"
+                                                                                                    onclick="updatePostApproval(this, false)">
+                                                                                                    <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"
+                                                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                                                        <path fill-rule="evenodd"
+                                                                                                            d="M16.293 4.293a1 1 0 00-1.414 0L10 8.586 5.121 3.707a1 1 0 10-1.414 1.414L8.586 10l-4.879 4.879a1 1 0 001.414 1.414L10 11.414l4.879 4.879a1 1 0 001.414-1.414L11.414 10l4.879-4.879a1 1 0 000-1.414z"
+                                                                                                            clip-rule="evenodd"></path>
+                                                                                                    </svg>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <!-- Replace the existing model output cell with this -->
+                                                                                        <td class="px-4 py-3">
+                                                                                            <% if (upload.real===false) { %>
+                                                                                                <div class="block p-4 mb-4 text-sm font-semibold text-red-100 bg-red-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-red"
+                                                                                                    style="max-width: 300px; word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+                                                                                                    <div class="flex flex-col">
+                                                                                                        <span class="text-lg mb-2">⚠️ Fake Certificate Detected</span>
+                                                                                                        <% if (upload.edited_by) { %>
+                                                                                                            <span class="text-sm opacity-90">Edited by: <%= upload.edited_by %></span>
+                                                                                                            <% } %>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <% } else if ( upload.real===true) { %>
+                                                                                                    <div class="block p-4 mb-4 text-sm font-semibold text-green-100 bg-green-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-green"
+                                                                                                        style="max-width: 300px; word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+                                                                                                        <span class="text-lg">✅ Valid Certificate</span>
+                                                                                                    </div>
+                                                                                                    <% } else { %>
+                                                                                                        <div class="block p-4 mb-4 text-sm font-semibold text-gray-100 bg-gray-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-gray"
+                                                                                                            style="max-width: 300px; word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
+                                                                                                            <span class="text-lg">⏳ Pending Verification</span>
+                                                                                                        </div>
+                                                                                                        <% } %>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <% }); %>
+                                                                                        <% } %>
+                                                                        </tbody>
                                                                         <% } %>
-                                                                    </tbody>
-                                                                    <% } %>
                                                                 </table>
                                                             </div>
                                                         </div>

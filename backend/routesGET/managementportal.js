@@ -13,7 +13,7 @@ managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (
     const username = await fetchUser(req, res);
     const mentees = await Mentees.find({ "mentor": username });
     const menteesUsername = mentees.flatMap(mentee => mentee.username);
-    const students_uploads = await Profiles.find({ username: { $in: menteesUsername } });
+    const students_uploads = await Profiles.find({ username: { $in: menteesUsername },mentor_approved: null });
     const teachercourses = await Courses.find({ mentor: username });
     
     // Fetch unapproved skills for mentees
@@ -120,7 +120,7 @@ managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (
             students: studentProfiles
         });
     }
-    console.log("Pendgin skills approval ",JSON.stringify(pendingSkills));
+    console.log("uploads" , students_uploads);
     res.render("managementprotal", { 
         username, 
         Studentdonecourse, 

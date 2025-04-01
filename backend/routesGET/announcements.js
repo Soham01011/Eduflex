@@ -3,13 +3,15 @@ const AnnoucementRoute = express.Router();
 
 const {logMessage} = require('../utils/logger'); 
 const {fetchUser} = require('../utils/fetchUser');
-const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype");
+const { checkToken } = require("../middleware/checkToken");
 const {interfaceFetch} = require("../utils/interface");
+const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype");
 
 const Announcement = require("../models/announcements");
+const User = require("../models/users");
 
 // GET route for fetching announcements
-AnnoucementRoute.get("/", checkTokenAndUserType, async(req, res) => {
+AnnoucementRoute.get("/", checkToken, async(req, res) => {
     try {
         let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         if (Array.isArray(userIP)) {
@@ -55,6 +57,12 @@ AnnoucementRoute.post("/register", checkTokenAndUserType, async(req, res) => {
         const username = await fetchUser(req, res);
         const interface = await interfaceFetch(req, res);
         let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (await User.findOne({ username: username }).select("user_type") === "Mentor") {
+            return res.status(403).json({
+                success: false,
+                message: "Mentors cannot register for events"
+            });
+        }
 
         if (Array.isArray(userIP)) {
             userIP = userIP[0];

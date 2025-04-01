@@ -11,39 +11,39 @@
   <script src="/assets/js/init-alpine.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
-  <script src="/assets/js/charts-lines.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
   <script>
-    // Safely inject pointsData from server-side
     const pointsData = <%- JSON.stringify(pointsData) %>;
-  
-    // Define categories with initial point totals
+    
+    console.log(pointsData);
+    // Define categories with initial point totals and colors
     const categories = {
-      academic: 0,
-      extra: 0,
-      experience: 0,
+      academic: { points: 0, color: '#FF6384' },
+      extracurricular: { points: 0, color: '#36A2EB' },
+      experience: { points: 0, color: '#FFCE56' }
     };
   
     // Aggregate points by category
     pointsData.forEach((entry) => {
-      if (entry.post_type in categories) {
-        categories[entry.post_type] += entry.points;
+      const type = entry.post_type.toLowerCase();
+      if (type in categories) {
+        categories[type].points += entry.points;
       }
     });
-  
+
     // Create the doughnut chart
     const createDoughnutChart = () => {
       const ctx = document.getElementById('doughnutChart').getContext('2d');
       const chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: Object.keys(categories), // 'academic', 'extracurricular', 'experience'
+          labels: Object.keys(categories),
           datasets: [{
             label: 'Points by Category',
-            data: Object.values(categories), // Corresponding points for each category
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // You can customize the colors
+            data: Object.values(categories).map(cat => cat.points),
+            backgroundColor: Object.values(categories).map(cat => cat.color),
             hoverOffset: 4
           }]
         },
@@ -55,7 +55,7 @@
             },
             tooltip: {
               callbacks: {
-                label: function (tooltipItem) {
+                label: function(tooltipItem) {
                   return tooltipItem.label + ': ' + tooltipItem.raw + ' points';
                 }
               }
@@ -64,23 +64,199 @@
         }
       });
     };
-  
-    // Update card values dynamically
-    const updateCardValues = () => {
-      Object.entries(categories).forEach(([postType, points]) => {
-        const cardElement = document.querySelector(`[data-post-type="${postType}"] .text-lg`);
-        if (cardElement) {
-          cardElement.textContent = points;
+
+    // Process time series data for line chart
+    const processTimeSeriesData = (timeRange) => {
+    const now = new Date();
+    const sortedData = [...pointsData].sort((a, b) => new Date(a.time) - new Date(b.time));
+    
+    // Get start date based on time range
+    let startDate = new Date();
+    switch(timeRange) {
+        case 'month':
+            startDate.setDate(1); // Start of current month
+            startDate.setHours(0, 0, 0, 0);
+            break;
+        case 'year':
+            startDate.setMonth(0, 1); // Start of current year
+            startDate.setHours(0, 0, 0, 0);
+            break;
+        default:
+            startDate = new Date(sortedData[0]?.time || now);
+    }
+
+    // Filter data based on time range
+    const filteredData = sortedData.filter(entry => {
+        const entryDate = new Date(entry.time);
+        switch(timeRange) {
+            case 'month':
+                return entryDate.getMonth() === now.getMonth() && 
+                       entryDate.getFullYear() === now.getFullYear();
+            case 'year':
+                return entryDate.getFullYear() === now.getFullYear();
+            default:
+                return true;
         }
-      });
-  
-      // Create or update the doughnut chart after DOM is fully loaded
-      createDoughnutChart();
+    });
+
+    // Initialize time series data
+    const timeSeriesData = {
+        academic: [{ x: startDate, y: 0 }],
+        extracurricular: [{ x: startDate, y: 0 }],
+        experience: [{ x: startDate, y: 0 }]
     };
-  
-    // Trigger updates after DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', updateCardValues);
-  </script>
+
+    // Track cumulative points
+    const cumulativePoints = {
+        academic: 0,
+        extracurricular: 0,
+        experience: 0
+    };
+
+    // Process each data point chronologically
+    filteredData.forEach(entry => {
+        const type = entry.post_type.toLowerCase();
+        const normalizedType = type === 'extracurricular' ? 'extracurricular' : type;
+        
+        if (normalizedType in cumulativePoints) {
+            cumulativePoints[normalizedType] += entry.points;
+            
+            // Add point exactly at the timestamp it occurred
+            timeSeriesData[normalizedType].push({
+                x: new Date(entry.time),
+                y: cumulativePoints[normalizedType]
+            });
+        }
+    });
+
+    return timeSeriesData;
+};
+
+const createLineChart = (timeRange = 'month') => {
+    const ctx = document.getElementById('line').getContext('2d');
+    const timeSeriesData = processTimeSeriesData(timeRange);
+
+    // Destroy existing chart if it exists
+    if (window.lineChart instanceof Chart) {
+        window.lineChart.destroy();
+    }
+
+    const timeConfig = {
+        month: { 
+            unit: 'day',
+            displayFormats: {
+                day: 'MMM d, HH:mm'
+            }
+        },
+        year: { 
+            unit: 'month',
+            displayFormats: {
+                month: 'MMM yyyy'
+            }
+        },
+        all: { 
+            unit: 'month',
+            displayFormats: {
+                month: 'MMM yyyy'
+            }
+        }
+    }[timeRange];
+
+    window.lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: 'Academic',
+                    data: timeSeriesData.academic,
+                    borderColor: categories.academic.color,
+                    backgroundColor: categories.academic.color + '20',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Extracurricular',
+                    data: timeSeriesData.extracurricular,
+                    borderColor: categories.extracurricular.color,
+                    backgroundColor: categories.extracurricular.color + '20',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Experience',
+                    data: timeSeriesData.experience,
+                    borderColor: categories.experience.color,
+                    backgroundColor: categories.experience.color + '20',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: timeConfig,
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cumulative Points'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y} points`;
+                        },
+                        title: function(tooltipItems) {
+                            const date = new Date(tooltipItems[0].parsed.x);
+                            return date.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+};
+    // Update card values and create charts
+    const updateCardValues = () => {
+        Object.entries(categories).forEach(([postType, data]) => {
+            const cardElement = document.querySelector(`[data-post-type="${postType}"] .text-lg`);
+            if (cardElement) {
+                cardElement.textContent = data.points;
+            }
+        });
+        
+        // Create both charts
+        createDoughnutChart();
+        createLineChart('month');
+    };
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set up time range filter listener
+        const timeRangeFilter = document.getElementById('timeRangeFilter');
+        timeRangeFilter.addEventListener('change', (e) => {
+            createLineChart(e.target.value);
+        });
+        
+        // Update all visuals
+        updateCardValues();
+    });
+</script>
   
 </head>
 
@@ -92,6 +268,7 @@
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
           EduFlex
         </a>
+        
 
         <ul class="mt-6">
           <li class="relative px-6 py-3">
@@ -346,15 +523,7 @@
             </a>
           </li>
         </ul>
-        
-        <div class="px-6 my-6">
-          <button
-            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-          >
-            Create account
-            <span class="ml-2" aria-hidden="true">+</span>
-          </button>
-        </div>
+
 
       </div>
     </aside>
@@ -473,8 +642,7 @@
               >
                 <img
                   class="object-cover w-8 h-8 rounded-full"
-                  src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
-                  alt=""
+                  src="/uploads/<%= username %>/profile.jpg"                  alt=""
                   aria-hidden="true"
                 />
               </button>
@@ -581,7 +749,7 @@
             </div>
 
             <!-- Extracurricular Card -->
-            <div data-post-type="extra"
+            <div data-post-type="extracurricular"
               class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
               <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
                 <img src="/assets/img/sports-svgrepo-com.svg" class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
@@ -638,35 +806,18 @@
               </div>
               
               <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-                <div class="chartjs-size-monitor">
-                  <div class="chartjs-size-monitor-expand">
-                    <div class=""></div>
-                  </div>
-                  <div class="chartjs-size-monitor-shrink">
-                    <div class=""></div>
-                  </div>
-                </div>
-                <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+               
+                <h4 class="font-semibold text-gray-800 dark:text-gray-300">
                   Overall Growth
                 </h4>
+                <select id="timeRangeFilter" class="px-3 py-1 text-sm rounded-md border dark:bg-gray-700 dark:text-gray-300">
+                  <option value="month">Current Month</option>
+                  <option value="year">Current Year</option>
+                  <option value="all">All Time</option>
+                </select>
                 <canvas id="line" width="415" height="207" style="display: block; width: 415px; height: 207px;"
                   class="chartjs-render-monitor"></canvas>
-                <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                  <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-                    <span>Academics</span>
-                  </div>
-
-                  <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
-                    <span>Extracurricular</span>
-                  </div>
-
-                  <div class="flex items-center">
-                    <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-                    <span>Communication</span>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -674,59 +825,5 @@
     </div>
   </div>
 </body>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    // Check if the button exists
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async function (event) {
-        event.preventDefault(); // Prevent default button action
-        alert('Logout process initiated.'); // Alert when logout is initiated
-
-        // Send the POST request to the logout route
-        try {
-          const response = await fetch('/logout', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ Token: '' }) // Send token or leave it empty for cookie-based logout
-          });
-
-          if (response.ok) {
-            alert('Logout successful! Redirecting to the login page.'); // Alert on successful logout
-
-            // Attempt redirection to the primary URL
-            fetch('/loginpage', { method: 'HEAD' })
-              .then((res) => {
-                if (res.ok) {
-                  // Redirect if the primary URL is accessible
-                  window.location.href = '/loginpage';
-                } else {
-                  throw new Error("Primary login page unavailable");
-                }
-              })
-              .catch(() => {
-                // Fallback to localhost if the primary URL fails
-                console.error("Failed to load the login page, redirecting to localhost.");
-                window.location.href = '/loginpage';
-              });
-          }
-          else {
-            alert('Failed to log out. Please try again.'); // Alert on failed logout
-            console.error('Failed to log out');
-          }
-        } catch (error) {
-          alert('Error during logout: ' + error.message); // Alert on error during fetch
-          console.error('Error during logout:', error);
-        }
-      });
-    } else {
-      console.error('Logout button not found'); // Log if the button is not found
-    }
-  });
-</script>
-
 
 </html>
