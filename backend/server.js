@@ -473,6 +473,8 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
 
         // Update user data if all validations pass
         try {
+            const existingCredly = await Credly.findOne({ username: tokencheck.username });
+
             await User.updateOne(
                 { username: tokencheck.username },
                 {
@@ -496,13 +498,15 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
                 },
                 { upsert: true }
             );
-
+            console.log("reciving Credly link : ", credly , existingCredly);
             // Handle Credly badge fetching
-            if (credly && fetchBadges) {
-                fetchBadges(interface,credly,firstName,lastName,tokencheck.username,userIP) 
-            }
-            else if (credly){
-                console.log('[INFO] * Credly system is disabled, enable it in env file')
+            if (credly !== existingCredly.link) {
+                console.log("Credly link changed", credly !== existingCredly.link);
+                if (fetchBadges) {
+                        await fetchBadges(interface, credly, firstName, lastName, tokencheck.username, userIP);
+                        logMessage(`[+] ${interface} ${userIP} : First time Credly badges fetch for ${tokencheck.username}`);
+                }
+                  
             }
 
             // Delete the used token
