@@ -14,12 +14,14 @@ const fetchUser = async (req, res) => {
                 return decoded.username;
             } else {
                 logMessage("Decoded data invalid in fetchUser util");
-                return "guest"; // Changed from "static" to "guest"
+                return "static"; // Return after sending response
             }
-        } else if (req.body && req.body.username) {
-            return req.body.username;
-        } else {
-            return 'guest'; // Changed from "static" to "guest"
+            
+        } else if (req.body) {
+            return res.body.username;
+        }
+        else{
+            return 'static';
         }
     } catch (error) {
         logMessage(`[*] Internal server error : ${error}`);

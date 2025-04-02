@@ -16,7 +16,7 @@ profilementorRoute.get("/profile-web-page-mentor", checkTokenAndUserType , async
     const mentees = await Mentees.find({"mentor" : username});
     const teachercourses = await Course.find({"mentor": username});
     console.log(teachercourses)
-    res.render("mentorprofilepage",{user,mentees,teachercourses});
+    res.render("mentorprofilepage",{user,mentees,teachercourses,username});
 });
 
 module.exports = profilementorRoute;

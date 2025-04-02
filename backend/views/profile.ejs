@@ -358,7 +358,7 @@
               <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none"
                 @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" aria-haspopup="true">
                 <img class="object-cover w-8 h-8 rounded-full"
-                src="/uploads/<%= username %>/profile.jpg"                  alt="" aria-hidden="true" />
+                src="/uploads/<%= username %>/profile/profile.jpg"                  alt="" aria-hidden="true" />
               </button>
               <template x-if="isProfileMenuOpen">
                 <ul x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
@@ -686,10 +686,10 @@
                               </h5>
                               <br>
 
-                              <button @click="openModal5"
+                              <!-- <button @click="openModal5"
                                 class="px-10 py-4 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                                 Open to Work
-                              </button>
+                              </button> -->
 
 
                               <!-- Modal2 -->
