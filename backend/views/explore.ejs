@@ -44,98 +44,63 @@
               </ul>
             <% } %>
         
+            <!-- Other menu items for logged-in users -->
             <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/announcements">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z">
-                  </path>
-                </svg>
-                <span class="ml-4">Announcements</span>
+              <a href="/announcements">
+                <!-- Announcements menu item -->
               </a>
             </li>
-  
+        
             <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/alltest">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
-                  </path>
-                </svg>
-                <span class="ml-4">Test</span>
+              <a href="/alltest">
+                <!-- Test menu item -->
               </a>
             </li>
         
             <% if (user_type === 'Student') { %>
               <li class="relative px-6 py-3">
-                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                  href="/upload-certificate">
-                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
-                    </path>
-                  </svg>
-                  <span class="ml-4">Upload Certificates</span>
+                <a href="/upload-certificate">
+                  <!-- Upload Certificates menu item -->
                 </a>
-              </li> 
+              </li>
             <% } %>
         
             <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/makeannoucement">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3">
-                  </path>
-                </svg>
-                <span class="ml-4">Make Announcemnets</span>
-              </a>
-            </li> 
-        
-            <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/profile-web-page">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
-                  </path>
-                </svg>
-                <span class="ml-4">Profile</span>
-              </a>
-            </li> 
-  
-            <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/makeannoucement">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3">
-                  </path>
-                </svg>
-                <span class="ml-4">Make Announcemnets</span>
-              </a>
-            </li> 
-          
-            <li class="relative px-6 py-3">
-              <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                href="/profile-web-page">
-                <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
-                  </path>
-                </svg>
-                <span class="ml-4">Profile</span>
+              <a href="/makeannoucement">
+                <!-- Make Announcements menu item -->
               </a>
             </li>
+        
+            <li class="relative px-6 py-3">
+              <a href="/profile-web-page">
+                <!-- Profile menu item -->
+              </a>
+            </li>
+          <% } %>
+        
+          <!-- Always show Explore and Leaderboard for all users including guests -->
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/explore">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"></path>
+              </svg>
+              <span class="ml-4">Explore</span>
+            </a>
+          </li>
+        
+          <li class="relative px-6 py-3">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              href="/leaderboard">
+              <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"></path>
+              </svg>
+              <span class="ml-4">Leaderboard</span>
+            </a>
+          </li>
+        </ul>
           </ul>
           
   

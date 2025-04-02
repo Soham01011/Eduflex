@@ -27,10 +27,6 @@ leaderboardroute.get("/api", async (req, res) => {
         const types = await pointshistory.distinct('post_type');
         const subtypes = await pointshistory.distinct('post_subtype');
 
-        console.log("Types:", types);
-        console.log("Subtypes:", subtypes);
-        console.log("users", usersMap)
-        console.log("pointsData", pointsData)
 
         res.json({
             pointsData: pointsData,
@@ -47,8 +43,34 @@ leaderboardroute.get("/api", async (req, res) => {
 });
 
 // Route to serve the leaderboard page
-leaderboardroute.get("/", (req, res) => {
-    res.render("leaderboard");
+leaderboardroute.get("/", async(req, res) => {
+    try {
+        // Await the fetchUser promise
+        const username = await fetchUser(req, res);
+        
+        if (username === 'guest') {
+            return res.render("leaderboard", {
+                username: 'guest',
+                user_type: 'guest'
+            });
+        }
+
+        // Find user type only if username is not guest
+        const userDoc = await User.findOne({ username }).select("user_type");
+        const user_type = userDoc ? userDoc.user_type : 'guest';
+
+        res.render("leaderboard", {
+            username,
+            user_type
+        });
+
+    } catch (error) {
+        logMessage(`[*] Error in leaderboard route: ${error}`);
+        res.render("leaderboard", {
+            username: 'guest',
+            user_type: 'guest'
+        });
+    }
 });
 
 module.exports = leaderboardroute;

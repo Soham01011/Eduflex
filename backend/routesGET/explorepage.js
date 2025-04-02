@@ -7,43 +7,74 @@ const explorepageRoute = express.Router();
 
 const Profiles = require('../models/profiles')
 const Likes = require("../models/likes")
+const {fetchUser} = require('../utils/fetchUser')
+const Users = require('../models/users')
 
 explorepageRoute.get("/explore", async (req, res) => {
     try {
+        const page = 1;
+        const range = 5;
+        
+        let username;
+        let user_type = "guest"; // Default value
 
-        const page = 1; // First page
-        const range = 5; // Number of posts per page
+        try {
+            username = await fetchUser(req, res);
+        } catch (error) {
+            console.log("User fetch error:", error);
+            username = "guest";
+        }
 
-        // Fetch the latest posts with required fields
+        if (!username) {
+            username = "guest";
+        }
+
+        if(username !== "guest") {   
+            const userDoc = await Users.findOne({username: username}).select("user_type");
+            user_type = userDoc ? userDoc.user_type : "guest";
+        }
+
         const cards = await Profiles.find()
             .select('firstname lastname username post_desc file hashtags postID')
-            .sort({ createdAt: -1 }) // Sort by 'createdAt' field in descending order
-            .skip((page - 1) * range) // Skip based on the page
-            .limit(range); // Limit to 'range' posts
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * range)
+            .limit(range);
 
-        // Extract all postIDs from the cards
+        if (!cards) {
+            return res.status(200).render('explore', { 
+                cards: [], 
+                username: username,
+                user_type: user_type  // Added user_type
+            });
+        }
+
         const postIDs = cards.map(card => card.postID);
-
-        // Fetch likes for the posts in the current range
         const likesData = await Likes.find({ postID: { $in: postIDs } });
 
-        // Create a map of postID to likes count
         const likesMap = {};
         likesData.forEach(like => {
             likesMap[like.postID] = like.liked.length;
         });
 
-        // Attach likes count to each card, defaulting to 0 if no likes found
         const updatedCards = cards.map(card => ({
             ...card.toObject(),
             likes: likesMap[card.postID] || 0
         }));
 
-        // Render the page with the updated cards
-        res.status(200).render('explore', { cards: updatedCards });
+        return res.status(200).render('explore', { 
+            cards: updatedCards, 
+            username: username,
+            user_type: user_type  // Added user_type
+        });
+
     } catch (error) {
         console.error("Error fetching explore data:", error);
-        res.status(500).send("An error occurred while fetching data.");
+        return res.status(200).render('explore', { 
+            cards: [], 
+            username: "guest",
+            user_type: "guest",  // Added user_type
+            error: "An error occurred while fetching data."
+        });
     }
 });
 

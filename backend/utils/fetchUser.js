@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { CSRFToken } = require('../models/csrfttoken');  // Assuming CSRFToken model is defined somewhere
+const { CSRFToken } = require('../models/csrfttoken');
 const {logMessage} = require('./logger'); 
 
 const serverSK = process.env.SERVER_SEC_KEY;
@@ -14,18 +14,16 @@ const fetchUser = async (req, res) => {
                 return decoded.username;
             } else {
                 logMessage("Decoded data invalid in fetchUser util");
-                return res.redirect('/loginpage'); // Return after sending response
+                return "guest"; // Changed from "static" to "guest"
             }
-            
-        } else if (req.body) {
-            return res.body.username;
-        }
-        else{
-            return '';
+        } else if (req.body && req.body.username) {
+            return req.body.username;
+        } else {
+            return 'guest'; // Changed from "static" to "guest"
         }
     } catch (error) {
         logMessage(`[*] Internal server error : ${error}`);
-        return res.redirect('/loginpage');
+        return 'guest'; // Return "guest" instead of redirecting on error
     }
 };
 
