@@ -11,6 +11,10 @@
   <script src="/assets/js/init-alpine.js"></script>
   <script src="/scripts/deletepost.js"></script>
   <script src="/scripts/experince.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
 
   <script>
@@ -978,34 +982,32 @@
                                                 </label>
 
                                                 <br><br>
+
                                                 <div class="flex items-center space-x-4">
                                                   <label class="block text-sm">
                                                     <span class="text-gray-700 dark:text-gray-400">Start Date:</span>
-                                                    <select id="start_date" name="start_date"
-                                                      class="select2 form-select">
-                                                      <option value="">Select</option>
-                                                      <option value="2018">2018</option>
-                                                      <option value="2019">2019</option>
-                                                      <option value="2020">2020</option>
-                                                      <option value="2021">2021</option>
-                                                      <option value="2022">2022</option>
-                                                      <option value="2023">2023</option>
-                                                    </select>
+                                                    <input type="text" id="start_date" class="form-input date-picker" placeholder="Select Start Date">
                                                   </label>
                                                   <label class="block text-sm">
                                                     <span class="text-gray-700 dark:text-gray-400">End Date:</span>
-                                                    <select id="end_date" name="end_date" class="select2 form-select">
-                                                      <option value="">Select</option>
-                                                      <option value="2024">2024</option>
-                                                      <option value="2025">2025</option>
-                                                      <option value="2026">2026</option>
-                                                      <option value="2027">2027</option>
-                                                      <option value="2028">2028</option>
-                                                      <option value="2029">2029</option>
-                                                    </select>
+                                                    <input type="text" id="end_date" class="form-input date-picker" placeholder="Select End Date">
                                                   </label>
                                                 </div>
-
+                                                
+                                                <script>
+                                                  document.addEventListener("DOMContentLoaded", function () {
+                                                    flatpickr(".date-picker", {
+                                                      dateFormat: "F Y", // Format: Month Year
+                                                      plugins: [
+                                                        new monthSelectPlugin({
+                                                          shorthand: true, // Show short month names
+                                                          dateFormat: "F Y", // Display format
+                                                          altFormat: "F Y" // Alternative input format
+                                                        })
+                                                      ]
+                                                    });
+                                                  });
+                                                </script>        
                                               </div>
 
                                               <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
@@ -1033,9 +1035,9 @@
                                                   <button
                                                     class="delete-exp-btn flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 font-bold hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                                                     aria-label="Delete" data-exp-id="<%= exp.id %>""
-                                >
-                                    Delete
-                                </button>
+                                                    >
+                                                    Delete
+                                                  </button>
                             </div>
                           <% }); %>
                         </div>
@@ -1141,32 +1143,31 @@
                                                   </label>
                                                   <br>
                                                   <div class="flex items-center space-x-4">
-                                                    <label class="block text-sm">
-                                                      <span class="text-gray-700 dark:text-gray-400">Start Date:</span>
-                                                      <select id="startTime" name="startTime"
-                                                        class="select2 form-select">
-                                                        <option value="">Select</option>
-                                                        <option value="2018">2018</option>
-                                                        <option value="2019">2019</option>
-                                                        <option value="2020">2020</option>
-                                                        <option value="2021">2021</option>
-                                                        <option value="2022">2022</option>
-                                                        <option value="2023">2023</option>
-
-                                                      </select>
-                                                    </label>
-                                                    <label class="block text-sm">
-                                                      <span class="text-gray-700 dark:text-gray-400">End Date:</span>
-                                                      <select id="endTime" name="endTime" class="select2 form-select">
-                                                        <option value="">Select</option>
-                                                        <option value="2024">2024</option>
-                                                        <option value="2025">2025</option>
-                                                        <option value="2026">2026</option>
-                                                        <option value="2027">2027</option>
-                                                        <option value="2028">2028</option>
-                                                        <option value="2029">2029</option>
-                                                      </select>
-                                                    </label>
+                                                    <div class="flex items-center space-x-4">
+                                                      <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Start Date:</span>
+                                                        <input type="text" id="start_date" class="form-input date-picker" placeholder="Select Start Date">
+                                                      </label>
+                                                      <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">End Date:</span>
+                                                        <input type="text" id="end_date" class="form-input date-picker" placeholder="Select End Date">
+                                                      </label>
+                                                    </div>
+                                                    
+                                                    <script>
+                                                      document.addEventListener("DOMContentLoaded", function () {
+                                                        flatpickr(".date-picker", {
+                                                          dateFormat: "F Y", // Format: Month Year
+                                                          plugins: [
+                                                            new monthSelectPlugin({
+                                                              shorthand: true, // Show short month names
+                                                              dateFormat: "F Y", // Display format
+                                                              altFormat: "F Y" // Alternative input format
+                                                            })
+                                                          ]
+                                                        });
+                                                      });
+                                                    </script>
                                                   </div>
                                                   <br>
                                                   <button type="submit"
