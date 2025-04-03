@@ -11,8 +11,8 @@ makeannouncements.get("/makeannoucement", checkToken, async(req,res) => {
         const userAnnouncements = await Announcements.find({creator: username})
             .sort({ date: -1 }) // Sort by date descending (newest first)
             .lean(); // Convert to plain JavaScript objects
-        console.log(userAnnouncements)
-        res.render("uploadannouncement", { announcements: userAnnouncements });
+        const user_type = username.user_type;
+        res.render("uploadannouncement", { announcements: userAnnouncements ,username,user_type});
     } catch (error) {
         console.error("Error fetching announcements:", error);
         res.status(500).send("Error fetching announcements");

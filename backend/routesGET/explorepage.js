@@ -16,12 +16,12 @@ explorepageRoute.get("/explore", async (req, res) => {
             username = await fetchUser(req, res);
         } catch (error) {
             console.log("User fetch error:", error);
-            username = "static";
+            username = "guest";
         }
 
         // If username is null, undefined, or empty string, set to static
         if (!username) {
-            username = "static";
+            username = "guest";
         }
 
         // Fetch the latest posts with required fields
@@ -34,7 +34,7 @@ explorepageRoute.get("/explore", async (req, res) => {
         if (!cards) {
             return res.status(200).render('explore', { 
                 cards: [], 
-                username: username 
+                user_type: username 
             });
         }
 
@@ -57,7 +57,7 @@ explorepageRoute.get("/explore", async (req, res) => {
 
         return res.status(200).render('explore', { 
             cards: updatedCards, 
-            username: username 
+            user_type: username 
         });
 
     } catch (error) {
@@ -65,7 +65,7 @@ explorepageRoute.get("/explore", async (req, res) => {
         // Render the page with empty data rather than sending error
         return res.status(200).render('explore', { 
             cards: [], 
-            username: "static",
+            user_type: "guest",
             error: "An error occurred while fetching data."
         });
     }

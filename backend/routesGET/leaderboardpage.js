@@ -12,6 +12,12 @@ leaderboardroute.get("/api", async (req, res) => {
         // Get unique usernames from points history
         const activeUsernames = [...new Set(pointsData.map(point => point.username))];
         
+        let username = await fetchUser(req, res);
+        let user_type = "guest";
+        if(username){
+            user_type = username.user_type;
+        }
+
         // Get only users who have points
         const users = await User.find(
             { username: { $in: activeUsernames } }, 
@@ -32,8 +38,7 @@ leaderboardroute.get("/api", async (req, res) => {
             pointsData: pointsData,
             users: usersMap,
             types: types,
-            subtypes: subtypes,
-            
+            subtypes: subtypes,            
         });
 
     } catch (err) {
@@ -44,9 +49,13 @@ leaderboardroute.get("/api", async (req, res) => {
 });
 
 // Route to serve the leaderboard page
-leaderboardroute.get("/", (req, res) => {
-    const username = fetchUser(req, res);
-    res.render("leaderboard",{username});
+leaderboardroute.get("/", async(req, res) => {
+    let username = await fetchUser(req, res);
+    let user_type = "guest";
+    if(username){
+        user_type = username.user_type;
+    }
+    res.render("leaderboard",{username,user_type});
 });
 
 module.exports = leaderboardroute;
