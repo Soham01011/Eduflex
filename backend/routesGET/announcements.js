@@ -20,6 +20,8 @@ AnnoucementRoute.get("/", checkToken, async(req, res) => {
             userIP = userIP.split(',')[0].trim();
         }
         let username = await fetchUser(req, res);
+        let user_type = await User.findOne({ username: username }).select("user_type");
+        user_type = user_type.user_type;
 
         // Fetch all announcements and sort by date (newest first)
         const announcements = await Announcement.find({})
@@ -37,7 +39,8 @@ AnnoucementRoute.get("/", checkToken, async(req, res) => {
         // Return announcements with registration status
         res.render('announcement', {
             announcements: processedAnnouncements,
-            username: username
+            username: username,
+            user_type
         });
 
     } catch (error) {

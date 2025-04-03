@@ -15,16 +15,20 @@ const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype")
 const Profiles = require('../models/profiles');
 const Pointshistory = require("../models/pointshistory");
 const { logMessage } = require('../utils/logger');
+const User = require('../models/users');
 
 
 dashboardrouter.get("/dashboard",checkTokenAndUserType , async(req,res)=>{ //the checkToken will be exeuted first then the next request
     const username = await fetchUser(req,res); //returning the username
     try {
         const pointsData = await Pointshistory.find({"username": username}).select("post_type post_subtype points time")
-    
+        let user_type = await User.findOne({username: username}).select("user_type");
+        user_type = user_type.user_type;
+        console.log("user type is " ,user_type);
         res.status(200).render('index', {
             username, 
-            pointsData
+            pointsData,
+            user_type
         });
     } catch (error) {
         logMessage(`[*] Error fetching dashboard : ${error}`);

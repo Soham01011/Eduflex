@@ -9,7 +9,8 @@ const { fetchUser } = require("../utils/fetchUser");
 
 maintestpageRoute.get("/alltest",checkToken, async(req,res)=> {
     const username = await fetchUser(req,res);
-    let user_type = username.user_type;
+    let user_type = await Users.findOne({ username: username }).select("user_type");
+    user_type = user_type.user_type;
     return res.status(200).render("maintestpage",{username,user_type});
 });
 

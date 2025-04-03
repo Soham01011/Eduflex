@@ -13,10 +13,11 @@ const Profiles = require("../models/profiles");
 profilementorRoute.get("/profile-web-page-mentor", checkTokenAndUserType , async(req,res)=> {
     const username = await fetchUser(req,res);
     const user = await User.findOne({"username" : username});
+    let user_type = user.user_type;
     const mentees = await Mentees.find({"mentor" : username});
     const teachercourses = await Course.find({"mentor": username});
     console.log(teachercourses)
-    res.render("mentorprofilepage",{user,mentees,teachercourses,username});
+    res.render("mentorprofilepage",{user,mentees,user_type,teachercourses,username});
 });
 
 module.exports = profilementorRoute;

@@ -8,10 +8,13 @@ const Mentees = require("../models/mentees");
 const Profiles = require("../models/profiles");
 const Courses = require("../models/coursescert");
 const AllSkills = require("../models/expeduskill");
+const User = require("../models/users");
 
 managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (req, res) => {
     try {
         const username = await fetchUser(req, res);
+        let user_type = await User.findOne({ username: username }).select("user_type");
+        user_type = user_type.user_type;
         const mentees = await Mentees.find({ "mentor": username });
         const menteesUsername = mentees.flatMap(mentee => mentee.username);
         const students_uploads = await Profiles.find({ username: { $in: menteesUsername }, mentor_approved: null });
@@ -128,7 +131,8 @@ managementProtal.get("/management-portal-mentor", checkTokenAndUserType, async (
             mentees, 
             students_uploads, 
             teachercourses,
-            pendingSkills
+            pendingSkills,
+            user_type
         });
     } catch (error) {
         console.error('Error in management portal:', error);

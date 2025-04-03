@@ -4,24 +4,27 @@ const explorepageRoute = express.Router();
 const Profiles = require('../models/profiles')
 const Likes = require("../models/likes")
 const {fetchUser} = require('../utils/fetchUser')
+const User = require('../models/users')
 
 explorepageRoute.get("/explore", async (req, res) => {
     try {
         const page = 1; // First page
         const range = 5; // Number of posts per page
         
-        // Fetch username with error handling
-        let username;
-        try {
-            username = await fetchUser(req, res);
-        } catch (error) {
-            console.log("User fetch error:", error);
-            username = "guest";
-        }
+        // Initialize default values for guest users
+        let username = null;
+        let user_type = "guest";
 
-        // If username is null, undefined, or empty string, set to static
-        if (!username) {
-            username = "guest";
+        try {
+            // Attempt to fetch user details only if logged in
+            username = await fetchUser(req, res);
+            if (username) {
+                const userDoc = await User.findOne({ username: username }).select("user_type");
+                user_type = userDoc ? userDoc.user_type : "guest";
+            }
+        } catch (userError) {
+            // If fetching user fails, continue as guest
+            console.log("No logged in user, continuing as guest");
         }
 
         // Fetch the latest posts with required fields
@@ -31,10 +34,11 @@ explorepageRoute.get("/explore", async (req, res) => {
             .skip((page - 1) * range)
             .limit(range);
 
-        if (!cards) {
+        if (!cards || cards.length === 0) {
             return res.status(200).render('explore', { 
                 cards: [], 
-                user_type: username 
+                username,
+                user_type
             });
         }
 
@@ -57,7 +61,8 @@ explorepageRoute.get("/explore", async (req, res) => {
 
         return res.status(200).render('explore', { 
             cards: updatedCards, 
-            user_type: username 
+            username,
+            user_type
         });
 
     } catch (error) {
@@ -65,6 +70,7 @@ explorepageRoute.get("/explore", async (req, res) => {
         // Render the page with empty data rather than sending error
         return res.status(200).render('explore', { 
             cards: [], 
+            username: null,
             user_type: "guest",
             error: "An error occurred while fetching data."
         });

@@ -51,9 +51,12 @@ leaderboardroute.get("/api", async (req, res) => {
 // Route to serve the leaderboard page
 leaderboardroute.get("/", async(req, res) => {
     let username = await fetchUser(req, res);
-    let user_type = "guest";
-    if(username){
-        user_type = username.user_type;
+    let user_type = await User.findOne({ username: username }).select("user_type");
+    if (user_type){
+        user_type = user_type.user_type;
+    }
+    else{
+        user_type = "guest";
     }
     res.render("leaderboard",{username,user_type});
 });
