@@ -1,7 +1,6 @@
 backend/node_modules
 backend/.env
 backend/testing.js
-backend/uploads
 backend/node_modules
 tesseract
 backend/apiuploads
