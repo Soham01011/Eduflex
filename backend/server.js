@@ -307,16 +307,7 @@ server.post("/make-announcement", makeannoucementRouter);
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
 server.get("/ping", (req, res) => {
-    const userAgent = req.headers['user-agent'];
 
-    console.log("User-Agent:", userAgent);
-
-    // Set default based on the user-agent
-    let detectedInterface = "Webapp";
-
-    if (userAgent.includes("Mobile")) {
-        detectedInterface = "Mobileapp";
-    }
     res.status(200).json({ message: "Server is up and running" });
 });
 
