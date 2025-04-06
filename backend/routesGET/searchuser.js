@@ -82,8 +82,10 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             });
         }
         let editable = false
-
+        let user_type = 'guest'
         if (await fetchUser(req,res)== user.username){
+            user_type = await User.findOne({"username" : await fetchUser(req,res)});
+            user_type = user_type.user_type;
             editable = true
         }   
 
@@ -131,7 +133,8 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             userexp: userAllskills ? userAllskills.experience || [] : [],
             useredu: userAllskills ? userAllskills.education || [] : [],
             userAllskills: userAllskills || { skills: [] },
-            editable
+            editable,
+            user_type
         });
         
     } catch (error) {

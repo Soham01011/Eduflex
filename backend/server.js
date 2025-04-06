@@ -74,6 +74,7 @@ const dashboardmentorRoute = require("./routesGET/dashboardmentor");
 const managementProtalRoute = require("./routesGET/managementportal");
 const AnnoucementLogicRoute = require("./routesGET/announcements");
 const MakeAnnoucementsRoute = require("./routesGET/uploadannoucement");
+const RewadsLoginRoute = require("./routesGET/rewardspage");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -303,6 +304,8 @@ server.get("/makeannoucement", MakeAnnoucementsRoute);
 server.post("/update-skill-scores-mentor",scoreskillsRouter);
 
 server.post("/make-announcement", makeannoucementRouter);
+
+server.use("/rewards", RewadsLoginRoute);
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
