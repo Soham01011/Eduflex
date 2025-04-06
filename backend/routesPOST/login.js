@@ -124,7 +124,7 @@ loginLogicRouter.post("/login", async (req, res) => {
                 res.cookie("Token", payload, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production', // Set to true if serving over HTTPS
-                    maxAge: 15 * 60 * 1000 // 15 minutes
+                    maxAge: 30 * 60 * 1000 // 15 minutes
                 });
 
                 if (missingFields.length > 0) {

@@ -12,6 +12,22 @@
   <script src="./assets/js/init-alpine.js"></script>
   <script src="./assets/js/myscript.js"></script>
 
+  <style>
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+  </style>
 </head>
 
 <body>
@@ -75,6 +91,35 @@
 
           </div>
         </div>
+        
+        <div id="feedbackContainer" class="hidden">
+          <div class="min-w-0 p-6 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <h2 class="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              Test Results
+            </h2>
+            
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300">MBTI Type</h3>
+              <p id="mbtiResult" class="text-gray-700 dark:text-gray-200 text-xl"></p>
+            </div>
+        
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300">Personality Analysis</h3>
+              <p id="feedbackResult" class="text-gray-700 dark:text-gray-200"></p>
+            </div>
+          </div>
+
+          <div id="redirectButtonContainer" class="mt-6 flex justify-center">
+            <a href="/alltest" id="viewDashboardBtn" 
+               class="px-6 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple flex items-center">
+                <span>View Test Dashboard</span>
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+          </div>
+        </div>
+        
       </div>
     </main>
   </div>

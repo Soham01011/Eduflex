@@ -662,37 +662,27 @@
                     </tr>
                   </thead>
                   <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    <tr class="text-gray-700 dark:text-gray-400">
-                      <td class="px-4 py-3">
-                        <div class="flex items-center text-sm">
-                          <div>
-                            <p class="font-semibold">Psychometric Test</p>
+                    <% completedTests.forEach(function(test) { %>
+                      <tr class="text-gray-700 dark:text-gray-400">
+                        <td class="px-4 py-3">
+                          <div class="flex items-center text-sm">
+                            <div>
+                              <p class="font-semibold">Psychometric Test</p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        Introvert
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        6/10/2020
-                      </td>                    
-                    </tr>
-
-                    <tr class="text-gray-700 dark:text-gray-400">
-                      <td class="px-4 py-3">
-                        <div class="flex items-center text-sm">
-                          <div>
-                            <p class="font-semibold">Psychometric Test</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        Extrovert 
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        6/10/2020
-                      </td>
-                    </tr>
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          <%= test.dimension || 'Not Available' %>
+                        </td>
+                        <td class="px-4 py-3 text-sm">
+                          <%= new Date(test.startedAt).toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit'
+                          }) %>
+                        </td>
+                      </tr>
+                    <% }); %>
                   </tbody>
                 </table>
               </div>

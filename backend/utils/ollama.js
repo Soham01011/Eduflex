@@ -75,27 +75,92 @@ function extractQuestionOnly(responseText) {
 
 // Helper function to extract feedback and counselor requirement
 function extractDetailsFromResponse(responseText) {
-  // Match MBTI (case-insensitive, handles extra spaces)
-  const mbtiMatch = responseText.match(/mbti\s*:\s*(.*?)(\n|$)/i);
-  const mbti = mbtiMatch ? mbtiMatch[1].trim() : null;
+    // Clean the text first
+    const cleanText = responseText
+        .replace(/[`*]/g, '')
+        .replace(/\n+/g, ' ')
+        .trim();
 
-  // Match Feedback (captures multi-line content)
-  const feedbackMatch = responseText.match(/feedback\s*:\s*(.*?)(?=\n\s*Counselor\s*:|$)/is);
-  const feedback = feedbackMatch ? feedbackMatch[1].trim() : null;
+    // Updated regex patterns
+    const mbtiPatterns = [
+        /\*\*mbti:\*\*\s*([A-Z]{3,4})/i,                   // Markdown format
+        /mbti\s*:?\s*"?([A-Z]{3,4})"?/i,                   // Standard format
+        /mbti\s+(?:type|result|is)?\s*:?\s*([A-Z]{3,4})/i, // Descriptive format
+        /(?:personality\s+)?type\s*:?\s*([A-Z]{3,4})/i     // Alternative format
+    ];
 
-  // Match Counselor (True/False, case-insensitive)
-  const counselorMatch = responseText.match(/counselor\s*:\s*(true|false)/i);
-  const counselor = counselorMatch
-    ? counselorMatch[1].toLowerCase() === "true"
-    : null;
+    const feedbackPattern = /feedback\s*:?\s*"?([^"]+?)(?=(?:\s*counselor:|$))/i;
+    const counselorPattern = /counselor\s*:?\s*(true|false)/i;
 
-  console.log("FEEDBACK FROM OLLAMA:", mbti, feedback, counselor);
+    let mbti = null;
+    let feedback = null;
+    let counselor = null;
 
-  return {
-    mbti,
-    feedback,
-    counselor,
-  };
+    try {
+        // Try each MBTI pattern until we find a match
+        for (const pattern of mbtiPatterns) {
+            const mbtiMatch = cleanText.match(pattern);
+            if (mbtiMatch && mbtiMatch[1]) {
+                // Validate MBTI format
+                const mbtiValue = mbtiMatch[1].toUpperCase();
+                if (mbtiValue.length >= 3 && /^[IEFSNTJP]+$/.test(mbtiValue)) {
+                    mbti = mbtiValue;
+                    break;
+                }
+            }
+        }
+
+        // Extract Feedback
+        const feedbackMatch = cleanText.match(feedbackPattern);
+        if (feedbackMatch && feedbackMatch[1]) {
+            feedback = feedbackMatch[1].trim();
+        }
+
+        // Extract Counselor status
+        const counselorMatch = cleanText.match(counselorPattern);
+        if (counselorMatch && counselorMatch[1]) {
+            counselor = counselorMatch[1].toLowerCase() === 'true';
+        }
+
+        // Enhanced fallback for feedback
+        if (!feedback && mbti) {
+            const sections = cleanText.split(/(?:counselor|feedback)\s*:/i);
+            const mbtiSection = sections[0];
+            const textAfterMBTI = mbtiSection.substring(mbtiSection.indexOf(mbti) + mbti.length);
+            if (textAfterMBTI) {
+                feedback = textAfterMBTI.trim();
+            }
+        }
+
+    } catch (error) {
+        console.error("Error parsing response:", error);
+    }
+
+    // Validate and clean MBTI if needed
+    if (mbti && mbti.length === 3) {
+        // If only 3 letters are found, try to infer the 4th based on common patterns
+        const missingDimension = {
+            'IEJ': 'IEJF', // Example inference
+            'IEP': 'IESP',
+            // Add more mappings as needed
+        }[mbti] || null;
+        
+        if (missingDimension) {
+            mbti = missingDimension;
+            console.log(`Inferred MBTI from ${mbti} to ${missingDimension}`);
+        }
+    }
+
+    // Log the extracted data for debugging
+    console.log("Parsed Response:", {
+        mbti,
+        feedback: feedback ? `${feedback.substring(0, 50)}...` : null,
+        counselor,
+        originalText: cleanText.substring(0, 100) + '...'
+    });
+
+    return { mbti, feedback, counselor };
 }
 
 module.exports = {psychometricOllama};
+

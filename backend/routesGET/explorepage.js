@@ -29,7 +29,7 @@ explorepageRoute.get("/explore", async (req, res) => {
 
         // Fetch the latest posts with required fields
         const cards = await Profiles.find()
-            .select('firstname lastname username post_desc file hashtags postID')
+            .select('firstname lastname username post_name file hashtags postID')
             .sort({ createdAt: -1 })
             .skip((page - 1) * range)
             .limit(range);
