@@ -494,7 +494,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
             );
             console.log("reciving Credly link : ", credly , existingCredly);
             // Handle Credly badge fetching
-            if (credly !== existingCredly.link) {
+            if (credly && existingCredly && (credly !== existingCredly.link)) {
                 console.log("Credly link changed", credly !== existingCredly.link);
                 if (fetchBadges) {
                         await fetchBadges(interface, credly, firstName, lastName, tokencheck.username, userIP);

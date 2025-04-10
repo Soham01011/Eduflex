@@ -13,34 +13,21 @@ const User = require("../models/users");
 // GET route for fetching announcements
 AnnoucementRoute.get("/", checkToken, async(req, res) => {
     try {
-        let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        if (Array.isArray(userIP)) {
-            userIP = userIP[0];
-        } else if (userIP.includes(',')) {
-            userIP = userIP.split(',')[0].trim();
-        }
         let username = await fetchUser(req, res);
-        let user_type = await User.findOne({ username: username }).select("user_type");
-        user_type = user_type.user_type;
+        let userData = await User.findOne({ username: username }).select("user_type department");
+        let user_type = userData.user_type;
+        let department = userData.department; // Correctly get the department
 
         // Fetch all announcements and sort by date (newest first)
         const announcements = await Announcement.find({})
             .sort({ date: -1 });
 
-        // Add isRegistered field to each announcement
-        const processedAnnouncements = announcements.map(announcement => {
-            const isRegistered = announcement.registeredusers.includes(username);
-            return {
-                ...announcement.toObject(),
-                isRegistered
-            };
-        });
-
         // Return announcements with registration status
         res.render('announcement', {
-            announcements: processedAnnouncements,
+            announcements: announcements,
             username: username,
-            user_type
+            user_type: user_type,
+            department: department // Pass the department to the template
         });
 
     } catch (error) {

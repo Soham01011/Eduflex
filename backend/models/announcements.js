@@ -14,6 +14,7 @@ const announcementSchema = new mongoose.Schema({
     eventratingfromstudnets : {type : Array , default : []},
     feedbackfromstudents : {type : Array , default : []},
     creator : {type : String , required : false},
+    department : {type : String , required : false},
 });
 
 module.exports = mongoose.model('Announcements', announcementSchema);

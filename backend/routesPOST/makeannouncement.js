@@ -4,6 +4,7 @@ const Announcements = require("../models/announcements");
 const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4, stringify } = require("uuid");
+const Users = require("../models/users");
 
 const { logMessage } = require("../utils/logger");
 const { checkTokenAndUserType } = require("../middleware/checkTokenandUsertype");
@@ -53,6 +54,7 @@ makeannouncement.post("/make-announcement",
         try {
             const { title, description, date, speaker, venue, time, announcementId } = req.body;
             const username = await fetchUser(req, res);
+            
 
             // Date validation
             const eventDate = new Date(date);
@@ -102,7 +104,8 @@ makeannouncement.post("/make-announcement",
                 logMessage(`[+] ${userIP} ${username} : Announcement updated successfully`);
                 return res.redirect("/makeannoucement");
             }
-
+            const department = await Users.findOne({ username: username }).select("department");
+            department = department.department;
             // If no announcementId, create new announcement
             const id = `${username}-${uuidv4()}`;
             const newAnnouncement = new Announcements({
@@ -115,6 +118,7 @@ makeannouncement.post("/make-announcement",
                 id,
                 posterimage: req.file ? `/uploads/announcements/${req.file.filename}` : null,
                 creator: username,
+                department,
             });
 
             await newAnnouncement.save();
