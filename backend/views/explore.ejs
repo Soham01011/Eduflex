@@ -14,7 +14,7 @@
     <script src="./assets/js/charts-lines.js" defer></script>
     <script src="./assets/js/charts-pie.js" defer></script>
     <script src="./assets/js/charts-bars.js" defer></script>
-  </head>
+    <script src="./scripts/likespost.js"></script>  </head>
 
   <body>
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
@@ -470,10 +470,11 @@
                 >
                   <img
                     class="object-cover w-8 h-8 rounded-full"
-                    src="/uploads/guest/profile/profile.jpg"                    alt=""
+                    src="/uploads/<%= username %>/profile/profile.jpg"                    alt=""
                     aria-hidden="true"
                   />
                 </button>
+                <% if (username !== 'guest') { %>
                 <template x-if="isProfileMenuOpen">
                   <ul
                     x-transition:leave="transition ease-in duration-150"
@@ -530,6 +531,7 @@
                     </li>
                   </ul>
                 </template>
+                <% } %>
               </li>
             </ul>
           </div>
@@ -558,30 +560,25 @@
                               </div>
                           <% } %>
 
-                          LIKES <%= card.likes %>
-
+                         
                           <br>
                           <br>
 
-                          <div>
+                          <div class="flex items-center gap-2">
                             <button
-                              class=" like-post items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                              aria-label="Like" data-post-id="<%= card.postID %>" data-action="like"
+                            class="like-post items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 <%= card.isLiked ? 'bg-red-600 hover:bg-red-700' : 'bg-purple-600 hover:bg-purple-700' %> border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple"
+                            aria-label="Like"
+                            data-post-id="<%= card.postID %>"
+                            data-is-liked="<%= card.isLiked %>"
+                            onclick="console.log('Button clicked:', this.getAttribute('data-post-id'))"
                             >
-                              <svg
-                                class="w-5 h-5"
-                                aria-hidden="true"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                  clip-rule="evenodd"
-                                  fill-rule="evenodd"
-                                ></path>
-                              </svg>
-                            </button>
-                          </div>
+                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                            </svg>
+                          </button>
+                          <span class="likes-count">&nbsp <%= card.likes %></span>
+
+                        </div>
 
                       </div>
                       <div class="right">

@@ -1,42 +1,53 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Attach event listener to all like buttons
+    console.log("Script loaded");
+    
     const likeButtons = document.querySelectorAll(".like-post");
+    console.log("Found like buttons:", likeButtons.length);
 
     likeButtons.forEach(button => {
-        button.addEventListener("click", async () => {
+        button.addEventListener("click", async (event) => {
+            event.preventDefault();
+            console.log("Button clicked");
+            
             const postID = button.getAttribute("data-post-id");
-
-            if (!postID) {
-                console.error("Post ID is missing.");
-                return;
-            }
+            console.log("Post ID:", postID);
+            
+            const likesCountElement = button.parentElement.querySelector(".likes-count");
+            console.log("Current likes:", likesCountElement.textContent);
 
             try {
-                // Send POST request to like the post
                 const response = await fetch("/likeapi/like", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ postID }),
+                    credentials: 'include'
                 });
 
+                console.log("Response received:", response.status);
                 const result = await response.json();
+                console.log("Result:", result);
 
                 if (response.ok) {
-                    alert(result.message); // Show success message
-                    // Optionally, update the UI (e.g., increment/decrement likes)
-                    const likesCountElement = button.previousSibling; // Assuming likes count is just before the button
-                    if (likesCountElement && likesCountElement.textContent.startsWith("LIKES")) {
-                        const likes = parseInt(likesCountElement.textContent.split(" ")[1], 10);
-                        likesCountElement.textContent = `LIKES ${likes + (result.message.includes("unliked") ? -1 : 1)}`;
+                    likesCountElement.textContent = `${result.likesCount} likes`;
+                    button.setAttribute('data-is-liked', result.isLiked);
+                    
+                    if (result.isLiked) {
+                        button.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                        button.classList.add('bg-red-600', 'hover:bg-red-700');
+                    } else {
+                        button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                        button.classList.add('bg-purple-600', 'hover:bg-purple-700');
                     }
+                    
+                    console.log("Like updated successfully");
                 } else {
-                    alert(`Error: ${result.message}`);
+                    throw new Error(result.message);
                 }
             } catch (error) {
-                console.error("Error liking the post:", error);
-                alert("An error occurred. Please try again.");
+                console.error("Error:", error);
+                alert(error.message || "An error occurred while processing your like");
             }
         });
     });

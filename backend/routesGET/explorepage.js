@@ -26,7 +26,7 @@ explorepageRoute.get("/explore", async (req, res) => {
             // If fetching user fails, continue as guest
             console.log("No logged in user, continuing as guest");
         }
-
+        console.log("Username in explore route:", username);
         // Fetch the latest posts with required fields
         const cards = await Profiles.find()
             .select('firstname lastname username post_name file hashtags postID')
