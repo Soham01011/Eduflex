@@ -107,6 +107,7 @@ const CSRFToken = require("./models/csrfttoken");
 const User = require("./models/users");
 const Profiles = require("./models/profiles");
 const Credly = require("./models/credly");
+const { add } = require("date-fns/add");
 
 const serverSK = process.env.SERVER_SEC_KEY;
 
@@ -210,33 +211,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
-const isServerless = process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined;
-
-// Use /tmp in serverless, otherwise local folder
-const hashtagDir = isServerless
-    ? '/tmp/hashtag_extractions'
-    : path.join(__dirname, '../hashtag_extractions');
-
-// Ensure the directory exists
-if (!fs.existsSync(hashtagDir)) {
-    fs.mkdirSync(hashtagDir, { recursive: true });
-}
-
-// Configure Multer to use the directory
-const extract_hashtag_folder = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, hashtagDir);
-        },
-        filename: (req, file, cb) => {
-            // Replace spaces and special characters
-            const sanitizedFilename = file.originalname.replace(/\s+/g, "_");
-            cb(null, sanitizedFilename);
-        }
-    })
-});
-
 
 
 const user_profilepic = multer.diskStorage({
@@ -527,38 +501,7 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
     }
 );
 
-server.post("/addbatch", extract_hashtag_folder.single('file'), async (req, res) => {
-    const { post_desc, timeslot, selection } = req.body;
-    
-    let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-    if (Array.isArray(userIP)) {
-        userIP = userIP[0];
-    } else if (userIP.includes(',')) {
-        userIP = userIP.split(',')[0].trim();
-    }
-    const interface = "Webapp"
-    const userUsername = await fetchUser(req, res);
-
-    // Check if file was uploaded
-    if (!req.file) {
-        return res.status(400).json({ message: "No file received!" });
-    }
-
-    const file = req.file.filename; // Extract the filename
-    const filePath = req.file.path;
-    console.log(post_desc, timeslot, selection,file , filePath);
-    if (!fs.existsSync(filePath)) {
-        console.error("File was not saved:", filePath);
-        return res.status(500).json({ message: "File upload failed!" });
-    }
-
-    if (addMentees) {
-        addMentees(userUsername, file, post_desc, selection, interface, userIP, timeslot);
-    }
-
-    res.status(200).redirect("/profile-web-page-mentor");
-});
+server.post("/addbatch", addbatchRoute);
 
 server.post("/getUserProfile", getuserprofileLogicRoute);
 
