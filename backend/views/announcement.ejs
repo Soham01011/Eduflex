@@ -578,11 +578,12 @@
                         </button>
 
                         <% if (user_type === 'Mentor' && department && announcement.department && department === announcement.department) { %>
-                          <button data-event-id="<%= announcement.id %>"
-                              class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 hover:bg-purple-700 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple">
-                              Download CSV
+                          <button data-event-data-id="<%= announcement.id %>"
+                            class="download-pdf-btn px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 hover:bg-purple-700 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple">
+                            Download PDF
                           </button> 
-                      <% } %>
+                        <% } %>
+                        
                       </div>
                       
                       </div>
