@@ -502,6 +502,12 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
                 }
                   
             }
+            else if (credly && !existingCredly) {
+                if (fetchBadges) {
+                    await fetchBadges(interface, credly, firstName, lastName, tokencheck.username, userIP);
+                    logMessage(`[+] ${interface} ${userIP} : First time Credly badges fetch for ${tokencheck.username}`);
+                }
+            }
 
             // Delete the used token
             await CSRFToken.deleteOne({ token: Token });

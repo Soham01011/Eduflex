@@ -17,6 +17,7 @@ const Profiles = require('../models/profiles');
 const Credly = require('../models/credly');
 const Allskills = require('../models/expeduskill');
 const User = require("../models/users");
+const Pointshistory = require('../models/pointshistory');
 
 
 /**
@@ -119,6 +120,8 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             });
         };
 
+        const pointsData = await Pointshistory.find({"username": userData.username}).select("post_type post_subtype points time")
+
         res.render("searchpage", {
             username: userData.username,
             firstname: userData.firstname || null,
@@ -134,7 +137,8 @@ searchuserprofileRoute.get('/search-profile/:search_query',async(req,res)=>{
             useredu: userAllskills ? userAllskills.education || [] : [],
             userAllskills: userAllskills || { skills: [] },
             editable,
-            user_type
+            user_type,
+            pointsData: pointsData || [],
         });
         
     } catch (error) {

@@ -17,242 +17,244 @@
 
   <script>
     const pointsData = <%- JSON.stringify(pointsData) %>;
-    
-    // Define categories with initial point totals and colors
+
     const categories = {
-        academic: { points: 0, color: '#FF6384' },
-        extracurricular: { points: 0, color: '#36A2EB' },
-        experience: { points: 0, color: '#FFCE56' }
+      academic: { points: 0, color: '#FF6384' },
+      extracurricular: { points: 0, color: '#36A2EB' },
+      experience: { points: 0, color: '#FFCE56' }
     };
-  
-    // Aggregate points by category
+
+    // Aggregate total points by category
     pointsData.forEach((entry) => {
-        const type = entry.post_type.toLowerCase();
-        if (type in categories) {
-            categories[type].points += entry.points;
-        }
+      const type = entry.post_type.toLowerCase();
+      if (type in categories) {
+        categories[type].points += entry.points;
+      }
     });
 
-    // Create the doughnut chart
     const createDoughnutChart = () => {
-        const ctx = document.getElementById('doughnutChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: Object.keys(categories),
-                datasets: [{
-                    label: 'Points by Category',
-                    data: Object.values(categories).map(cat => cat.points),
-                    backgroundColor: Object.values(categories).map(cat => cat.color),
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw + ' points';
-                            }
-                        }
-                    }
+      const ctx = document.getElementById('doughnutChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(categories),
+          datasets: [{
+            label: 'Points by Category',
+            data: Object.values(categories).map(cat => cat.points),
+            backgroundColor: Object.values(categories).map(cat => cat.color),
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label: function (tooltipItem) {
+                  return tooltipItem.label + ': ' + tooltipItem.raw + ' points';
                 }
+              }
             }
-        });
+          }
+        }
+      });
     };
 
-    // Process time series data for line chart
+    // Week number function based on UTC
+
     const processTimeSeriesData = (timeRange) => {
-        const now = new Date();
-        const sortedData = [...pointsData].sort((a, b) => new Date(a.time) - new Date(b.time));
-        
-        // Get start date based on time range
-        let startDate = new Date();
-        switch(timeRange) {
-            case 'month':
-                startDate.setDate(1);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            case 'year':
-                startDate.setMonth(0, 1);
-                startDate.setHours(0, 0, 0, 0);
-                break;
-            default:
-                startDate = new Date(sortedData[0]?.time || now);
+      const now = new Date();
+      const nowUTC = new Date(now.toISOString());
+
+      const sortedData = [...pointsData].sort((a, b) => new Date(a.time) - new Date(b.time));
+
+      const filteredData = sortedData.filter(entry => {
+        const entryDate = new Date(entry.time);
+        switch (timeRange) {
+          case 'month':
+            return (
+              entryDate.getUTCMonth() === nowUTC.getUTCMonth() &&
+              entryDate.getUTCFullYear() === nowUTC.getUTCFullYear()
+            );
+          case 'year':
+            return entryDate.getUTCFullYear() === nowUTC.getUTCFullYear();
+          default:
+            return true;
         }
+      });
 
-        // Filter data based on time range
-        const filteredData = sortedData.filter(entry => {
-            const entryDate = new Date(entry.time);
-            switch(timeRange) {
-                case 'month':
-                    return entryDate.getMonth() === now.getMonth() && 
-                           entryDate.getFullYear() === now.getFullYear();
-                case 'year':
-                    return entryDate.getFullYear() === now.getFullYear();
-                default:
-                    return true;
-            }
-        });
+      console.log("Filtered data:", filteredData);
+      console.log("UTC now:", nowUTC.toISOString());
+      console.log("Now ", now.toISOString());
 
-        // Initialize time series data
-        const timeSeriesData = {
-            academic: [{ x: startDate, y: 0 }],
-            extracurricular: [{ x: startDate, y: 0 }],
-            experience: [{ x: startDate, y: 0 }]
-        };
+      const aggregatedData = {
+        academic: {},
+        extracurricular: {},
+        experience: {}
+      };
 
-        // Track cumulative points
-        const cumulativePoints = {
-            academic: 0,
-            extracurricular: 0,
-            experience: 0
-        };
+      const getTotalWeeksInMonth = (date) => {
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth();
+        const firstDay = new Date(Date.UTC(year, month, 1));
+        const lastDay = new Date(Date.UTC(year, month + 1, 0));
+        const firstWeekday = firstDay.getUTCDay();
+        const daysInMonth = lastDay.getUTCDate();
+        return Math.ceil((daysInMonth + firstWeekday) / 7);
+      };
 
-        // Process each data point chronologically
-        filteredData.forEach(entry => {
-            const type = entry.post_type.toLowerCase();
-            const normalizedType = type === 'extracurricular' ? 'extracurricular' : type;
-            
-            if (normalizedType in cumulativePoints) {
-                cumulativePoints[normalizedType] += entry.points;
-                timeSeriesData[normalizedType].push({
-                    x: new Date(entry.time),
-                    y: cumulativePoints[normalizedType]
-                });
-            }
-        });
+      const getWeekNumber = (date) => {
+        const firstDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
+        const firstWeekday = firstDay.getUTCDay();
+        const dayOfMonth = date.getUTCDate();
+        return Math.ceil((dayOfMonth + firstWeekday) / 7);
+      };
 
-        return timeSeriesData;
+      let xLabels = [];
+
+      if (timeRange === 'month') {
+        const totalWeeks = getTotalWeeksInMonth(nowUTC);
+        xLabels = Array.from({ length: totalWeeks }, (_, i) => `Week ${i + 1}`);
+        // Initialize all categories with all week labels
+        for (const type in aggregatedData) {
+          xLabels.forEach(week => {
+            aggregatedData[type][week] = 0;
+          });
+        }
+      } else if (timeRange === 'year') {
+        xLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        for (const type in aggregatedData) {
+          xLabels.forEach(month => {
+            aggregatedData[type][month] = 0;
+          });
+        }
+      }
+
+      filteredData.forEach(entry => {
+        const entryDate = new Date(entry.time);
+        const type = entry.post_type.toLowerCase();
+
+        if (type in aggregatedData) {
+          if (timeRange === 'month') {
+            const weekNum = getWeekNumber(entryDate);
+            const weekLabel = `Week ${weekNum}`;
+            aggregatedData[type][weekLabel] += (entry.points || 0);
+          } else if (timeRange === 'year') {
+            const monthLabel = entryDate.toLocaleString('default', { month: 'short' });
+            aggregatedData[type][monthLabel] += (entry.points || 0);
+          }
+        }
+      });
+
+      const timeSeriesData = {};
+      for (const type in aggregatedData) {
+        timeSeriesData[type] = xLabels.map(label => ({
+          x: label,
+          y: aggregatedData[type][label] || 0
+        }));
+      }
+
+      return { timeSeriesData, xLabels };
     };
 
-    // Create the line chart
     const createLineChart = (timeRange = 'month') => {
-        const ctx = document.getElementById('line').getContext('2d');
-        const timeSeriesData = processTimeSeriesData(timeRange);
+      const ctx = document.getElementById('line').getContext('2d');
+      const { timeSeriesData, xLabels } = processTimeSeriesData(timeRange);
 
-        if (window.lineChart instanceof Chart) {
-            window.lineChart.destroy();
+      if (window.lineChart instanceof Chart) {
+        window.lineChart.destroy();
+      }
+
+      window.lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: xLabels,
+          datasets: [
+            {
+              label: 'Academic',
+              data: timeSeriesData.academic.map(d => d.y),
+              borderColor: categories.academic.color,
+              backgroundColor: categories.academic.color + '20',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'Extracurricular',
+              data: timeSeriesData.extracurricular.map(d => d.y),
+              borderColor: categories.extracurricular.color,
+              backgroundColor: categories.extracurricular.color + '20',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'Experience',
+              data: timeSeriesData.experience.map(d => d.y),
+              borderColor: categories.experience.color,
+              backgroundColor: categories.experience.color + '20',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          },
+          scales: {
+            x: {
+              type: 'category',
+              title: {
+                display: true,
+                text: timeRange === 'month' ? 'Weeks' :
+                  timeRange === 'year' ? 'Months' : 'Years'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Points'
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `${context.dataset.label}: ${context.parsed.y} points`;
+                }
+              }
+            }
+          }
         }
-
-        const timeConfig = {
-            month: { 
-                unit: 'day',
-                displayFormats: {
-                    day: 'MMM d, HH:mm'
-                }
-            },
-            year: { 
-                unit: 'month',
-                displayFormats: {
-                    month: 'MMM yyyy'
-                }
-            },
-            all: { 
-                unit: 'month',
-                displayFormats: {
-                    month: 'MMM yyyy'
-                }
-            }
-        }[timeRange];
-
-        window.lineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'Academic',
-                        data: timeSeriesData.academic,
-                        borderColor: categories.academic.color,
-                        backgroundColor: categories.academic.color + '20',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Extracurricular',
-                        data: timeSeriesData.extracurricular,
-                        borderColor: categories.extracurricular.color,
-                        backgroundColor: categories.extracurricular.color + '20',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Experience',
-                        data: timeSeriesData.experience,
-                        borderColor: categories.experience.color,
-                        backgroundColor: categories.experience.color + '20',
-                        tension: 0.4,
-                        fill: true
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: timeConfig,
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Cumulative Points'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.dataset.label}: ${context.parsed.y} points`;
-                            },
-                            title: function(tooltipItems) {
-                                const date = new Date(tooltipItems[0].parsed.x);
-                                return date.toLocaleString();
-                            }
-                        }
-                    }
-                }
-            }
-        });
+      });
     };
 
-    // Update card values and create charts
     const updateCardValues = () => {
-        Object.entries(categories).forEach(([postType, data]) => {
-            const cardElement = document.querySelector(`[data-post-type="${postType}"] .text-lg`);
-            if (cardElement) {
-                cardElement.textContent = data.points;
-            }
-        });
-        
-        createDoughnutChart();
-        createLineChart('month');
+      Object.entries(categories).forEach(([postType, data]) => {
+        const cardElement = document.querySelector(`[data-post-type="${postType}"] .text-lg`);
+        if (cardElement) {
+          cardElement.textContent = data.points;
+        }
+      });
+
+      createDoughnutChart();
+      createLineChart('month');
     };
 
-    // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
-        const timeRangeFilter = document.getElementById('timeRangeFilter');
-        timeRangeFilter.addEventListener('change', (e) => {
-            createLineChart(e.target.value);
-        });
-        
-        updateCardValues();
+      const timeRangeFilter = document.getElementById('timeRangeFilter');
+      timeRangeFilter.addEventListener('change', (e) => {
+        createLineChart(e.target.value);
+      });
+
+      updateCardValues();
     });
-</script>
+  </script>
+  
   
 </head>
 

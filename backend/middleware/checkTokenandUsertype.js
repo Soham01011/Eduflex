@@ -75,7 +75,7 @@ async function checkTokenAndUserType(req, res, next) {
         next();
     } catch (error) {
         console.log("Error processing token:", error.message);
-        return res.status(400).json({ message: "Invalid token or error during token verification" });
+        return res.redirect("/loginpage");
     }
 }
 
