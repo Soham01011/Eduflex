@@ -211,12 +211,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const hashtagDir = './hashtag_extractions';
+const isServerless = process.env.AWS_LAMBDA_FUNCTION_NAME !== undefined;
 
+// Use /tmp in serverless, otherwise local folder
+const hashtagDir = isServerless
+    ? '/tmp/hashtag_extractions'
+    : path.join(__dirname, '../hashtag_extractions');
+
+// Ensure the directory exists
 if (!fs.existsSync(hashtagDir)) {
     fs.mkdirSync(hashtagDir, { recursive: true });
 }
 
+// Configure Multer to use the directory
 const extract_hashtag_folder = multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
