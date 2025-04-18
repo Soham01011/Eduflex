@@ -13,7 +13,7 @@ const { interfaceFetch } = require("../utils/interface");
 const { logMessage } = require("../utils/logger");
 
 // Define your server secret key from environment variables
-const serverSK = process.env.SERVER_SK;
+const serverSK = process.env.SERVER_SEC_KEY;
 
 if (process.env.USE_ADD_MENTES === "false") {
     addMentees = false;
@@ -21,8 +21,11 @@ if (process.env.USE_ADD_MENTES === "false") {
 
 const hashtag_storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        // Use an absolute path to ensure you know where the files are stored
-        const hashtagDir = path.join(__dirname, '..', 'hashtag_extractions');
+        const isProd = process.env.VERCEL === '1'; // Vercel sets this env var automatically
+        const hashtagDir = isProd
+            ? '/tmp/hashtag_extractions'
+            : path.join(__dirname, '..', 'hashtag_extractions');
+
         console.log("Creating/using directory:", hashtagDir);
         fs.mkdirSync(hashtagDir, { recursive: true });
         callback(null, hashtagDir);
@@ -51,12 +54,12 @@ const hashtag_storage = multer.diskStorage({
             return callback(new Error('Username not found'));
         }
 
-        // Construct the new filename
-        const newFilename = username + "-" + file.originalname;
+        const newFilename = username + "-" + file.originalname.replace(/\s+/g, "_");
         console.log("Saving file as:", newFilename);
         callback(null, newFilename);
     }
 });
+
 
 const extract_hashtag_folder = multer({ storage: hashtag_storage });
 
@@ -88,7 +91,8 @@ addbatches.post("/addbatch", checkToken, checkUserType, extract_hashtag_folder.s
         );
         
         if (addMentees) {
-            addMentees(up_username, req.body.file, post_desc, selection, userIP, interfaceData, timeslot);
+            addMentees(up_username, req.file.filename, post_desc, selection, userIP, interfaceData, timeslot);
+
         } else {
             console.log('[INFO] * Mentees part is disabled, enable it in env file.');
         }
