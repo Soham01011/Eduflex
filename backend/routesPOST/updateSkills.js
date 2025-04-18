@@ -60,7 +60,7 @@ scoreskillsRouter.post('/update-skill-scores-mentor', checkTokenAndUserType, asy
             await Pointshistory.create({
                 username: username,
                 postID: skillId,
-                post_type: 'Extracurricular',
+                post_type: 'extracurricular',
                 post_subtype: skillDetails?.name || 'Unknown Skill',
                 points: skillScore || 1,
                 time: new Date()

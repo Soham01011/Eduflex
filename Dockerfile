@@ -26,13 +26,13 @@ COPY --from=builder /usr/src/app/backend/utils ./utils
 COPY --from=builder /usr/src/app/backend/views ./views
 COPY --from=builder /usr/src/app/backend/package*.json ./
 COPY --from=builder /usr/src/app/backend/server.js ./
-
+COPY --from=builder /usr/src/app/backend/uploads ./
 
 # Install production dependencies only
 RUN npm ci --only=production
 
 # Create upload directories
-RUN mkdir -p /usr/src/app/uploads /usr/src/app/apiuploads
+RUN mkdir -p /usr/src/app/apiuploads /usr/src/app/backend/hashtag_extractions
 
 # Expose port
 EXPOSE 8000

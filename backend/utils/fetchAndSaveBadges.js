@@ -43,7 +43,9 @@ async function fetchAndSaveBadges(userUsername) {
                         link: credlylink,
                         issuer_name: badge.issuer_name,
                         cert_name: badge.certificate_name,
-                        issue_date: badge.issued_date
+                        issue_date: badge.issued_date,
+                        badge_url: badge.badge_url,
+                        image_url: badge.image_url
                     });
                 }
             }

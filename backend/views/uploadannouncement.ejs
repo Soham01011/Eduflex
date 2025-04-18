@@ -24,131 +24,145 @@
         <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
             <div class="py-4 text-gray-500 dark:text-gray-400">
                 <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-                    EduFlex
+                  Eduflex
                 </a>
-        
+                <% if (user_type === 'Student') { %>
                 <ul class="mt-6">
-                    <li class="relative px-6 py-3">
+                  <li class="relative px-6 py-3">
+                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200	  "
+                      href="/dashboard">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Dashboard</span>
+                    </a>
+                  </li>
+                
+                  <li class="relative px-6 py-3">
+                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      href="/upload-certificate">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Upload Certificates</span>
+                    </a>
+                  </li>
+
+
+                </ul>
+                <!-- Only for student -->
+                <% } %>
+        
+                  <ul class="">
+                    <!-- Commonroute between studnet and mentor -->
+                    <% if (user_type === 'Mentor') { %>
+                      <li class="relative px-6 py-3">
                         <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/dashboard">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                          href="/management-portal-mentor">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                             <path
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                              d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
                             </path>
-                        </svg>
-                        <span class="ml-4">Dashboard</span>
+                          </svg>
+                          <span class="ml-4">Management Protal </span>
                         </a>
-                    </li>
-                </ul>
-        
-                <ul>
+                      </li>
+                    <% } %>
+                      
+                    <!-- Guest routes -->
                     <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                         href="/explore">
                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
+                          stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
                             d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z">
-                            </path>
+                          </path>
                         </svg>
                         <span class="ml-4">Explore</span>
-                        </a>
+                      </a>
                     </li>
-        
+          
                     <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/announcements">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Announcements</span>
-                        </a>
-                    </li>
-            
-            
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                         href="/leaderboard">
                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
+                          stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
                             d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
-                            </path>
+                          </path>
                         </svg>
                         <span class="ml-4">Leaderboard</span>
-                        </a>
+                      </a>
                     </li>
-            
-                    <li class="relative px-6 py-3">
+                    <!-- Guest routes -->
+        
+                    <% if (user_type === 'Mentor' || user_type === 'Student') { %>
+                      <li class="relative px-6 py-3">
                         <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/alltest">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                          href="/announcements">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                             <path
-                            d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                              d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z">
                             </path>
-                        </svg>
-                        <span class="ml-4">Test</span>
+                          </svg>
+                          <span class="ml-4">Announcements</span>
                         </a>
-                    </li>
-            
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/upload-certificate">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Upload Certificates</span>
-                        </a>
-                    </li> 
-            
-                    <li class="relative px-6 py-3">
+                      </li>
+        
+                      <li class="relative px-6 py-3">
                         <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                            aria-hidden="true">
-                        </span>
-                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800    dark:hover:text-gray-200 dark:text-gray-100"
-                        href="/makeannoucement">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true"></span>
+                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                          href="/makeannoucement">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                             <path
-                            d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3">
+                              d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3">
                             </path>
-                        </svg>
-                        <span class="ml-4">Make Announcemnets</span>
+                          </svg>
+                          <span class="ml-4">Make Announcemnets</span>
                         </a>
-                    </li> 
-                    
-                    <li class="relative px-6 py-3">
+                      </li>
+                      
+                      <li class="relative px-6 py-3">
                         <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/profile-web-page">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                          href="/alltest">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                             <path
-                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
+                              d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
                             </path>
-                        </svg>
-                        <span class="ml-4">Profile</span>
+                          </svg>
+                          <span class="ml-4">Test</span>
                         </a>
-                    </li>
-                </ul>
-                
-                <div class="px-6 my-6">
-                    <button
-                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    >
-                        Create account
-                        <span class="ml-2" aria-hidden="true">+</span>
-                    </button>
-                </div>
+                      </li>
+                  
+                      <li class="relative px-6 py-3">
+                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                          href="/profile-web-page">
+                          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                            <path
+                              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
+                            </path>
+                          </svg>
+                          <span class="ml-4">Profile</span>
+                        </a>
+                      </li>
+                    <% } %>
+                    <!-- Commonroute between studnet and mentor -->
+                  </ul>
             </div>
-        </aside>
+          </aside>
 
         <!-- Mobile sidebar -->
         <div
@@ -173,132 +187,146 @@
             @click.away="closeSideMenu"
             @keydown.escape="closeSideMenu"
         >
-            <div class="py-4 text-gray-500 dark:text-gray-400">
-                <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
-                    EduFlex
+          <div class="py-4 text-gray-500 dark:text-gray-400">
+            <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
+              Eduflex
+            </a>
+            <% if (user_type === 'Student') { %>
+            <ul class="mt-6">
+              <li class="relative px-6 py-3">
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200	  "
+                  href="/dashboard">
+                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                    </path>
+                  </svg>
+                  <span class="ml-4">Dashboard</span>
                 </a>
-        
-                <ul class="mt-6">
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/dashboard">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Dashboard</span>
-                        </a>
-                    </li>
-                </ul>
-        
-                <ul>
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/explore">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Explore</span>
-                        </a>
-                    </li>
-        
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/announcements">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Announcements</span>
-                        </a>
-                    </li>
+              </li>
             
-            
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/leaderboard">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Leaderboard</span>
-                        </a>
-                    </li>
-            
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/alltest">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Test</span>
-                        </a>
-                    </li>
-            
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/upload-certificate">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Upload Certificates</span>
-                        </a>
-                    </li> 
-            
-                    <li class="relative px-6 py-3">
-                        <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                            aria-hidden="true">
-                        </span>
-                        <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800    dark:hover:text-gray-200 dark:text-gray-100"
-                        href="/makeannoucement">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Make Announcemnets</span>
-                        </a>
-                    </li> 
-                    
-                    <li class="relative px-6 py-3">
-                        <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                        href="/profile-web-page">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
-                            </path>
-                        </svg>
-                        <span class="ml-4">Profile</span>
-                        </a>
-                    </li>
-                </ul>
-                
-                <div class="px-6 my-6">
-                    <button
-                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    >
-                        Create account
-                        <span class="ml-2" aria-hidden="true">+</span>
-                    </button>
-                </div>
-            </div>
+              <li class="relative px-6 py-3">
+                <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                  href="/upload-certificate">
+                  <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m0-3-3-3m0 0-3 3m3-3v11.25m6-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75">
+                    </path>
+                  </svg>
+                  <span class="ml-4">Upload Certificates</span>
+                </a>
+              </li>
+
+
+            </ul>
+            <!-- Only for student -->
+            <% } %>
+    
+              <ul class="">
+                <!-- Commonroute between studnet and mentor -->
+                <% if (user_type === 'Mentor') { %>
+                  <li class="relative px-6 py-3">
+                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      href="/management-portal-mentor">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Management Protal </span>
+                    </a>
+                  </li>
+                <% } %>
+                  
+                <!-- Guest routes -->
+                <li class="relative px-6 py-3">
+                  <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="/explore">
+                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                      <path
+                        d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z">
+                      </path>
+                    </svg>
+                    <span class="ml-4">Explore</span>
+                  </a>
+                </li>
+      
+                <li class="relative px-6 py-3">
+                  <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                    href="/leaderboard">
+                    <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                      <path
+                        d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z">
+                      </path>
+                    </svg>
+                    <span class="ml-4">Leaderboard</span>
+                  </a>
+                </li>
+                <!-- Guest routes -->
+    
+                <% if (user_type === 'Mentor' || user_type === 'Student') { %>
+                  <li class="relative px-6 py-3">
+                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      href="/announcements">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Announcements</span>
+                    </a>
+                  </li>
+    
+                  <li class="relative px-6 py-3">
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                    aria-hidden="true"></span>
+                    <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                      href="/makeannoucement">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Make Announcemnets</span>
+                    </a>
+                  </li>
+                  
+                  <li class="relative px-6 py-3">
+                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      href="/alltest">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Test</span>
+                    </a>
+                  </li>
+              
+                  <li class="relative px-6 py-3">
+                    <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                      href="/profile-web-page">
+                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z">
+                        </path>
+                      </svg>
+                      <span class="ml-4">Profile</span>
+                    </a>
+                  </li>
+                <% } %>
+                <!-- Commonroute between studnet and mentor -->
+              </ul>
+          </div>
         </aside>
 
         <div class="flex flex-col flex-1">
@@ -389,6 +417,30 @@
                     </button>
                 </li>
 
+                <li class="relative">
+                  <div>
+                    <button
+                      class="flex items-center justify-between px-5 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    >
+                      <svg
+                        class="w-5 h-5 mr-2"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+                        ></path>
+                      </svg>
+                      <span>Points</span>
+                    </button>
+                  </div>
+                </li>
+
                 <!-- Profile menu -->
                 <li class="relative">
                     <button
@@ -400,7 +452,7 @@
                     >
                     <img
                         class="object-cover w-8 h-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82"
+                        src="/uploads/<%= username %>/profile/profile.jpg"
                         alt=""
                         aria-hidden="true"
                     />
@@ -440,7 +492,7 @@
                         <li class="flex">
                         <a
                             class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                            href="#"
+                            href="/logout"
                         >
                             <svg
                             class="w-4 h-4 mr-3"
@@ -557,11 +609,27 @@
 
                         <label class="block text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Time</span>
-                            <input id="time" name="time"
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Enter Time Duration"
+                            <input 
+                                id="time" 
+                                name="time" 
+                                type="time" 
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                required
                             />
                         </label>
+                        
+                        <!-- Add this script at the bottom of the body tag -->
+                        <script>
+                            // Convert 24hr time to 12hr format
+                            const timeInput = document.getElementById('time');
+                            timeInput.addEventListener('change', function() {
+                                const time24 = this.value;
+                                const [hours24, minutes] = time24.split(':');
+                                const hours12 = ((hours24 % 12) || 12);
+                                const ampm = hours24 < 12 ? 'AM' : 'PM';
+                                this.dataset.time12 = `${hours12}:${minutes} ${ampm}`;
+                            });
+                        </script>
 
                         <br>
 
@@ -578,6 +646,283 @@
                         </button>
                     </form>
                 </div>
+
+                <br>
+
+                <!-- Projects -->  
+                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-bold text-gray-600 dark:text-gray-300">
+                            Past Announcements  
+                        </h4>              
+                    </div>
+
+                    <br>
+
+                    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full whitespace-no-wrap">
+
+                        <thead>
+                            <tr
+                            class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                            >
+                            <th class="px-4 py-3">Event Title</th>
+                            <th class="px-4 py-3">Venue</th>
+                            <th class="px-4 py-3">Date</th>
+                            <th class="px-4 py-3">Time</th>
+                            <th class="px-4 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <% if (announcements && announcements.length > 0) { %>
+                            <% announcements.forEach(announcement => { %>
+                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3">
+                                <div class="flex items-center text-sm">
+                                <!-- Avatar with inset shadow -->
+                                <div>
+                                    <p class="font-semibold"> <%= announcement.title %> </p>  
+                                </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                <%= announcement.venue %>
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                <%= announcement.date %>
+                            </td>
+                            <td class="px-4 py-3 text-sm">
+                                <%= announcement.time %>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center space-x-4 text-sm">
+                                <button
+                                    @click="openModal20"
+                                    class="flex items-center justify-between px-2 py-2 text-sm font-bold leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                    aria-label="Delete"
+                                >
+                                    Edit
+                                </button>
+
+                                <!-- Modal Section -->
+                                    <div
+                                        x-show="isModal20Open"
+                                        x-transition:enter="transition ease-out duration-150"
+                                        x-transition:enter-start="opacity-0"
+                                        x-transition:enter-end="opacity-100"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100"
+                                        x-transition:leave-end="opacity-0"
+                                        class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
+                                    >
+                                        <!-- Modal -->
+                                        <div
+                                        x-show="isModal20Open"
+                                        x-transition:enter="transition ease-out duration-150"
+                                        x-transition:enter-start="opacity-0 transform translate-y-1/2"
+                                        x-transition:enter-end="opacity-100"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100"
+                                        x-transition:leave-end="opacity-0 transform translate-y-1/2"
+                                        @click.away="closeModal20"
+                                        @keydown.escape="closeModal20"
+                                        class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-5xl"
+                                        role="dialog"
+                                        id="modal20"                                      
+                                        style="max-height: 90vh; overflow-y: auto;"
+                                        >
+                                        <!-- Modal body -->
+                                        <div class="mt-4 mb-6">
+                                            <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300"> Past Announcements </p>
+                                
+                                            <br>
+
+                                            <div>
+                                                <form action="/make-announcement" method="post" enctype="multipart/form-data">
+                                                    <div
+                                                    class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+                                                    >
+                                                    <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Title</span>
+                                                        <input id="title" name="title"
+                                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        placeholder="<%= announcement.title %>"
+                                                        />
+                                                    </label>
+                            
+                                                    <br> 
+                            
+                                                    <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Description</span>
+                                                        <input id="description" name="description"
+                                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        placeholder="<%= announcement.description %>"
+                                                        />
+                                                    </label> 
+                            
+                                                    <br>
+                            
+                                                    <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Speaker / Host</span>
+                                                        <input id="speaker" name="speaker"
+                                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        placeholder="<%= announcement.speaker %>"
+                                                        />
+                                                    </label> 
+                            
+                                                    <br>
+                            
+                                                    <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Venue</span>
+                                                        <input id="venue" name="venue"
+                                                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                        placeholder="<%= announcement.venue %>"
+                                                        />
+                                                    </label>
+                            
+                                                    <br>
+                            
+                                                    <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Date</span>
+                                                        <input id="date" name="date"
+                                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            placeholder="<%= announcement.date %>"
+                                                            type="date"
+                                                            class="form-control"
+                                                        />
+                                                    </label>
+                            
+                                                    <br>
+                            
+                                                    <label class="block text-sm">
+                                                        <span class="text-gray-700 dark:text-gray-400">Time</span>
+                                                        <input 
+                                                            id="time" 
+                                                            name="time" 
+                                                            type="time" 
+                                                            placeholder="<%= announcement.time %>"
+                                                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                                            required
+                                                        />
+                                                    </label>
+                                                    
+                                                    <!-- Add this script at the bottom of the body tag -->
+                                                    <script>
+                                                        // Convert 24hr time to 12hr format
+                                                        const timeInput = document.getElementById('time');
+                                                        timeInput.addEventListener('change', function() {
+                                                            const time24 = this.value;
+                                                            const [hours24, minutes] = time24.split(':');
+                                                            const hours12 = ((hours24 % 12) || 12);
+                                                            const ampm = hours24 < 12 ? 'AM' : 'PM';
+                                                            this.dataset.time12 = `${hours12}:${minutes} ${ampm}`;
+                                                        });
+                                                    </script>
+                            
+                                                    <br>
+                            
+                                                    <label class="block text-sm">   
+                                                        <label for="file" class="text-gray-700 dark:text-gray-200 mb-8">Change image file:</label>
+                                                        <input type="file" id="posterimage" name="posterimage"  class="mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" id="address" name="" placeholder="Choose a file" />
+                                                        <br><br>
+                                                        
+                                                    </label> 
+                                                    
+                                                    <input id="announcementId" name="announcementId" type="hidden" value="<%= announcement.id %>">
+                                                
+                                                    <button type="submit" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                                        Upload Edited Post
+                                                    </button>
+
+                                                    <button
+                                                      @click="closeModal20"
+                                                      type="submit" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                                        Discard
+                                                    </button>
+                                                </form>
+                                            
+                                                <!-- Inline CSS -->
+                                                <style>
+                                                    /* Custom styles for the action buttons only within the table */
+                                                    .action-btn {
+                                                        display: inline-flex;
+                                                        align-items: center;
+                                                        justify-content: center;
+                                                        padding: 8px;
+                                                        cursor: pointer;
+                                                        border: none;
+                                                        background-color: transparent;
+                                                    }
+                                                
+                                                    .accept-btn svg {
+                                                        fill: #38a169; /* Green color */
+                                                    }
+                                                
+                                                    .reject-btn svg {
+                                                        fill: #e53e3e; /* Red color */
+                                                    }
+                                                
+                                                    .action-btn:hover {
+                                                        transform: scale(1.1); /* Slightly enlarge on hover */
+                                                    }
+                                                </style>
+                                            
+                                                <!-- Inline JavaScript -->
+                                                <script>
+                                                    // Accept and Reject functionality for Row 1
+                                                    document.getElementById("accept1").addEventListener("click", function() {
+                                                        let statusElement = document.getElementById("status1");
+                                                        statusElement.textContent = "Approved";
+                                                        statusElement.classList.replace("bg-orange-100", "bg-green-100");
+                                                        statusElement.classList.replace("text-orange-700", "text-green-700");
+                                                    });
+                                                
+                                                    document.getElementById("reject1").addEventListener("click", function() {
+                                                        let statusElement = document.getElementById("status1");
+                                                        statusElement.textContent = "Rejected";
+                                                        statusElement.classList.replace("bg-green-100", "bg-red-100");
+                                                        statusElement.classList.replace("text-green-700", "text-red-700");
+                                                    });
+                                                
+                                                    // Accept and Reject functionality for Row 2
+                                                    document.getElementById("accept2").addEventListener("click", function() {
+                                                        let statusElement = document.getElementById("status2");
+                                                        statusElement.textContent = "Approved";
+                                                        statusElement.classList.replace("bg-orange-100", "bg-green-100");
+                                                        statusElement.classList.replace("text-orange-700", "text-green-700");
+                                                    });
+                                                
+                                                    document.getElementById("reject2").addEventListener("click", function() {
+                                                        let statusElement = document.getElementById("status2");
+                                                        statusElement.textContent = "Rejected";
+                                                        statusElement.classList.replace("bg-green-100", "bg-red-100");
+                                                        statusElement.classList.replace("text-green-700", "text-red-700");
+                                                    });
+                                                </script>
+                                            </div>
+                                                                                                                                            
+                                        </div>
+                                    </div>
+                                <!--Modal End-->
+
+                                </div>
+                            </td>
+                            </tr>
+                        </tbody>
+                            <% }) %>
+                        <% } else { %>
+                            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            <tr class="text-gray-700 dark:text-gray-400">
+                            <td class="px-4 py-3 text-sm" colspan="5">No announcements found.</td>
+                            </tr>
+                            </tbody>
+                        <% } %>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+                <!--End-->
             </main>
         </div>
     </body>

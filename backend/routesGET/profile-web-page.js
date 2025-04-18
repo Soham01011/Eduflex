@@ -57,6 +57,9 @@ profilepageRoute.get("/profile-web-page", checkTokenAndUserType, async (req, res
         // Fetch the username from the token
         const username = await fetchUser(req, res);
 
+        let user_type = await User.findOne({ username: username }).select("user_type");
+        user_type = user_type.user_type;
+
         let userProfile;
     
         // Check if user profile exists
@@ -141,7 +144,10 @@ profilepageRoute.get("/profile-web-page", checkTokenAndUserType, async (req, res
             userexp,
             useredu,
             userskills,
-            userproj
+            userproj,
+            credlybadges: Credly_there,
+            username,
+            user_type
         });
  
     }

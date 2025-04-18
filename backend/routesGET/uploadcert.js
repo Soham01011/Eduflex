@@ -18,9 +18,14 @@ const { checkTokenAndUserType } = require('../middleware/checkTokenandUsertype')
  *      - fetchs the username of the user
  *      - renders by passing the username for profile pic
  */
+
+const User = require('../models/users');
+
 uploadcretRouter.get("/upload-certificate",checkTokenAndUserType,async(req,res)=>{
     username = await fetchUser(req,res);
-    res.render("upload",{username : username});
+    let user_type = await User.findOne({ username: username }).select("user_type");
+    user_type = user_type.user_type;
+    res.render("upload",{username : username,user_type});
 });
 
 module.exports = uploadcretRouter;

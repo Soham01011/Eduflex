@@ -262,5 +262,17 @@ function data() {
       this.isModal19Open = false
       this.trapCleanup()
     },
+
+    // Modal20
+    isModal20Open: false,
+    trapCleanup: null,
+    openModal20() {
+      this.isModal20Open = true
+      this.trapCleanup = focusTrap(document.querySelector('#modal19'))
+    },
+    closeModal20() {
+      this.isModal20Open = false
+      this.trapCleanup()
+    },
   }
 }

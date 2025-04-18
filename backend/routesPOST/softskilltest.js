@@ -11,7 +11,7 @@ const {interfaceFetch} = require("../utils/interface");
 const Users = require("../models/users")
 const testsession = require("../models/psychometric")
 
-MAX_QUESTIONS = 20
+MAX_QUESTIONS = 5
 
 psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
     let userIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;

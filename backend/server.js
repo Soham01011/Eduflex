@@ -24,11 +24,9 @@ let {addMentees} = require('./utils/mentees');
 let {fetchBadges} = require('./utils/fetchBadges');
 let {fetchAndSaveBadges} = require('./utils/fetchAndSaveBadges');
 const {checkToken} = require('./middleware/checkToken');
-const {checkUserType} = require("./middleware/checkUserType")
 let {validatecert} = require('./utils/validatecert');
 const {fetchUser} = require('./utils/fetchUser');
 let {certificatelevelcheck} = require('./utils/certlevelcheck');
-const {interfaceFetch} = require("./utils/interface")
 
 /**
  * Below is the code to have manual feature enabling and disabling commands to make it scalable 
@@ -61,7 +59,7 @@ if(process.env.USE_ADD_MENTES === "false"){
 */
 
 const loginRoute = require('./routesGET/loginpage');
-const dashboardRoute = require('./routesPOST/dashboardRoute');
+const dashboardRoute = require('./routesGET/dashboardRoute');
 const uploadcretRouter = require('./routesGET/uploadcert');
 const profilepageRoute = require('./routesGET/profile-web-page');
 const explorepageRoute = require('./routesGET/explorepage');
@@ -76,6 +74,7 @@ const dashboardmentorRoute = require("./routesGET/dashboardmentor");
 const managementProtalRoute = require("./routesGET/managementportal");
 const AnnoucementLogicRoute = require("./routesGET/announcements");
 const MakeAnnoucementsRoute = require("./routesGET/uploadannoucement");
+const RewadsLoginRoute = require("./routesGET/rewardspage");
 
 /**
    These are the endpoint  with post request mainly requesting the user data 
@@ -108,8 +107,6 @@ const CSRFToken = require("./models/csrfttoken");
 const User = require("./models/users");
 const Profiles = require("./models/profiles");
 const Credly = require("./models/credly");
-const Mentor = require("./models/mentees");
-const Pointshistory = require("./models/pointshistory");
 
 const serverSK = process.env.SERVER_SEC_KEY;
 
@@ -276,6 +273,10 @@ const profile_pic_upload = multer({ storage: user_profilepic });
 
 
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** START
+server.get("/",(req,res) => {
+    res.render("landing");
+});
+
 server.get("/loginpage", loginRoute);
 
 server.get("/dashboard", dashboardRoute);
@@ -286,7 +287,7 @@ server.get("/upload-certificate",uploadcretRouter);
 
 server.get("/explore", explorepageRoute);
 
-server.get('/leaderboard', leaderboardroute);
+server.use('/leaderboard', leaderboardroute);
 
 server.get('/search-profile/:search_query', searchuserprofileRoute);
 
@@ -294,11 +295,9 @@ server.get("/forgotpassword",forgetpasswordRoute);
 
 server.get("/profile-web-page-mentor", profilementorRoute);
 
-server.get("/dashboard-mentor", dashboardmentorRoute);
-
 server.get("/management-portal-mentor", managementProtalRoute);
 
-server.get("/announcements", AnnoucementLogicRoute);
+server.use("/announcements", AnnoucementLogicRoute);
 
 server.get("/makeannoucement", MakeAnnoucementsRoute);
 
@@ -306,19 +305,12 @@ server.post("/update-skill-scores-mentor",scoreskillsRouter);
 
 server.post("/make-announcement", makeannoucementRouter);
 
+server.use("/rewards", RewadsLoginRoute);
+
 // ----------------------------------------------------------------------------------- WEB SITE ROUTES *************** END
 
 server.get("/ping", (req, res) => {
-    const userAgent = req.headers['user-agent'];
 
-    console.log("User-Agent:", userAgent);
-
-    // Set default based on the user-agent
-    let detectedInterface = "Webapp";
-
-    if (userAgent.includes("Mobile")) {
-        detectedInterface = "Mobileapp";
-    }
     res.status(200).json({ message: "Server is up and running" });
 });
 
@@ -387,6 +379,7 @@ server.get("/logout", checkToken, async (req, res) => {
     logMessage(`[=] ${username} ${userIP} : Logged out successfully`);
     // Clear the cookie
     res.clearCookie('Token');
+    res.redirect('/loginpage');
 
 });
 
@@ -474,6 +467,8 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
 
         // Update user data if all validations pass
         try {
+            const existingCredly = await Credly.findOne({ username: tokencheck.username });
+
             await User.updateOne(
                 { username: tokencheck.username },
                 {
@@ -497,13 +492,21 @@ server.post('/changeprofile',checkToken,profile_pic_upload.single('file'),async 
                 },
                 { upsert: true }
             );
-
+            console.log("reciving Credly link : ", credly , existingCredly);
             // Handle Credly badge fetching
-            if (credly && fetchBadges) {
-                fetchBadges(interface,credly,firstName,lastName,tokencheck.username,userIP) 
+            if (credly && existingCredly && (credly !== existingCredly.link)) {
+                console.log("Credly link changed", credly !== existingCredly.link);
+                if (fetchBadges) {
+                        await fetchBadges(interface, credly, firstName, lastName, tokencheck.username, userIP);
+                        logMessage(`[+] ${interface} ${userIP} : First time Credly badges fetch for ${tokencheck.username}`);
+                }
+                  
             }
-            else if (credly){
-                console.log('[INFO] * Credly system is disabled, enable it in env file')
+            else if (credly && !existingCredly) {
+                if (fetchBadges) {
+                    await fetchBadges(interface, credly, firstName, lastName, tokencheck.username, userIP);
+                    logMessage(`[+] ${interface} ${userIP} : First time Credly badges fetch for ${tokencheck.username}`);
+                }
             }
 
             // Delete the used token

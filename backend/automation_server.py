@@ -244,33 +244,58 @@ def extract_hashtags():
 
 ##################################################################################        CREDLY BADGES
 
-@app.route("/fetch-badges",methods =['GET'])
+@app.route("/fetch-badges", methods=['GET'])
 def fetch_badges_2():
     url = request.args.get('url') + '/badges'
-    if not url :
+    if not url:
         return jsonify({'error': "Url not provided"}), 400
     try:
-        responce = requests.get(url,headers={'User-Agent':'Mozilla/5.0'})
+        response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 
-        if responce.status_code ==200:
-            soup = BeautifulSoup(responce.text,'html.parser')
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-            badges = soup.find_all('div', class_ ='cr-standard-grid-item-content')
+            # Find all badge elements (anchor tags containing badges)
+            badges = soup.find_all('a', class_='c-grid-item c-grid-item--stack-lt-sm cr-public-earned-badge-grid-item')
             certificates = []
+            
             for badge in badges:
                 # Extract details for each badge
-                title = badge.find('div', class_='cr-standard-grid-item-content__title')
-                subtitle = badge.find('div', class_='cr-standard-grid-item-content__subtitle')
+                content = badge.find('div', class_='cr-standard-grid-item-content')
+                title = content.find('div', class_='cr-standard-grid-item-content__title')
+                subtitle = content.find('div', class_='cr-standard-grid-item-content__subtitle')
+                image = content.find('img', class_='cr-standard-grid-item-content__image')
+                
+                # Construct the full badge URL
+                badge_url = f"https://www.credly.com{badge['href']}" if badge.get('href') else 'N/A'
+
+                # Get issue date by making a request to the badge URL
+                issue_date = 'N/A'
+                if badge_url != 'N/A':
+                    try:
+                        badge_response = requests.get(badge_url, headers={'User-Agent': 'Mozilla/5.0'})
+                        if badge_response.status_code == 200:
+                            badge_soup = BeautifulSoup(badge_response.text, 'html.parser')
+                            date_element = badge_soup.find('div', class_='date')
+                            if date_element:
+                                issue_date = date_element.text.strip()
+                    except:
+                        pass
+
                 certificates.append({
                     'certificate_name': title.text.strip() if title else 'N/A',
                     'issuer_name': subtitle.text.strip() if subtitle else 'N/A',
+                    'badge_url': badge_url,
+                    'image_url': image['src'] if image else 'N/A',
+                    'issue_date': issue_date
                 })
 
-            return jsonify(certificates),200 
-        elif responce.status_code != 200:
-            return jsonify({"error": f"Scrapper status code ${responce.status_code}"}), 500
-    except ExceptionGroup as e:
-        return({"error" : f"Internal server error , ${e.message}"}),500
+
+            return jsonify(certificates), 200
+        elif response.status_code != 200:
+            return jsonify({"error": f"Scrapper status code {response.status_code}"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Internal server error, {str(e)}"}), 500
  
 ##################################################################################         Validate certificate
 
