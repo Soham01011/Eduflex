@@ -25,13 +25,12 @@ AnnoucementRoute.get("/", checkToken, async (req, res) => {
 
     // Fetch all announcements and sort by date (newest first)
     const announcements = await Announcement.find({}).sort({ date: -1 });
-
     // Return announcements with registration status
     res.render("announcement", {
       announcements: announcements,
       username: username,
       user_type: user_type,
-      department: department, // Pass the department to the template
+      department: department,
     });
   } catch (error) {
     logMessage("error", `Error fetching announcements: ${error.message}`);

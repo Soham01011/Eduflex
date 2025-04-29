@@ -54,7 +54,7 @@ makeannouncement.post("/make-announcement",
         try {
             const { title, description, date, speaker, venue, time, announcementId } = req.body;
             const username = await fetchUser(req, res);
-            
+            console.log(req.body)
 
             // Date validation
             const eventDate = new Date(date);
@@ -104,8 +104,10 @@ makeannouncement.post("/make-announcement",
                 logMessage(`[+] ${userIP} ${username} : Announcement updated successfully`);
                 return res.redirect("/makeannoucement");
             }
-            const department = await Users.findOne({ username: username }).select("department");
-            department = department.department;
+
+            let departmentDoc = await Users.findOne({ username: username }).select("department");
+            const department = departmentDoc.department;
+
             // If no announcementId, create new announcement
             const id = `${username}-${uuidv4()}`;
             const newAnnouncement = new Announcements({
