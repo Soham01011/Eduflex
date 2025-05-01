@@ -16,6 +16,11 @@ from pdfminer.pdfpage import PDFPage
 import pytesseract
 from PIL import Image
 from nltk.corpus import stopwords
+from scipy.sparse import csr_matrix
+import json
+import numpy as np
+import tensorflow as tf
+from datetime import datetime
 
 from model2 import extract_font_information_with_metadata_and_images, prepare_data_for_prediction, preprocessor, model
 
@@ -37,6 +42,9 @@ CERT_DETECTION = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['HASHTAG_FOLDER'] = HASHTAG_FOLDER
 app.config['CERT_DETECTION'] = CERT_DETECTION
+
+RLHF_JSONL = "./RLHF/predictions.jsonl"
+RLHF_RESULTS = "./RLHF/results.json"
 
 
 #--------------------------------------------------------------------------    UPLOAD
@@ -331,6 +339,20 @@ def validate_certificate_two():
         X_processed = preprocessor.transform(df)
         predictions = model.predict(X_processed)
         
+        detailed_results = []
+        for i, (row, pred) in enumerate(zip(X_processed, predictions)):
+            row_dense = row.toarray().flatten().tolist() if isinstance(row, csr_matrix) else row.tolist()
+            detailed_results.append({
+                "input_data": row_dense,
+                "prediction": float(pred),
+                "producer": features[i].get("Producer", ""),
+                "username": username
+            })
+
+        detailed_results = {
+            "filename": filename,
+            "data": detailed_results
+        }
         # Determine the final result
         all_real = True
         fake_producer = None
@@ -343,9 +365,9 @@ def validate_certificate_two():
         
         # Return the result based on prediction
         if all_real:
-            return jsonify({"result": "Real"})
+            return jsonify({"result": "Real", "detailed_results": detailed_results  })
         else:
-            return jsonify({"result": "Fake", "Edited_By": f"{fake_producer}"})
+            return jsonify({"result": "Fake", "Edited_By": f"{fake_producer}", "detailed_results": detailed_results  })
     
     except Exception as e:
         # Log the exception for debugging
@@ -397,6 +419,114 @@ def checkcertlevel():
         "type": cert_type,
         "lines": lines
     })
+
+
+######################################################################################         RLHF 
+@app.route('/rlhf', methods=['POST'])
+def rlhf():
+    try:
+        # Declare model as global at the start of the function
+        global model
+        
+        # Read the JSONL file
+        rlhf_data = []
+        X = []
+        y = []
+        
+        if os.path.exists(RLHF_JSONL):
+            with open(RLHF_JSONL, 'r') as f:
+                for line in f:
+                    entry = json.loads(line)
+                    if not entry.get('trained', False) and 'mentor_decision' in entry:
+                        features = entry['model_data']['input_data']
+                        label = 1 if entry['mentor_decision'] == "accept" else 0
+                        
+                        X.append(features)
+                        y.append(label)
+                        entry['trained'] = True
+                        rlhf_data.append(entry)
+
+        if len(X) == 0:
+            return jsonify({"message": "No new data to train on"}), 200
+
+        # Convert to numpy arrays with explicit shape
+        X = np.array(X, dtype=np.float32).reshape(-1, 200)
+        y = np.array(y, dtype=np.float32)
+
+        try:
+            # Configure TensorFlow to use CPU only
+            tf.config.set_visible_devices([], 'GPU')
+            
+            # Create a fresh model for fine-tuning
+            new_model = tf.keras.Sequential([
+                tf.keras.layers.Dense(64, activation='relu', input_shape=(200,)),
+                tf.keras.layers.Dropout(0.3),
+                tf.keras.layers.Dense(32, activation='relu'),
+                tf.keras.layers.Dropout(0.2),
+                tf.keras.layers.Dense(1, activation='sigmoid')
+            ])
+            
+            # Copy weights from original model if possible
+            try:
+                new_model.set_weights(model.get_weights())
+            except Exception as weight_error:
+                print(f"Could not copy weights: {weight_error}")
+            
+            # Compile with basic configuration
+            new_model.compile(
+                optimizer=tf.keras.optimizers.legacy.Adam(learning_rate=0.0001),
+                loss=tf.keras.losses.BinaryCrossentropy(),
+                metrics=['accuracy']
+            )
+            
+            # Train with smaller batch size
+            history = new_model.fit(
+                X, y,
+                epochs=3,
+                batch_size=8,
+                validation_split=0.2,
+                verbose=1,
+                shuffle=True
+            )
+
+            # Save the new model
+            new_model.save("./certificate_indentifier.keras", overwrite=True)
+            
+            # Update the global model reference
+            model = new_model
+
+            # Save results
+            results = {
+                "training_time": datetime.now().isoformat(),
+                "samples_trained": len(X),
+                "final_metrics": {
+                    "loss": float(history.history['loss'][-1]),
+                    "accuracy": float(history.history['accuracy'][-1]),
+                    "val_loss": float(history.history['val_loss'][-1]) if 'val_loss' in history.history else None,
+                    "val_accuracy": float(history.history['val_accuracy'][-1]) if 'val_accuracy' in history.history else None
+                }
+            }
+            
+            with open(RLHF_RESULTS, 'w') as f:
+                json.dump(results, f, indent=2)
+
+            with open(RLHF_JSONL, 'w') as f:
+                for entry in rlhf_data:
+                    f.write(json.dumps(entry) + '\n')
+
+            return jsonify({
+                "message": "RLHF training completed successfully",
+                "metrics": results["final_metrics"]
+            }), 200
+
+        except tf.errors.InvalidArgumentError as e:
+            print(f"Training error: {str(e)}")
+            return jsonify({"error": f"Model training failed: {str(e)}"}), 500
+
+    except Exception as e:
+        print("RLHF Error:", str(e))
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':

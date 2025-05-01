@@ -110,12 +110,13 @@ postsRouter.post('/post/webapp',checkToken,upload.single('file'), async(req,res)
     const up_username = await fetchUser(req,res);
     const sanitizedFilename = filename.replace(/\s+/g, '_');
     const filePath = `uploads/${up_username}/${up_username}-${sanitizedFilename}`;
+    const postid = `${up_username}-${uuidv4()}`
     try{
         const userfirstlastname = await User.findOne({"username" : up_username}).select("firstname lastname");
         let [model_result, producer] = '';
 
         if (validatecert) {
-            [model_result, producer] = await validatecert(up_username, sanitizedFilename);
+            [model_result, producer] = await validatecert(up_username, sanitizedFilename,postid);
         } else {
             console.log('[INFO] * Validate cert is disabled, enable it in the env file');
         }
@@ -153,8 +154,6 @@ postsRouter.post('/post/webapp',checkToken,upload.single('file'), async(req,res)
                 points = 8;
             }
         }
-
-        const postid = `${up_username}-${uuidv4()}`
 
         const newPointsHistory = new Pointshistory({
             username: up_username, // Add the username
