@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache git
 RUN git clone https://github.com/Soham01011/Eduflex.git .
 
+# Create required directories in builder stage
+RUN mkdir -p /usr/src/app/backend/uploads
+
 # Change to backend directory and install dependencies
 WORKDIR /usr/src/app/backend
 RUN npm install
@@ -26,13 +29,17 @@ COPY --from=builder /usr/src/app/backend/utils ./utils
 COPY --from=builder /usr/src/app/backend/views ./views
 COPY --from=builder /usr/src/app/backend/package*.json ./
 COPY --from=builder /usr/src/app/backend/server.js ./
-COPY --from=builder /usr/src/app/backend/uploads ./
+
+# Create required directories in production stage
+RUN mkdir -p /usr/src/app/apiuploads \
+    /usr/src/app/uploads \
+    /usr/src/app/hashtag_extractions
 
 # Install production dependencies only
 RUN npm ci --only=production
 
-# Create upload directories
-RUN mkdir -p /usr/src/app/apiuploads /usr/src/app/backend/hashtag_extractions
+# Add volume mounts for persistent storage
+VOLUME ["/usr/src/app/apiuploads", "/usr/src/app/uploads", "/usr/src/app/hashtag_extractions"]
 
 # Expose port
 EXPOSE 8000

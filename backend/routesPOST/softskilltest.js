@@ -1,6 +1,7 @@
 const express = require("express")
 const psychometrictest = express.Router()
 const { v4: uuidv4 } = require('uuid');
+require("dotenv").config();
 
 const {checkToken} = require("../middleware/checkToken")
 const {fetchUser} = require("../utils/fetchUser")
@@ -10,6 +11,8 @@ const {interfaceFetch} = require("../utils/interface");
 
 const Users = require("../models/users")
 const testsession = require("../models/psychometric")
+
+const USE_LLAMA_MODEL = process.env.USE_LLAMA_MODEL
 
 MAX_QUESTIONS = 5
 
@@ -21,6 +24,12 @@ psychometrictest.post("/psychometrictest", checkToken, async (req, res) => {
     } else if (userIP.includes(',')) {
         userIP = userIP.split(',')[0].trim();
     }
+
+    if ( USE_LLAMA_MODEL === "false" ) {
+        console.log('[INFO] * LLAMA system is disabled , enable it in env file')
+        return res.status(500).json({ error: "LLAMA model is not enabled" });
+    }
+
     const interface = await interfaceFetch(req,res);
     const { test_id, question, answer } = req.body;
 

@@ -6,8 +6,6 @@ tesseract
 backend/apiuploads
 backend/hashtag_extractions
 backend/certifications
-backend/fake_cert.csv
-backend/real_cert.csv
 backend/DockerFile
 backend/logs
 backend/todo

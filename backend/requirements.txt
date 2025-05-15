@@ -13,3 +13,7 @@ pandas
 tensorflow==2.18
 scikit-learn
 PyMuPDF
+pandas
+scipy
+PyPDF2
+werkzeug
