@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: eduflex_mongodb
+    expose:
+      - "27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=RMS
+    restart: unless-stopped
+    networks:
+      - internal_network
+
+  python_server:
+    image: soham1011/eduflex_python:latest
+    container_name: eduflex_python
+    expose:
+      - "5000"
+    volumes:
+      - ./backend/apiuploads:/app/apiuploads
+      - ./backend/hashtag_extraction:/app/hashtag_extraction
+      - ./backend/uploads:/app/uploads
+      - ./backend/RLHF:/app/RLHF
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - internal_network
+
+  node_server:
+    image: soham1011/eduflex_node:latest
+    container_name: eduflex_node
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/apiuploads:/usr/src/app/apiuploads
+      - ./backend/uploads:/usr/src/app/uploads
+      - ./backend/hashtag_extractions:/usr/src/app/hashtag_extractions
+      - ./backend/logs:/usr/src/app/logs
+    environment:
+      - USE_PYTHON_SERVER=true
+      - USE_CREDLY_BADGES=false
+      - USE_VALIDATE_CERT=true
+      - USE_ADD_MENTES=true
+      - USE_LLAMA_MODEL=true
+      - SERVER_SEC_KEY=ITS SECRECT
+      - MONGODB_CONN_URI=mongodb://mongodb:27017/RMS
+      - STORAGE_BACKEND=local
+      - BLOB_READ_WRITE_TOKEN=vercel_blob_rw_rappuBEdkwO054ug_JE8xYZScphtEADApyski1rkvOhCDvI
+    depends_on:
+      - python_server
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - internal_network
+      - external_network
+
+
+
+networks:
+  internal_network:
+    internal: true
+  external_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

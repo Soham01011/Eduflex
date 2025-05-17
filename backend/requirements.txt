@@ -7,7 +7,6 @@ pdfplumber
 pdfminer.six
 pytesseract
 Pillow
-nltk
 numpy
 pandas
 tensorflow==2.18

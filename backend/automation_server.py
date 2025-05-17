@@ -4,7 +4,7 @@ from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-import os ,re ,nltk
+import os ,re 
 import pandas as pd
 from werkzeug.utils import secure_filename
 import pdfplumber
@@ -15,7 +15,6 @@ from pdfminer.converter import PDFPageAggregator
 from pdfminer.pdfpage import PDFPage
 import pytesseract
 from PIL import Image
-from nltk.corpus import stopwords
 from scipy.sparse import csr_matrix
 import json
 import numpy as np
@@ -24,8 +23,6 @@ from datetime import datetime
 
 from model2 import extract_font_information_with_metadata_and_images, prepare_data_for_prediction, preprocessor, model
 
-nltk.download('stopwords')
-stop_words = set(stopwords.words('english'))
 
 app = Flask(__name__)
 CORS(app)  
@@ -152,21 +149,6 @@ def extract_text_from_image(file_path):
     except Exception as e:
         print(f"Error extracting text from image: {e}")
         return []
-
-def create_hashtags_from_lines(lines):
-    hashtags = []
-    for line in lines:
-        line = line.strip()
-        if line:
-            # Tokenize the line into words
-            words = re.findall(r'\w+', line)
-            # Remove stop words and create hashtags from remaining words
-            filtered_words = [word for word in words if word.lower() not in stop_words]
-            if filtered_words:
-                # Join the remaining words with underscores
-                hashtag = '#{}'.format('_'.join(filtered_words))
-                hashtags.append(hashtag)
-    return list(set(hashtags))
 
 
 ##################################################################################        UPLOAD
